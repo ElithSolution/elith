@@ -22,51 +22,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="lazy-import" href="elith-login.html">
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
 <link rel="lazy-import" href="elith-horaire.html">
 <link rel="lazy-import" href="elith-view404.html">
 
 <dom-module id="elith-app">
+  <link rel="import" type="css" href="../src/style/elith-style.css">
   <template>
-    <style>
-      :host {
-        --app-primary-color: #4285f4;
-        --app-secondary-color: black;
 
-        display: block;
-      }
-
-      app-drawer-layout:not([narrow]) [drawer-toggle] {
-        display: none;
-      }
-
-      app-header {
-        color: #fff;
-        background-color: var(--app-primary-color);
-      }
-
-      app-header paper-icon-button {
-        --paper-icon-button-ink-color: white;
-      }
-
-      .drawer-list {
-        margin: 0 20px;
-      }
-
-      .drawer-list a {
-        display: block;
-        padding: 0 16px;
-        text-decoration: none;
-        color: var(--app-secondary-color);
-        line-height: 40px;
-      }
-
-      .drawer-list a.iron-selected {
-        color: black;
-        font-weight: bold;
-      }
-    </style>
 
     <app-location
         route="{{route}}"
@@ -80,7 +45,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         tail="{{subroute}}">
     </app-route>
 
-    <app-drawer-layout fullbleed narrow="{{narrow}}">
+
+
+      <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
         <app-toolbar>Menu</app-toolbar>
@@ -92,24 +59,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </app-drawer>
 
       <!-- Main content -->
-      <app-header-layout has-scrolling-region>
+        <app-header-layout has-scrolling-region>
 
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>My App</div>
+            <div main-title>Elith</div>
+             <a name="elith-login" href="[[rootPath]]login">Log in</a>
           </app-toolbar>
         </app-header>
+
+        log in :     [[!storedUser.loggedin]]
 
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
             fallback-selection="view404"
             role="main">
+          <elith-login name="login"></elith-login>
           <elith-client name="client"></elith-client>
           <elith-produit name="produit"></elith-produit>
           <elith-horaire name="horaire"></elith-horaire>
-          <view404 name="view404"></view404>
+          <elith-view404 name="view404"></elith-view404>
         </iron-pages>
       </app-header-layout>
     </app-drawer-layout>
@@ -131,6 +102,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           // This shouldn't be neccessary, but the Analyzer isn't picking up
           // Polymer.Element#rootPath
           rootPath: String,
+
+            storedUser: {
+                type: Object,
+                notify: true,
+            }
         };
       }
 
@@ -143,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'elith-client';
+        this.page = page || 'client';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
@@ -164,6 +140,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       _showPage404() {
         this.page = 'view404';
       }
+
+
     }
 
     window.customElements.define(ElithApp.is, ElithApp);

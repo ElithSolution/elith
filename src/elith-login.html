@@ -1,0 +1,146 @@
+
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/iron-sessionstorage/iron-sessionstorage.html">
+<link rel="import" href="../../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="elith-logout.html">
+<link rel="import" href="elith-data.html">
+<link rel="import" href="elith-constantes.html">
+
+
+
+<dom-module id="elith-login">
+    <link rel="import" type="css" href="style/elith-style.css">
+    <template>
+
+
+
+        <app-location route="{{route}}"></app-location>
+        <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
+
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <!--<iron-sessionstorage name="user-sessionstorage" value="{{storedUser}}"></iron-sessionstorage>-->
+        <elith-data key="userData" data="{{storedUser}}"></elith-data>
+        <elith-data key="pathElith" data="{{pathElith}}"></elith-data>
+
+
+        <iron-ajax
+                id="registerLoginAjax"
+                method="post"
+                content-type="application/json"
+                handle-as="text/json"
+                on-response="handleLoginResponse"
+                on-error="handleUserError">
+        </iron-ajax>
+
+
+        <div class="card" >
+
+
+            <div id="header" class="headerDialog"></div>
+
+            <div id="unauthenticated" hidden$="[[storedUser.loggedin]]">
+                <h1>Log In</h1>
+                <h2>Veuillez entrer votre login et mot de passe ! </h2>
+
+                <template is="dom-if" if="[[error]]">
+                    <p class="alert-error"><strong>Error:</strong> [[error]]</p>
+                </template>
+
+                <form is="iron-form" id="form" method="post">
+                    <paper-input label="Login" id="login" type="text" value="{{formData.login}}" required></paper-input>
+                    <paper-input label="Mot de passe" id="motPasse" type="password" value="{{formData.motPasse}}"></paper-input>
+
+                    <div class="wrapper-btns ">
+                        <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin"></iron-a11y-keys>
+                        <paper-button id="submit" raised class="primary" on-tap="postLogin">Log In</paper-button>
+
+                    </div>
+
+                </form>
+            </div>
+
+            <div id="authenticated" hidden$="[[!storedUser.loggedin]]">
+                <h2>Bonjour [[storedUser.name]]!</h2>
+                <p>Connexion réussie.</p>
+                <elith-logout stored-user="{{storedUser}}"></elith-logout>
+            </div>
+
+        </div>
+    </template>
+
+
+    <script>
+        (function() {
+            Polymer({
+                is: 'elith-login',
+
+                properties: {
+                    formData: {
+                        type: Object,
+                        value: {}
+                    },
+                    storedUser: Object,
+                    error: String,
+                    target: {
+                        type: Object
+                    },
+                    pathElith: Object,
+
+                },
+
+                ready: function() {
+                    this.target = this.$.form;
+                },
+
+                _setReqBody: function() {
+                    this.$.registerLoginAjax.body = this.formData;
+                },
+
+                postLogin: function() {
+                    this.$.registerLoginAjax.url = ELITH_AUTHENTICATE;
+                    this._setReqBody();
+                    this.$.registerLoginAjax.generateRequest();
+                },
+
+
+                handleLoginResponse: function(event) {
+
+                    var response = JSON.parse(event.detail.response);
+                    console.log(response);
+
+                    if (response.accessToken) {
+                        this.error = '';
+                        this.storedUser = {
+                            name: this.formData.login,
+                            accessToken: response.accessToken,
+                            loggedin: true
+                        };
+                        // path de l'appli
+                        this.pathElith = ELITH_PATH;
+
+                        // redirect to Secret Quotes
+                        this.set('route.path', '/accueil');
+
+                    }
+
+                    // reset form data
+                    this.formData = {};
+                    //this.parentNode.close();
+
+                },
+
+                handleUserError: function(event) {
+                    this.error = event.detail.request.xhr.response;
+                },
+
+            });
+
+        }());
+    </script>
+</dom-module>

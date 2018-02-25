@@ -24,15 +24,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <div class="card">
       <div class="circle">1</div>
       <h1>Client</h1>
-      <p>Ut labores minimum atomorum pro. Laudem tibique ut has.</p>
-      <p>Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Lorem ipsum dolor sit amet, per in nusquam nominavi periculis, sit elit oportere ea.Cu mei vide viris gloriatur, at populo eripuit sit.</p>
+      <p>Affichage des clients.</p>
+      <p>Détail d'un client  <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
+      </p>
     </div>
   </template>
 
   <script>
     class ElithClient extends Polymer.Element {
-      static get is() { return 'elith-client'; }
+        static get is() {
+            return 'elith-client';
+        }
+
+        _getItemHrefTest(item) {
+            // By returning null when `itemId` is undefined, the href attribute won't be set and
+            // the link will be disabled.
+            return item ? ['/client', 1380].join('/') : null;
+
+        }
     }
+
+
 
     window.customElements.define(ElithClient.is, ElithClient);
   </script>
