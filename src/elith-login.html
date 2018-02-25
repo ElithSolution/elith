@@ -76,73 +76,6 @@
 
 
     <script>
-
-        (function() {
-                        Polymer({
-                                is: 'elith-login',
-
-                                    properties: {
-                                   formData: {
-                                            type: Object,
-                                              value: {}
-                                       },
-                                    storedUser: Object,
-                                        error: String,
-                                        target: {
-                                            type: Object
-                                        },
-                                    pathElith: Object,
-
-                                        },
-
-                               ready: function() {
-                                   this.target = this.$.form;
-                               },
-
-                               _setReqBody: function() {
-                                   this.$.registerLoginAjax.body = this.formData;
-                               },
-
-                                postLogin: function() {
-                                    this.$.registerLoginAjax.url = ELITH_AUTHENTICATE;
-                                    this._setReqBody();
-                                    this.$.registerLoginAjax.generateRequest();
-                                },
-
-
-                                handleLoginResponse: function(event) {
-
-                                    var response = JSON.parse(event.detail.response);
-                                    console.log(response);
-
-                                        if (response.accessToken) {
-                                            this.error = '';
-                                            this.storedUser = {
-                                                    name: this.formData.login,
-                                                    accessToken: response.accessToken,
-                                                    loggedin: true
-                                            };
-                                            // path de l'appli
-                                                this.pathElith = ELITH_PATH;
-
-                                                // redirect to Secret Quotes
-                                                    this.set('route.path', '/accueil');
-
-                                            }
-
-                                        // reset form data
-                                            this.formData = {};
-                                   //this.parentNode.close();
-
-                                        },
-
-                                handleUserError: function(event) {
-                                    this.error = event.detail.request.xhr.response;
-                                },
-                        });
-
-                       }());
-=======
       class ElithLogin extends Polymer.Element {
         static get is() { return 'elith-login'; }
 
@@ -206,6 +139,5 @@
       }
 
       window.customElements.define(ElithLogin.is, ElithLogin);
->>>>>>> 6c97e0634ac381b328398bd8690bc927de8170da
     </script>
 </dom-module>
