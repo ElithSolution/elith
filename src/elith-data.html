@@ -2,66 +2,66 @@
 
 <dom-module id="elith-data">
     <script>
-        (function() {
-            var instances = [];
-            var vars = Object.create(Polymer.Base);
+      class ElithData extends Polymer.Element {
+        static get is() { return 'elith-data'; }
 
-            Polymer({
-                is: 'elith-data',
+        constructor() {
+          super();
+          this.instances = [];
+          this.vars = Object.create(Polymer.Base);
+        }
 
-                properties: {
-                    data: {
-                        type: Object,
-                        value: '',
-                        notify: true,
-                        readonly: false,
-                        observer: '_data_changed'
+        static get properties() {
+          return {
+            data: {
+              type: Object,
+              value: '',
+              notify: true,
+              readonly: false,
+              observer: '_data_changed',
+            },
+            key: String,
+          };
+        }
 
-                    },
-                    key: String
-                },
+        created() {
+          let key = this.getAttribute('key');
+          if (!key) {
+            console.log(this);
+            throw ('elith-data element requires key');
+          }
+          this.instances.push({
+            key: key,
+            instance: this,
+          });
+        }
 
-                created: function() {
-                    key = this.getAttribute('key');
-                    if (!key) {
-                        console.log(this);
-                        throw ('elith-data element requires key');
-                    }
-                    instances.push({
-                        key: key,
-                        instance: this
-                    });
-                },
+        detached() {
+          let key = this.getAttribute('key');
+          let i = this.instances.indexOf({
+            key: key,
+            instance: this,
+          });
+          if (i >= 0) {
+            this.instances.splice(i, 1);
+          }
+        }
 
-                detached: function() {
-                    key = this.getAttribute('key');
-                    var i = instances.indexOf({
-                        key: key,
-                        instance: this
-                    });
-                    if (i >= 0) {
-                        instances.splice(i, 1);
-                    }
-                },
+        _data_changed(newvalue, oldvalue) {
+          let key = this.getAttribute('key');
+          if (!key) {
+            throw ('_data_changed: app-data element requires key');
+          }
+          this.vars.set(key, newvalue);
 
-                _data_changed: function(newvalue, oldvalue) {
-
-                    key = this.getAttribute('key');
-                    if (!key) {
-                        throw ('_data_changed: app-data element requires key');
-                    }
-                    vars.set(key, newvalue);
-
-                    // notify the instances with the correct key
-                    for (var i = 0; i < instances.length; i++) {
-                        if (instances[i].key == key) {
-                            instances[i].instance.notifyPath('data', newvalue);
-                        }
-                    }
-                },
-
-
-            });
-        }());
+          // notify the instances with the correct key
+          for (let i = 0; i < this.instances.length; i++) {
+            if (this.instances[i].key == key) {
+              this.instances[i].instance.notifyPath('data', newvalue);
+            }
+          }
+        }
+      }
+      window.customElements.define(ElithData.is, ElithData);
     </script>
 </dom-module>
