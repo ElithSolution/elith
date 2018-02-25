@@ -1,11 +1,12 @@
 {
   "entrypoint": "index.html",
-  "shell": "src/my-app.html",
+  "shell": "src/elith-app.html",
   "fragments": [
-    "src/my-view1.html",
-    "src/my-view2.html",
-    "src/my-view3.html",
-    "src/my-view404.html"
+    "src/authentification/elith-login.html",
+    "src/elith-client.html",
+    "src/elith-produit.html",
+    "src/elith-horaire.html",
+    "src/elith-view404.html"
   ],
   "sources": [
     "src/**/*",
