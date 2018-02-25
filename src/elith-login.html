@@ -92,10 +92,11 @@
               type: Object,
             },
             pathElith: Object,
-          }
+          };
         }
 
         ready() {
+          super.ready();
           this.target = this.$.form;
         }
 
@@ -111,9 +112,7 @@
 
 
         handleLoginResponse(event) {
-
-          var response = JSON.parse(event.detail.response);
-          console.log(response);
+          let response = JSON.parse(event.detail.response);
 
           if (response.accessToken) {
             this.error = '';
@@ -131,7 +130,7 @@
 
           // reset form data
           this.formData = {};
-          //this.parentNode.close();
+          this.parentNode.close();
         }
 
         handleUserError(event) {
