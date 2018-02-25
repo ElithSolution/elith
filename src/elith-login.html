@@ -76,69 +76,70 @@
 
 
     <script>
-      class ElithLogin extends Polymer.Element {
-        static get is() { return 'elith-login'; }
+        (function() {
+                        Polymer({
+                                is: 'elith-login',
 
-        static get properties()
-        {
-          return {
-            formData: {
-              type: Object,
-              value: {},
-            },
-            storedUser: Object,
-            error: String,
-            target: {
-              type: Object,
-            },
-            pathElith: Object,
-          }
-        }
+                                    properties: {
+                                   formData: {
+                                            type: Object,
+                                              value: {}
+                                       },
+                                    storedUser: Object,
+                                        error: String,
+                                        target: {
+                                            type: Object
+                                        },
+                                    pathElith: Object,
 
-        ready() {
-          this.target = this.$.form;
-        }
+                                        },
 
-        _setReqBody() {
-          this.$.registerLoginAjax.body = this.formData;
-        }
+                               ready: function() {
+                                   this.target = this.$.form;
+                               },
 
-        postLogin() {
-          this.$.registerLoginAjax.url = ELITH_AUTHENTICATE;
-          this._setReqBody();
-          this.$.registerLoginAjax.generateRequest();
-        }
+                               _setReqBody: function() {
+                                   this.$.registerLoginAjax.body = this.formData;
+                               },
+
+                                postLogin: function() {
+                                    this.$.registerLoginAjax.url = ELITH_AUTHENTICATE;
+                                    this._setReqBody();
+                                    this.$.registerLoginAjax.generateRequest();
+                                },
 
 
-        handleLoginResponse(event) {
+                                handleLoginResponse: function(event) {
 
-          var response = JSON.parse(event.detail.response);
-          console.log(response);
+                                    var response = JSON.parse(event.detail.response);
+                                    console.log(response);
 
-          if (response.accessToken) {
-            this.error = '';
-            this.storedUser = {
-              name: this.formData.login,
-              accessToken: response.accessToken,
-              loggedin: true,
-            };
-            // path de l'appli
-            this.pathElith = ELITH_PATH;
+                                        if (response.accessToken) {
+                                            this.error = '';
+                                            this.storedUser = {
+                                                    name: this.formData.login,
+                                                    accessToken: response.accessToken,
+                                                    loggedin: true
+                                            };
+                                            // path de l'appli
+                                                this.pathElith = ELITH_PATH;
 
-            // redirect to Secret Quotes
-            this.set('route.path', '/accueil');
-          }
+                                                // redirect to Secret Quotes
+                                                    this.set('route.path', '/accueil');
 
-          // reset form data
-          this.formData = {};
-          //this.parentNode.close();
-        }
+                                            }
 
-        handleUserError(event) {
-          this.error = event.detail.request.xhr.response;
-        }
-      }
+                                        // reset form data
+                                            this.formData = {};
+                                   //this.parentNode.close();
 
-      window.customElements.define(ElithLogin.is, ElithLogin);
+                                        },
+
+                                handleUserError: function(event) {
+                                    this.error = event.detail.request.xhr.response;
+                                },
+                        });
+
+                       }());
     </script>
 </dom-module>
