@@ -2,7 +2,8 @@
   "entrypoint": "index.html",
   "shell": "src/elith-app.html",
   "fragments": [
-    "src/authentification/elith-login.html",
+    "src/elith-login.html",
+    "src/elith-accueil.html",
     "src/elith-client.html",
     "src/elith-produit.html",
     "src/elith-horaire.html",

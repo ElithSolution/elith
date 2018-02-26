@@ -1,0 +1,83 @@
+<!--
+@license
+Copyright (c) 2016 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/iron-sessionstorage/iron-sessionstorage.html">
+
+<link rel="import" href="shared-styles.html">
+<link rel="import" href="elith-data.html">
+
+
+<dom-module id="elith-accueil">
+    <template>
+
+        <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
+        <!--<iron-sessionstorage name="user-sessionstorage" value="{{storedUser}}" ></iron-sessionstorage>-->
+        <elith-data key="userData" data="{{storedUser}}"></elith-data>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+            .flex-horizontal-with-ratios {
+                @apply --layout-horizontal;
+            }
+            .flexchild {
+                @apply --layout-flex;
+            }
+            .flex2child {
+                @apply --layout-flex-2;
+            }
+        </style>
+        </style>
+
+        <div class="card">
+                 <h1>Accueil</h1>
+                      <div main-title> <span id="test">LOGIN : [[storedUser.name]] !</span></div>
+                      <p>Bienvenu sur la page d'accueil de votre compte Elith</p>
+        </div>
+
+        <div class="container flex-horizontal-with-ratios">
+
+                <div class="flex2child">
+                           <div class="card">
+                                <h1>Mon calendrier du jour</h1>
+                           </div>
+                </div>
+                <div class="flexchild">
+                           <div class="card">
+                                 <h1>Liste de mes suivis</h1>
+                            </div>
+                </div>
+        </div>
+    </template>
+
+        <script>
+        class ElithAccueil extends Polymer.Element {
+        static get is() {
+            return 'elith-accueil';
+        }
+
+
+        static get properties() {
+            return {
+            storedUser: {
+                type: Object,
+            },
+            };
+        }
+
+
+        }
+
+        window.customElements.define(ElithAccueil.is, ElithAccueil);
+        </script>
+          </dom-module>

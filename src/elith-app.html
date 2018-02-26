@@ -12,7 +12,9 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="my-icons.html">
 
-<link rel="lazy-import" href="elith-login.html">
+<link rel="import" href="elith-login.html">
+<link rel="import" href="elith-logout.html">
+
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
 <link rel="lazy-import" href="elith-horaire.html">
@@ -34,8 +36,8 @@
         data="{{routeData}}"
         tail="{{subroute}}">
     </app-route>
-
-
+    <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
+    <elith-data key="userData" data="{{storedUser}}"></elith-data>
 
       <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
@@ -54,12 +56,15 @@
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title>Elith</div>
-             <a name="elith-login" href="[[rootPath]]login">Log in</a>
+            <div main-title> <span>LOGIN : [[storedUser.name]] !</span></div>
+
+            <paper-icon-button icon="account-circle"></paper-icon-button>
+            <elith-logout></elith-logout>
+
           </app-toolbar>
         </app-header>
 
-        log in :     [[!storedUser.loggedin]]
+        log in :     [[storedUser.loggedin]]
 
         <iron-pages
             selected="[[page]]"
@@ -67,6 +72,7 @@
             fallback-selection="view404"
             role="main">
           <elith-login name="login"></elith-login>
+          <elith-accueil name="accueil"></elith-accueil>
           <elith-client name="client"></elith-client>
           <elith-produit name="produit"></elith-produit>
           <elith-horaire name="horaire"></elith-horaire>
@@ -109,7 +115,7 @@
       _routePageChanged(page) {
         // If no page was found in the route data, page will be an empty string.
         // Default to 'view1' in that case.
-        this.page = page || 'client';
+        this.page = page || 'accueil';
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
