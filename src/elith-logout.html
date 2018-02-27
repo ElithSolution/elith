@@ -1,6 +1,7 @@
 
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-data.html">
 
 <dom-module id="elith-logout">
@@ -18,13 +19,9 @@
             }
         </style>
 
-
-        <elith-data key="userData" data="{{storedUser}}"></elith-data>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <elith-data key="clientsListed" data="{{clients}}"></elith-data>
 
-       <span>Link : </span>  {{link}}
-
-        <a onclick="logout">test</a>
         <template is="dom-if" if="{{!link}}">
             <paper-button raised on-tap="logout">Log Out</paper-button>
         </template>
@@ -53,7 +50,6 @@
             }
 
             logout(){
-                alert('');
                 // remove user data
                 this.storedUser = null;
                 this.clients = null;

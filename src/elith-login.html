@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-logout.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-constantes.html">
@@ -24,8 +25,8 @@
         <app-route route="{{route}}" pattern="/:page" data="{{routeData}}" tail="{{subroute}}"></app-route>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
-        <!--<iron-sessionstorage name="user-sessionstorage" value="{{storedUser}}"></iron-sessionstorage>-->
-        <elith-data key="userData" data="{{storedUser}}"></elith-data>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
         <elith-data key="pathElith" data="{{pathElith}}"></elith-data>
 
 
@@ -130,7 +131,7 @@
 
           // reset form data
           this.formData = {};
-          this.parentNode.close();
+          //this.parentNode.close();
         }
 
         handleUserError(event) {

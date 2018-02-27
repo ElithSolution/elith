@@ -11,6 +11,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/iron-sessionstorage/iron-sessionstorage.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="elith-data.html">
@@ -20,8 +21,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <template>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
-        <!--<iron-sessionstorage name="user-sessionstorage" value="{{storedUser}}" ></iron-sessionstorage>-->
-        <elith-data key="userData" data="{{storedUser}}"></elith-data>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
         <style include="shared-styles">
             :host {
                 display: block;

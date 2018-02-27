@@ -10,6 +10,7 @@
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="my-icons.html">
 
 <link rel="import" href="elith-login.html">
@@ -37,7 +38,8 @@
         tail="{{subroute}}">
     </app-route>
     <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
-    <elith-data key="userData" data="{{storedUser}}"></elith-data>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
 
       <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
@@ -59,13 +61,14 @@
             <div main-title> <span>LOGIN : [[storedUser.name]] !</span></div>
 
             <paper-icon-button icon="account-circle"></paper-icon-button>
-            <elith-logout></elith-logout>
+            <elith-logout stored-user="{{storedUser}}" ></elith-logout>
+
 
           </app-toolbar>
         </app-header>
 
-        log in :     [[storedUser.loggedin]]
-
+          <a name="login" href="[[rootPath]]login" hidden$="[[storedUser.loggedin]]">Log in</a>
+        
         <iron-pages
             selected="[[page]]"
             attr-for-selected="name"
