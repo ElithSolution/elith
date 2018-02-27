@@ -3,6 +3,7 @@
   "shell": "src/elith-app.html",
   "fragments": [
     "src/elith-login.html",
+    "src/elith-logout.html",
     "src/elith-accueil.html",
     "src/elith-client.html",
     "src/elith-produit.html",
