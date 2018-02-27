@@ -33,28 +33,31 @@
 
 
     <script>
-        class ElithLogout extends Polymer.Element {
-            static get is() { return 'elith-logout'; }
-
-            static get properties(){
-                return {
-                    storedUser: Object,
-                    link: {
-                        type: Boolean,
-                        value: false
-                    },
-                    clients: {
-                        type: Object,
-                    },
-                };
-            }
-
-            logout(){
-                // remove user data
-                this.storedUser = null;
-                this.clients = null;
-            }
+      class ElithLogout extends Polymer.Element {
+        static get is() {
+          return 'elith-logout';
         }
-        window.customElements.define(ElithLogout.is, ElithLogout);
+
+        static get properties() {
+          return {
+            storedUser: Object,
+            link: {
+              type: Boolean,
+              value: false,
+            },
+            clients: {
+              type: Object,
+            },
+          };
+        }
+
+        logout() {
+          // remove user data
+          this.storedUser = null;
+          this.clients = null;
+        }
+      }
+
+      window.customElements.define(ElithLogout.is, ElithLogout);
     </script>
 </dom-module>

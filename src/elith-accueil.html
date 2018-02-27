@@ -15,6 +15,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="shared-styles.html">
 <link rel="import" href="elith-data.html">
+<link rel="import" href="elith-login.html">
 
 
 <dom-module id="elith-accueil">
@@ -40,20 +41,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </style>
         </style>
 
-        <div class="card">
+
+        <div name="secret-quotes" hidden$="[[storedUser.loggedin]]">
+             <elith-login></elith-login>
+         </div>
+
+
+        <div class="card" hidden$="[[!storedUser.loggedin]]">
                  <h1>Accueil</h1>
                       <div main-title> <span id="test">LOGIN : [[storedUser.name]] !</span></div>
                       <p>Bienvenu sur la page d'accueil de votre compte Elith</p>
         </div>
 
-        <div class="container flex-horizontal-with-ratios">
+        <div class="container flex-horizontal-with-ratios" hidden$="[[!storedUser.loggedin]]">
 
-                <div class="flex2child">
+                <div class="flex2child" hidden$="[[!storedUser.loggedin]]">
                            <div class="card">
                                 <h1>Mon calendrier du jour</h1>
                            </div>
                 </div>
-                <div class="flexchild">
+                <div class="flexchild" hidden$="[[!storedUser.loggedin]]">
                            <div class="card">
                                  <h1>Liste de mes suivis</h1>
                             </div>

@@ -24,8 +24,6 @@
 <dom-module id="elith-app">
   <link rel="import" type="css" href="../src/style/elith-style.css">
   <template>
-
-
     <app-location
         route="{{route}}"
         url-space-regex="^[[rootPath]]">
@@ -35,7 +33,7 @@
         route="{{route}}"
         pattern="[[rootPath]]:page"
         data="{{routeData}}"
-        tail="{{subroute}}">
+        tail="{{subRoute}}">
     </app-route>
     <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
@@ -43,7 +41,9 @@
 
       <app-drawer-layout fullbleed narrow="{{narrow}}">
       <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" hidden$="[[!storedUser.loggedin]]">
+
+
         <app-toolbar>Menu</app-toolbar>
         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
           <a name="elith-client" href="[[rootPath]]client">Clients</a>
@@ -64,10 +64,10 @@
             <elith-logout stored-user="{{storedUser}}" ></elith-logout>
 
 
+
           </app-toolbar>
         </app-header>
 
-          <a name="login" href="[[rootPath]]login" hidden$="[[storedUser.loggedin]]">Log in</a>
 
         <iron-pages
             selected="[[page]]"
@@ -86,63 +86,75 @@
   </template>
 
   <script>
-    class ElithApp extends Polymer.Element {
-      static get is() { return 'elith-app'; }
+      class ElithApp extends Polymer.Element {
+          static get is() {
+              return 'elith-app';
+          }
 
-      static get properties() {
-        return {
-          page: {
-            type: String,
-            reflectToAttribute: true,
-            observer: '_pageChanged',
-          },
-          routeData: Object,
-          subroute: String,
-          // This shouldn't be neccessary, but the Analyzer isn't picking up
-          // Polymer.Element#rootPath
-          rootPath: String,
+          static get properties() {
+              return {
+                  page: {
+                      type: String,
+                      reflectToAttribute: true,
+                      observer: '_pageChanged',
+                  },
+                  routeData: Object,
+                  subRoute: String,
+                  // This shouldn't be neccessary, but the Analyzer isn't picking up
+                  // Polymer.Element#rootPath
+                  rootPath: String,
 
-            storedUser: {
-                type: Object,
-                notify: true,
-            }
-        };
+                  storedUser: {
+                      type: Object,
+                      notify: true,
+                      observer: '_storedUserChanged',
+                  },
+              };
+          }
+
+          static get observers() {
+              return [
+                  '_routePageChanged(routeData.page)',
+              ];
+          }
+
+          _storedUserChanged(storedUser) {
+              if (this.storedUser === null) {
+                  this.page = 'accueil';
+                  this.set('route.path', '/accueil');
+              }
+          }
+
+          _routePageChanged(page) {
+              // If no page was found in the route data, page will be an empty string.
+              if (this.storedUser === null) {
+                  this.page = 'accueil';
+                  this.set('route.path', '/accueil');
+              } else {
+                  this.page = page || 'accueil';
+              }
+
+              // Close a non-persistent drawer when the page & route are changed.
+              if (!this.$.drawer.persistent) {
+                  this.$.drawer.close();
+              }
+          }
+
+          _pageChanged(page) {
+              // Load page import on demand. Show 404 page if fails
+              let resolvedPageUrl = this.resolveUrl('elith-' + page + '.html');
+              Polymer.importHref(
+                  resolvedPageUrl,
+                  null,
+                  this._showPage404.bind(this),
+                  true);
+          }
+
+          _showPage404() {
+              this.page = 'view404';
+          }
       }
 
-      static get observers() {
-        return [
-          '_routePageChanged(routeData.page)',
-        ];
-      }
-
-      _routePageChanged(page) {
-        // If no page was found in the route data, page will be an empty string.
-        // Default to 'view1' in that case.
-        this.page = page || 'accueil';
-
-        // Close a non-persistent drawer when the page & route are changed.
-        if (!this.$.drawer.persistent) {
-          this.$.drawer.close();
-        }
-      }
-
-      _pageChanged(page) {
-        // Load page import on demand. Show 404 page if fails
-        let resolvedPageUrl = this.resolveUrl('elith-' + page + '.html');
-        Polymer.importHref(
-            resolvedPageUrl,
-            null,
-            this._showPage404.bind(this),
-            true);
-      }
-
-      _showPage404() {
-        this.page = 'view404';
-      }
-
-
-    }
-
-    window.customElements.define(ElithApp.is, ElithApp);
+      window.customElements.define(ElithApp.is, ElithApp);
   </script>
 </dom-module>
