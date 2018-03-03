@@ -4,9 +4,11 @@
   "devDependencies": {
     "eslint": "4.18.2",
     "eslint-config-google": "0.7.1",
-    "eslint-plugin-html": "4.0.2"
+    "eslint-plugin-html": "4.0.2",
+    "nsp": "3.2.1"
   },
   "scripts": {
+    "audit": "nsp check",
     "lint": "npm run lint:javascript && polymer lint",
     "lint:javascript": "eslint . --ext js,html --ignore-path .gitignore",
     "test": "polymer test",
