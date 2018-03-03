@@ -27,7 +27,6 @@
       created () {
         let key = this.getAttribute('key')
         if (!key) {
-          console.log(this)
           throw ('elith-data element requires key')
         }
         this.instances.push({
@@ -47,7 +46,7 @@
         }
       }
 
-      _data_changed (newvalue, oldvalue) {
+      _data_changed (newvalue) {
         let key = this.getAttribute('key')
         if (!key) {
           throw ('_data_changed: app-data element requires key')

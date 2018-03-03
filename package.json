@@ -1,9 +1,10 @@
 {
-  "name": "polymer-starter-kit",
-  "license": "BSD-3-Clause",
+  "name": "Elith",
+  "license": "MIT",
   "devDependencies": {
-    "eslint": "3.19.0",
-    "eslint-config-google": "0.7.1"
+    "eslint": "4.18.2",
+    "eslint-config-google": "0.7.1",
+    "eslint-plugin-html": "4.0.2"
   },
   "scripts": {
     "lint": "npm run lint:javascript && polymer lint",

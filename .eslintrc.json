@@ -1,12 +1,14 @@
 {
-  "extends": ["eslint:recommended", "google"],
+  "extends": ["eslint:recommended"],
   "parserOptions": {
     "ecmaVersion": 6
   },
   "env": {
     "browser": true
   },
-  "plugins": [],
+  "plugins": [
+    "html"
+  ],
   "rules": {
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
@@ -15,6 +17,12 @@
     "linebreak-style": "off"
   },
   "globals": {
-    "Polymer": true
+    "__dirname": false,
+    "app": false,
+    "page": false,
+    "Polymer": false,
+    "process": false,
+    "require": false,
+    "Elith": false
   }
 }
