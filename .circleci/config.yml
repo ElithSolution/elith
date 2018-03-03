@@ -1,0 +1,30 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/elith
+    docker:
+      - image: circleci/node:8.9-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: install-dependencies-npm
+          command: npm install
+      - run:
+          name: install-dependencies-bower
+          command: bower install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+            - ~/.cache/npm
+      - run:
+          name: linter
+          command: npm run lint
+      - run:
+          name: security-audit
+          command: npm run audit
+      - run:
+          name: unit-tests
+          command: npm run test
