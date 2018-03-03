@@ -15,7 +15,7 @@
 
 <link rel="import" href="elith-login.html">
 <link rel="import" href="elith-logout.html">
-
+<link rel="lazy-import" href="elith-accueil.html">
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
 <link rel="lazy-import" href="elith-horaire.html">
@@ -25,64 +25,65 @@
   <link rel="import" type="css" href="../src/style/elith-style.css">
   <template>
     <app-location
-        route="{{route}}"
-        url-space-regex="^[[rootPath]]">
+      route="{{route}}"
+      url-space-regex="^[[rootPath]]">
     </app-location>
 
     <app-route
-        route="{{route}}"
-        pattern="[[rootPath]]:page"
-        data="{{routeData}}"
-        tail="{{subRoute}}">
+      route="{{route}}"
+      pattern="[[rootPath]]:page"
+      data="{{routeData}}"
+      tail="{{subRoute}}">
     </app-route>
-    <iron-localstorage name="user-storage" value="{{storedUser}}" ></iron-localstorage>
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+    <app-drawer-layout fullbleed narrow="{{narrow}}">
+      <!-- Drawer content -->
+      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" hidden$="[[!storedUser.loggedin]]">
+        <app-header-layout has-scrolling-region>
+          <app-header slot="header" fixed effects="waterfall">
 
-      <app-drawer-layout fullbleed narrow="{{narrow}}">
-        <!-- Drawer content -->
-        <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" hidden$="[[!storedUser.loggedin]]">
-          <app-header-layout has-scrolling-region>
-            <app-header slot="header" fixed effects="waterfall">
-
-              <app-toolbar>
-                <slot name="logo">
-                  <paper-icon-button src="../images/logo.png" class="logo">Logo</paper-icon-button>
-                </slot>
-              </app-toolbar>
-            </app-header>
+            <app-toolbar>
+              <slot name="logo">
+                <paper-icon-button src="../images/logo.png" class="logo">Logo</paper-icon-button>
+              </slot>
+            </app-toolbar>
+          </app-header>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name="elith-accueil" href="[[rootPath]]accueil">
-              <paper-icon-button icon="my-icons:home" ></paper-icon-button>Accueil
+              <paper-icon-button icon="my-icons:home"></paper-icon-button>
+              Accueil
             </a>
             <a name="elith-client" href="[[rootPath]]client">
-              <paper-icon-button icon="my-icons:client" ></paper-icon-button>Clients</a>
+              <paper-icon-button icon="my-icons:client"></paper-icon-button>
+              Clients</a>
             <a name="elith-produit" href="[[rootPath]]produit">Produits</a>
             <a name="elith-horaire" href="[[rootPath]]horaire">Horaire</a>
           </iron-selector>
-          </app-header-layout>
-        </app-drawer>
+        </app-header-layout>
+      </app-drawer>
 
       <!-- Main content -->
-        <app-header-layout has-scrolling-region>
+      <app-header-layout has-scrolling-region>
 
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title> <span>LOGIN : [[storedUser.name]] !</span></div>
+            <div main-title><span>LOGIN : [[storedUser.name]] !</span></div>
 
             <paper-icon-button icon="account-circle"></paper-icon-button>
-            <elith-logout stored-user="{{storedUser}}" ></elith-logout>
+            <elith-logout stored-user="{{storedUser}}"></elith-logout>
 
           </app-toolbar>
         </app-header>
 
         <iron-pages
-            selected="[[page]]"
-            attr-for-selected="name"
-            fallback-selection="view404"
-            role="main">
+          selected="[[page]]"
+          attr-for-selected="name"
+          fallback-selection="view404"
+          role="main">
           <elith-login name="login"></elith-login>
           <elith-accueil name="accueil"></elith-accueil>
           <elith-client name="client" route="[[subRoute]]"></elith-client>
@@ -95,75 +96,72 @@
   </template>
 
   <script>
-      class ElithApp extends Polymer.Element {
-          static get is() {
-              return 'elith-app';
-          }
-
-          static get properties() {
-              return {
-                  page: {
-                      type: String,
-                      reflectToAttribute: true,
-                      observer: '_pageChanged',
-                  },
-                  routeData: Object,
-                  subRoute: String,
-                  // This shouldn't be neccessary, but the Analyzer isn't picking up
-                  // Polymer.Element#rootPath
-                  rootPath: String,
-
-                  storedUser: {
-                      type: Object,
-                      notify: true,
-                      observer: '_storedUserChanged',
-                  },
-              };
-          }
-
-          static get observers() {
-              return [
-                  '_routePageChanged(routeData.page)',
-              ];
-          }
-
-          _storedUserChanged(storedUser) {
-              if (this.storedUser === null) {
-                  this.page = 'accueil';
-                  this.set('route.path', '/accueil');
-              }
-          }
-
-          _routePageChanged(page) {
-              // If no page was found in the route data, page will be an empty string.
-              if (this.storedUser === null) {
-                  this.page = 'accueil';
-                  this.set('route.path', '/accueil');
-              } else {
-                  this.page = page || 'accueil';
-              }
-
-              // Close a non-persistent drawer when the page & route are changed.
-              if (!this.$.drawer.persistent) {
-                  this.$.drawer.close();
-              }
-          }
-
-          _pageChanged(page) {
-              // Load page import on demand. Show 404 page if fails
-              let resolvedPageUrl = this.resolveUrl('elith-' + page + '.html');
-              Polymer.importHref(
-                  resolvedPageUrl,
-                  null,
-                  this._showPage404.bind(this),
-                  true);
-          }
-
-          _showPage404() {
-              this.page = 'view404';
-          }
+    class ElithApp extends Polymer.Element {
+      static get is () {
+        return 'elith-app'
       }
 
-      window.customElements.define(ElithApp.is, ElithApp);
+      static get properties () {
+        return {
+          page: {
+            type: String,
+            reflectToAttribute: true,
+            observer: '_pageChanged',
+          },
+          routeData: Object,
+          subRoute: String,
+          rootPath: String,
+          storedUser: {
+            type: Object,
+            notify: true,
+            observer: '_storedUserChanged',
+          },
+        }
+      }
+
+      static get observers () {
+        return [
+          '_routePageChanged(routeData.page)',
+        ]
+      }
+
+      _storedUserChanged (storedUser) {
+        if (this.storedUser === null) {
+          this.page = 'accueil'
+          this.set('route.path', '/accueil')
+        }
+      }
+
+      _routePageChanged (page) {
+        // If no page was found in the route data, page will be an empty string.
+        if (this.storedUser === null) {
+          this.page = 'accueil'
+          this.set('route.path', '/accueil')
+        } else {
+          this.page = page || 'accueil'
+        }
+
+        // Close a non-persistent drawer when the page & route are changed.
+        if (!this.$.drawer.persistent) {
+          this.$.drawer.close()
+        }
+      }
+
+      _pageChanged (page) {
+        // Load page import on demand. Show 404 page if fails
+        let resolvedPageUrl = this.resolveUrl('elith-' + page + '.html')
+        Polymer.importHref(
+          resolvedPageUrl,
+          null,
+          this._showPage404.bind(this),
+          true)
+      }
+
+      _showPage404 () {
+        this.page = 'view404'
+      }
+    }
+
+    window.customElements.define(ElithApp.is, ElithApp)
   </script>
 </dom-module>

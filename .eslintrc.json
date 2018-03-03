@@ -6,9 +6,7 @@
   "env": {
     "browser": true
   },
-  "plugins": [
-    "html"
-  ],
+  "plugins": [],
   "rules": {
     "brace-style": "off",
     "new-cap": ["error", { "capIsNewExceptions": ["Polymer"] }],
