@@ -12,6 +12,9 @@ jobs:
           name: install-dependencies-npm
           command: npm install
       - run:
+          name: install bower globally
+          command: npm i bower -g
+      - run:
           name: install-dependencies-bower
           command: bower install
       - save_cache:
