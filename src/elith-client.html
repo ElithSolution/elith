@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="elith-client">
@@ -11,10 +12,18 @@
       }
     </style>
 
+    <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:id"
+            data="{{routeData}}"
+            tail="{{subRoute}}">
+    </app-route>
+
     <div class="card">
       <div class="circle">1</div>
       <h1>Client</h1>
-      <p>Affichage des clients.</p>
+      <p>Affichage des clients : [[route]]</p>
+
       <p>Détail d'un client  <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
       </p>
     </div>
@@ -25,6 +34,24 @@
         static get is() {
             return 'elith-client';
         }
+
+      static get properties()
+      {
+        return {
+          routeData: Object,
+          route: {
+            type: Object,
+            notify: true,
+            observer: '_routeChanged',
+          },
+
+        };
+      }
+
+      _routeChanged(route) {
+       console.log(route);
+       console.log(this.routeData);
+      }
 
         _getItemHrefTest(item) {
             // By returning null when `itemId` is undefined, the href attribute won't be set and

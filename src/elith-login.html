@@ -27,7 +27,6 @@
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-        <elith-data key="pathElith" data="{{pathElith}}"></elith-data>
 
 
         <iron-ajax
@@ -92,7 +91,7 @@
             target: {
               type: Object,
             },
-            pathElith: Object,
+
           };
         }
 
@@ -106,7 +105,7 @@
         }
 
         postLogin() {
-          this.$.registerLoginAjax.url = ELITH_AUTHENTICATE;
+          this.$.registerLoginAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
           this._setReqBody();
           this.$.registerLoginAjax.generateRequest();
         }
@@ -122,8 +121,7 @@
               accessToken: response.accessToken,
               loggedin: true,
             };
-            // path de l'appli
-            this.pathElith = ELITH_PATH;
+
 
             // redirect to Secret Quotes
             this.set('route.path', '/accueil');
