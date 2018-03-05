@@ -1,63 +1,62 @@
-
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-data.html">
 
 <dom-module id="elith-logout">
-    <template>
-        <style>
-            :host {
-                margin: 0;
-                padding: 0;
-            }
+  <template>
+    <style>
+      :host {
+        margin: 0;
+        padding: 0;
+      }
 
-            a {
-                color: #fff;
-                display: inline-block;
-                font-size: 13px;
-            }
-        </style>
+      a {
+        color: #fff;
+        display: inline-block;
+        font-size: 13px;
+      }
+    </style>
 
-        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <elith-data key="clientsListed" data="{{clients}}"></elith-data>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+    <elith-data key="clientsListed" data="{{clients}}"></elith-data>
 
-        <template is="dom-if" if="{{!link}}">
-            <paper-button raised on-tap="logout">Log Out</paper-button>
-        </template>
-
-        <template is="dom-if" if="{{link}}">
-            <a on-tap="logout" href>Log Out</a>
-        </template>
+    <template is="dom-if" if="{{!link}}">
+      <paper-button raised on-tap="logout">Log Out</paper-button>
     </template>
 
+    <template is="dom-if" if="{{link}}">
+      <a on-tap="logout" href>Log Out</a>
+    </template>
+  </template>
 
-    <script>
-      class ElithLogout extends Polymer.Element {
-        static get is() {
-          return 'elith-logout';
-        }
 
-        static get properties() {
-          return {
-            storedUser: Object,
-            link: {
-              type: Boolean,
-              value: false,
-            },
-            clients: {
-              type: Object,
-            },
-          };
-        }
+  <script>
+    class ElithLogout extends Polymer.Element {
+      static get is () {
+        return 'elith-logout'
+      }
 
-        logout() {
-          // remove user data
-          this.storedUser = null;
-          this.clients = null;
+      static get properties () {
+        return {
+          storedUser: Object,
+          link:       {
+            type:  Boolean,
+            value: false,
+          },
+          clients:    {
+            type: Object,
+          },
         }
       }
 
-      window.customElements.define(ElithLogout.is, ElithLogout);
-    </script>
+      logout () {
+        // remove user data
+        this.storedUser = null
+        this.clients = null
+      }
+    }
+
+    window.customElements.define(ElithLogout.is, ElithLogout)
+  </script>
 </dom-module>

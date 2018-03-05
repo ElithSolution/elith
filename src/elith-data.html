@@ -1,67 +1,67 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 
 <dom-module id="elith-data">
-    <script>
-      class ElithData extends Polymer.Element {
-        static get is() { return 'elith-data'; }
+  <script>
+    class ElithData extends Polymer.Element {
+      static get is () { return 'elith-data' }
 
-        constructor() {
-          super();
-          this.instances = [];
-          this.vars = Object.create(Polymer.Base);
+      constructor () {
+        super()
+        this.instances = []
+        this.vars = Object.create(Polymer.Base)
+      }
+
+      static get properties () {
+        return {
+          data: {
+            type:     Object,
+            value:    '',
+            notify:   true,
+            readonly: false,
+            observer: '_data_changed',
+          },
+          key:  String,
         }
+      }
 
-        static get properties() {
-          return {
-            data: {
-              type: Object,
-              value: '',
-              notify: true,
-              readonly: false,
-              observer: '_data_changed',
-            },
-            key: String,
-          };
+      created () {
+        let key = this.getAttribute('key')
+        if (!key) {
+          throw ('elith-data element requires key')
         }
+        this.instances.push({
+          key:      key,
+          instance: this,
+        })
+      }
 
-        created() {
-          let key = this.getAttribute('key');
-          if (!key) {
-            console.log(this);
-            throw ('elith-data element requires key');
-          }
-          this.instances.push({
-            key: key,
-            instance: this,
-          });
+      detached () {
+        let key = this.getAttribute('key')
+        let i = this.instances.indexOf({
+          key:      key,
+          instance: this,
+        })
+        if (i >= 0) {
+          this.instances.splice(i, 1)
         }
+      }
 
-        detached() {
-          let key = this.getAttribute('key');
-          let i = this.instances.indexOf({
-            key: key,
-            instance: this,
-          });
-          if (i >= 0) {
-            this.instances.splice(i, 1);
-          }
+      _data_changed (newvalue) {
+        let key = this.getAttribute('key')
+        if (!key) {
+          throw ('_data_changed: app-data element requires key')
         }
+        this.vars.set(key, newvalue)
 
-        _data_changed(newvalue, oldvalue) {
-          let key = this.getAttribute('key');
-          if (!key) {
-            throw ('_data_changed: app-data element requires key');
-          }
-          this.vars.set(key, newvalue);
-
-          // notify the instances with the correct key
-          for (let i = 0; i < this.instances.length; i++) {
-            if (this.instances[i].key == key) {
-              this.instances[i].instance.notifyPath('data', newvalue);
-            }
+        // notify the instances with the correct key
+        for (let i = 0; i < this.instances.length; i++) {
+          if (this.instances[i].key == key) {
+            this.instances[i].instance.notifyPath('data', newvalue)
           }
         }
       }
-      window.customElements.define(ElithData.is, ElithData);
-    </script>
+    }
+
+    window.customElements.define(ElithData.is, ElithData)
+  </script>
 </dom-module>

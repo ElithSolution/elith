@@ -1,5 +1,5 @@
 {
-  "extends": ["eslint:recommended", "google"],
+  "extends": ["eslint:recommended"],
   "parserOptions": {
     "ecmaVersion": 6
   },
@@ -17,6 +17,12 @@
     "linebreak-style": "off"
   },
   "globals": {
-    "Polymer": true
+    "__dirname": false,
+    "app": false,
+    "page": false,
+    "Polymer": false,
+    "process": false,
+    "require": false,
+    "Elith": false
   }
 }

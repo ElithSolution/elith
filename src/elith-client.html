@@ -7,16 +7,15 @@
     <style include="shared-styles">
       :host {
         display: block;
-
         padding: 10px;
       }
     </style>
 
     <app-route
-            route="{{route}}"
-            pattern="[[rootPath]]:id"
-            data="{{routeData}}"
-            tail="{{subRoute}}">
+      route="{{route}}"
+      pattern="[[rootPath]]:id"
+      data="{{routeData}}"
+    >
     </app-route>
 
     <div class="card">
@@ -24,45 +23,40 @@
       <h1>Client</h1>
       <p>Affichage des clients : [[route]]</p>
 
-      <p>Détail d'un client  <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
+      <p>Détail d'un client <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
       </p>
     </div>
   </template>
 
   <script>
     class ElithClient extends Polymer.Element {
-        static get is() {
-            return 'elith-client';
-        }
+      static get is () {
+        return 'elith-client'
+      }
 
-      static get properties()
-      {
+      static get properties () {
         return {
           routeData: Object,
-          route: {
-            type: Object,
-            notify: true,
+          route:     {
+            type:     Object,
+            notify:   true,
             observer: '_routeChanged',
           },
 
-        };
-      }
-
-      _routeChanged(route) {
-       console.log(route);
-       console.log(this.routeData);
-      }
-
-        _getItemHrefTest(item) {
-            // By returning null when `itemId` is undefined, the href attribute won't be set and
-            // the link will be disabled.
-            return item ? ['/client', 1380].join('/') : null;
-
         }
+      }
+
+      _routeChanged () {
+      }
+
+      _getItemHrefTest (item) {
+        // By returning null when `itemId` is undefined, the href attribute won't be set and
+        // the link will be disabled.
+        return item ? ['/client', 1380].join('/') : null
+
+      }
     }
 
-
-
-    window.customElements.define(ElithClient.is, ElithClient);
+    window.customElements.define(ElithClient.is, ElithClient)
   </script>
 </dom-module>
