@@ -87,7 +87,7 @@
           <elith-login name="login"></elith-login>
           <elith-accueil name="accueil"></elith-accueil>
           <elith-client name="client" route="[[subRoute]]"></elith-client>
-          <elith-produit name="produit"></elith-produit>
+          <elith-produit name="produit" route="[[subRoute]]"></elith-produit>
           <elith-horaire name="horaire"></elith-horaire>
           <elith-view404 name="view404"></elith-view404>
         </iron-pages>
@@ -140,6 +140,7 @@
         } else {
           this.page = page || 'accueil'
         }
+
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
