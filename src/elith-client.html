@@ -27,7 +27,7 @@
       </p>
     </div>
 
-    <dom-if if="[[isIdPage]]">
+    <dom-if if="[[isIdPage]]" restamp>
       <template>
         <div class="card">
           <div class="circle"></div>
@@ -83,6 +83,8 @@
         }
       }
 
+
+
       _routeChanged (route) {
 
         this.isIdPage = false;
@@ -105,6 +107,9 @@
           this.isIdPage = true;
 
         }
+        this.set('route.path', '/client');
+        this.set('routeData.param', '');
+
 
       }
 
