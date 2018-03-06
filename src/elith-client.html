@@ -13,7 +13,7 @@
 
     <app-route
       route="{{route}}"
-      pattern="[[rootPath]]:id"
+      pattern="[[rootPath]]:param"
       data="{{routeData}}"
     >
     </app-route>
@@ -26,6 +26,31 @@
       <p>Détail d'un client <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
       </p>
     </div>
+
+    <dom-if if="[[isIdPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          Détail !
+      </template>
+    </dom-if>
+
+    <dom-if if="[[isAddPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          Ajout !
+      </template>
+    </dom-if>
+
+    <dom-if if="[[isSearchPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          Recherche !
+      </template>
+    </dom-if>
+
   </template>
 
   <script>
@@ -38,15 +63,49 @@
         return {
           routeData: Object,
           route:     {
-            type:     Object,
-            notify:   true,
+            type: Object,
             observer: '_routeChanged',
           },
+          isIdPage:{
+            type: Boolean,
+            value: false,
+          },
+          isAddPage:{
+            type: Boolean,
+            value: false,
+          },
+          isSearchPage:{
+            type: Boolean,
+            value: false,
+          },
+
 
         }
       }
 
-      _routeChanged () {
+      _routeChanged (route) {
+
+        this.isIdPage = false;
+        this.isAddPage = false;
+        this.isSearchPage = false;
+
+        console.log('route :: ' + route);
+        console.log('routeData :: ' + this.routeData.param);
+
+        if(this.routeData.param === 'add'){
+          console.log('redirige vers la page d ajout');
+          this.isAddPage = true;
+
+        }else if(this.routeData.param === 'search'){
+          console.log('redirige vers la page de recherche');
+          this.isSearchPage = true;
+
+        }else if(Number(this.routeData.param)){
+          console.log('redirige vers la page de détail');
+          this.isIdPage = true;
+
+        }
+
       }
 
       _getItemHrefTest (item) {

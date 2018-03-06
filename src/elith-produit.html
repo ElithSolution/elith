@@ -1,4 +1,5 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="elith-produit">
@@ -9,6 +10,13 @@
         padding: 10px;
       }
     </style>
+
+    <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
+    >
+    </app-route>
 
     <div class="card">
       <div class="circle">2</div>
@@ -22,6 +30,23 @@
   <script>
     class ElithProduit extends Polymer.Element {
       static get is () { return 'elith-produit' }
+
+      static get properties () {
+        return {
+          routeData: Object,
+          route: {
+            type: Object,
+            observer: '_routeChanged',
+          }
+        }
+      }
+
+        _routeChanged (route){
+         console.log('route ', route);
+          console.log('routeData ', this.routeData);
+          this.set('route.path', '/produit');
+          this.set('routeData.param', '');
+        }
     }
 
     window.customElements.define(ElithProduit.is, ElithProduit)
