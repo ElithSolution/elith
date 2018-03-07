@@ -1,0 +1,161 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="elith-clientsearch">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+
+        <iron-localstorage name="user-storage" value="{{storedUser}}"
+                           on-iron-localstorage-load="initStoredUser"
+                           on-iron-localstorage-load-empty="initStoredUser"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <app-route
+                route="{{route}}"
+                pattern="[[rootPath]]:param"
+                data="{{routeData}}"
+        >
+        </app-route>
+
+        <iron-ajax
+                id="getClientsAjax"
+                method="get"
+                content-type="application/json"
+                handle-as="JSON"
+                on-response="handleClientsResponse"
+                on-error="handleClientsError">
+        </iron-ajax>
+
+        <paper-search-panel search="{{search}}"
+                            items="[[items]]"
+                            has-more="[[hasMore]]"
+                            loading="[[loading]]"
+                            hide-filter-button=true>
+
+            <div>
+                [[nbRes]] résultat(s).
+            </div>
+        </paper-search-panel>
+
+        <vaadin-grid items="{{clients}}" size="200">
+
+            <vaadin-grid-column width="50px">
+                <template>
+                    <a href$="[[_getItemHref(item)]]"> [[item.client.prenom]]</a>
+                </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px">
+                <template>
+                    <a href$="[[_getTest(item)]]"> [[item.client.prenom]]</a>
+                </template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="50px"><template>[[item.client.nom]]</template></vaadin-grid-column>
+            <vaadin-grid-column width="50px"><template>[[formatDate(item.client.dateNaissance)]]</template></vaadin-grid-column>
+
+
+        </vaadin-grid>
+
+
+    </template>
+
+    <script>
+      var delayTimer;
+      class ElithClientsearch extends Polymer.Element {
+        static get is() {
+          return 'elith-clientsearch'
+        }
+
+        static get properties() {
+          return {
+            storedUser: {
+              type: Object,
+              notify: true,
+            },
+            routeData: Object,
+            route: {
+              type: Object,
+              observer: '_routeChanged',
+            },
+            clients: {
+              type: Object
+            },
+            error: String,
+            search: {
+              type: String,
+              value: "",
+              observer: 'delayTyping'
+            },
+            nbRes: {
+              type: Number,
+              notify: true,
+              value: 0
+            },
+
+          }
+        }
+
+        initStoredUser() {
+          console.log("INIT StoredUser ", this.storedUser);
+          if (this.storedUser.loggedin) {
+            console.log('est loggué');
+          }
+
+        }
+
+
+        delayTyping(){
+          clearTimeout(this.delayTimer);
+          let head = this.$.getClientsAjax;
+
+          console.log('storedUser', this.storedUser);
+          if(typeof(this.storedUser) == 'undefined'){
+            console.log('undefined !!!!');
+
+          }
+          let token = this.storedUser.accessToken;
+          let searchField = this.search;
+          this.delayTimer = setTimeout(function() {
+            loadData(head, token, searchField);
+          }, 300);
+
+        }
+
+        handleClientsResponse(event) {
+          var response = JSON.parse(event.detail.response);
+          this.nbRes = response.items.length;
+          this.clients = response.items;
+          this.error = null;
+        }
+
+        handleClientsError(event) {
+          var response = JSON.parse(event.detail.request.xhr.response);
+          console.log("handeClientsError " + response);
+          this.error = response;
+          if (this.error.code == 401) {
+            console.log('ERREUR 401 ');
+            this.storedUser = null;
+          }
+          console.log(this.error.code);
+        }
+
+      }
+
+      function loadData(clientAjax, token, searchField) {
+        clientAjax.headers['Authorization'] = 'Bearer ' + token;
+        clientAjax.url = Elith.PATH.ELITH_CLIENTS + '?search=' + searchField;
+        clientAjax.generateRequest();
+      }
+
+      window.customElements.define(ElithClientsearch.is, ElithClientsearch)
+    </script>
+</dom-module>

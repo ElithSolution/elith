@@ -1,5 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+
+
+<link rel="import" href="client/elith-clientid.html">
+<link rel="import" href="client/elith-clientsearch.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="elith-client">
@@ -11,6 +18,9 @@
       }
     </style>
 
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
     <app-route
       route="{{route}}"
       pattern="[[rootPath]]:param"
@@ -21,7 +31,7 @@
     <div class="card">
       <div class="circle">1</div>
       <h1>Client</h1>
-      <p>Affichage des clients : [[route]]</p>
+      <p>Affichage des clients</p>
 
       <p>Détail d'un client <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
       </p>
@@ -31,7 +41,7 @@
       <template>
         <div class="card">
           <div class="circle"></div>
-          Détail !
+          <elith-clientid></elith-clientid>
       </template>
     </dom-if>
 
@@ -47,7 +57,7 @@
       <template>
         <div class="card">
           <div class="circle"></div>
-          Recherche !
+          <elith-clientsearch></elith-clientsearch>
       </template>
     </dom-if>
 
@@ -61,6 +71,10 @@
 
       static get properties () {
         return {
+          storedUser: {
+            type: Object,
+            notify: true,
+          },
           routeData: Object,
           route:     {
             type: Object,
@@ -91,8 +105,8 @@
         this.isAddPage = false;
         this.isSearchPage = false;
 
-        console.log('route :: ' + route);
-        console.log('routeData :: ' + this.routeData.param);
+        console.log('route ', route);
+        console.log('routeData ', this.routeData);
 
         if(this.routeData.param === 'add'){
           console.log('redirige vers la page d ajout');
@@ -107,8 +121,11 @@
           this.isIdPage = true;
 
         }
-        this.set('route.path', '/client');
+
         this.set('routeData.param', '');
+        console.log('storedUser', this.storedUser);
+        
+
 
 
       }
