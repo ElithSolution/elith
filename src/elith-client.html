@@ -71,10 +71,7 @@
 
       static get properties () {
         return {
-          storedUser: {
-            type: Object,
-            notify: true,
-          },
+          storedUser: Object,
           routeData: Object,
           route:     {
             type: Object,
@@ -124,7 +121,7 @@
 
         this.set('routeData.param', '');
         console.log('storedUser', this.storedUser);
-        
+
 
 
 

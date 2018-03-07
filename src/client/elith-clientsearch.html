@@ -16,9 +16,7 @@
             }
         </style>
 
-        <iron-localstorage name="user-storage" value="{{storedUser}}"
-                           on-iron-localstorage-load="initStoredUser"
-                           on-iron-localstorage-load-empty="initStoredUser"></iron-localstorage>
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <app-route
                 route="{{route}}"
@@ -46,6 +44,7 @@
                 [[nbRes]] résultat(s).
             </div>
         </paper-search-panel>
+
 
         <vaadin-grid items="{{clients}}" size="200">
 
@@ -104,30 +103,18 @@
           }
         }
 
-        initStoredUser() {
-          console.log("INIT StoredUser ", this.storedUser);
-          if (this.storedUser.loggedin) {
-            console.log('est loggué');
-          }
-
-        }
 
 
         delayTyping(){
           clearTimeout(this.delayTimer);
           let head = this.$.getClientsAjax;
-
-          console.log('storedUser', this.storedUser);
-          if(typeof(this.storedUser) == 'undefined'){
-            console.log('undefined !!!!');
-
+          if(typeof(this.storedUser) !== 'undefined') {
+            let token = this.storedUser.accessToken;
+            let searchField = this.search;
+            this.delayTimer = setTimeout(function () {
+              loadData(head, token, searchField);
+            }, 300);
           }
-          let token = this.storedUser.accessToken;
-          let searchField = this.search;
-          this.delayTimer = setTimeout(function() {
-            loadData(head, token, searchField);
-          }, 300);
-
         }
 
         handleClientsResponse(event) {

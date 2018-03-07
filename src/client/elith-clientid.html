@@ -1,5 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../shared-styles.html">
 
 <dom-module id="elith-clientid">
@@ -10,7 +12,8 @@
                 padding: 10px;
             }
         </style>
-
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <app-route
                 route="{{route}}"
                 pattern="[[rootPath]]:param"
@@ -20,7 +23,7 @@
 
         <div class="card">
             <div class="circle"></div>
-            <p>Affichage des clients</p>
+            <p>Affichage des clients [[storedUser.accessToken]]</p>
 
 
         </div>
