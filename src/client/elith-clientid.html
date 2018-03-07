@@ -1,0 +1,52 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../shared-styles.html">
+
+<dom-module id="elith-clientid">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+    <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
+    >
+    </app-route>
+
+    <div class="card">
+      <div class="circle"></div>
+    </div>
+
+  </template>
+
+  <script>
+    class ElithClientid extends Polymer.Element {
+      static get is () {
+        return 'elith-clientid'
+      }
+
+      static get properties () {
+        return {
+          routeData: Object,
+          route:     {
+            type:     Object,
+            observer: '_routeChanged',
+          },
+
+        }
+      }
+
+      _routeChanged () {}
+    }
+
+    window.customElements.define(ElithClientid.is, ElithClientid)
+  </script>
+</dom-module>

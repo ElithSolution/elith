@@ -1,5 +1,12 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+
+
+<link rel="import" href="client/elith-clientid.html">
+<link rel="import" href="client/elith-clientsearch.html">
+
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="elith-client">
@@ -11,21 +18,49 @@
       }
     </style>
 
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
     <app-route
-      route="{{route}}"
-      pattern="[[rootPath]]:id"
-      data="{{routeData}}"
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
     >
     </app-route>
 
     <div class="card">
       <div class="circle">1</div>
       <h1>Client</h1>
-      <p>Affichage des clients : [[route]]</p>
+      <p>Affichage des clients</p>
 
       <p>Détail d'un client <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
       </p>
     </div>
+
+    <dom-if if="[[isIdPage]]" restamp>
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          <elith-clientid></elith-clientid>
+      </template>
+    </dom-if>
+
+    <dom-if if="[[isAddPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          Ajout !
+      </template>
+    </dom-if>
+
+    <dom-if if="[[isSearchPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          <elith-clientsearch></elith-clientsearch>
+      </template>
+    </dom-if>
+
   </template>
 
   <script>
@@ -36,17 +71,41 @@
 
       static get properties () {
         return {
-          routeData: Object,
-          route:     {
+          storedUser:   Object,
+          routeData:    Object,
+          route:        {
             type:     Object,
-            notify:   true,
             observer: '_routeChanged',
+          },
+          isIdPage:     {
+            type:  Boolean,
+            value: false,
+          },
+          isAddPage:    {
+            type:  Boolean,
+            value: false,
+          },
+          isSearchPage: {
+            type:  Boolean,
+            value: false,
           },
 
         }
       }
 
-      _routeChanged () {
+      _routeChanged() {
+        this.isIdPage = false
+        this.isAddPage = false
+        this.isSearchPage = false
+
+        if (this.routeData.param === 'add') {
+          this.isAddPage = true
+        } else if (this.routeData.param === 'search') {
+          this.isSearchPage = true
+        } else if (Number(this.routeData.param)) {
+          this.isIdPage = true
+        }
+        this.set('routeData.param', '')
       }
 
       _getItemHrefTest (item) {
