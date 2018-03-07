@@ -22,9 +22,9 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
     <app-route
-      route="{{route}}"
-      pattern="[[rootPath]]:param"
-      data="{{routeData}}"
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
     >
     </app-route>
 
@@ -71,60 +71,41 @@
 
       static get properties () {
         return {
-          storedUser: Object,
-          routeData: Object,
-          route:     {
-            type: Object,
+          storedUser:   Object,
+          routeData:    Object,
+          route:        {
+            type:     Object,
             observer: '_routeChanged',
           },
-          isIdPage:{
-            type: Boolean,
+          isIdPage:     {
+            type:  Boolean,
             value: false,
           },
-          isAddPage:{
-            type: Boolean,
+          isAddPage:    {
+            type:  Boolean,
             value: false,
           },
-          isSearchPage:{
-            type: Boolean,
+          isSearchPage: {
+            type:  Boolean,
             value: false,
           },
-
 
         }
       }
 
+      _routeChanged() {
+        this.isIdPage = false
+        this.isAddPage = false
+        this.isSearchPage = false
 
-
-      _routeChanged (route) {
-
-        this.isIdPage = false;
-        this.isAddPage = false;
-        this.isSearchPage = false;
-
-        console.log('route ', route);
-        console.log('routeData ', this.routeData);
-
-        if(this.routeData.param === 'add'){
-          console.log('redirige vers la page d ajout');
-          this.isAddPage = true;
-
-        }else if(this.routeData.param === 'search'){
-          console.log('redirige vers la page de recherche');
-          this.isSearchPage = true;
-
-        }else if(Number(this.routeData.param)){
-          console.log('redirige vers la page de détail');
-          this.isIdPage = true;
-
+        if (this.routeData.param === 'add') {
+          this.isAddPage = true
+        } else if (this.routeData.param === 'search') {
+          this.isSearchPage = true
+        } else if (Number(this.routeData.param)) {
+          this.isIdPage = true
         }
-
-        this.set('routeData.param', '');
-        console.log('storedUser', this.storedUser);
-
-
-
-
+        this.set('routeData.param', '')
       }
 
       _getItemHrefTest (item) {
