@@ -26,7 +26,7 @@
     >
     </app-route>
 
-    <div class="card" hidden$="[[masquerSearchPage]]">
+    <div class="card">
       <elith-clientsearch></elith-clientsearch>
     </div>
     <dom-if if="[[isIdPage]]" restamp>
@@ -69,10 +69,6 @@
             type:  Boolean,
             value: false,
           },
-          masquerSearchPage: {
-            type:  Boolean,
-            value: false,
-          },
         }
       }
 
@@ -82,12 +78,10 @@
 
         if (this.routeData.param === 'add') {
           this.isAddPage = true
-          this.masquerSearchPage = true
         } else if (this.routeData.param === '') {
           this.masquerSearchPage = false
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true
-          this.masquerSearchPage = true
           this.set('routeData.item', this.routeData.param)
         }
         this.set('routeData.param', '')

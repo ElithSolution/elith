@@ -25,13 +25,7 @@
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-    <app-route
-            route="{{route}}"
-            pattern="[[rootPath]]:item"
-            data="{{routeData}}"
 
-    >
-    </app-route>
 
     <iron-ajax
             id="getClientsAjax"
@@ -42,10 +36,6 @@
             on-error="handleClientsError">
     </iron-ajax>
 
-    <div class="card">
-      <span>routedata : [[routeData]]</span><br>
-      <span>route : [[route.path]]</span><br>
-      </div>
 
     <paper-search-panel search="{{search}}"
                         items="[[items]]"

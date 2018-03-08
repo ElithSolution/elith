@@ -1,0 +1,63 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../shared-styles.html">
+
+<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
+<script>
+  // use date parser for all JSON.parse() requests
+  // make sure to call before any JSON conversions
+  JSON.useDateParser()
+</script>
+
+<dom-module id="elith-clientdetail">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+        </style>
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
+<div>
+
+    <span> Nom :  [[resultat.items.0.client.nom]] </span><br>
+    <span> Prénom :  [[resultat.items.0.client.prenom]] </span><br>
+    <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
+    <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
+    <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
+    <span> Email :  [[resultat.items.0.client.email]] </span><br>
+
+</div>
+
+    </template>
+
+    <script>
+      class ElithClientdetail extends Polymer.Element {
+        static get is () {
+          return 'elith-clientdetail'
+        }
+
+        static get properties () {
+          return {
+            storedUser: Object,
+            routeData:      {
+              type:     Object,
+            },
+            resultat: {
+              type: Object,
+            },
+          }
+        }
+
+
+      }
+
+      window.customElements.define(ElithClientdetail.is, ElithClientdetail)
+    </script>
+</dom-module>
