@@ -19,11 +19,11 @@
     </app-route>
 
     <div class="card">
-      <div class="circle">2</div>
-      <h1>Produit</h1>
-      <p>Ea duis bonorum nec, falli paulo aliquid ei eum.</p>
-      <p>Id nam odio natum malorum, tibique copiosae expetenda mel ea.Detracto suavitate repudiandae no eum. Id adhuc
-        minim soluta nam.Id nam odio natum malorum, tibique copiosae expetenda mel ea.</p>
+      <div class="circle"></div>
+      <span>routedata : [[routeData]]</span><br>
+      <span>route : [[route.path]]</span><br>
+      <span>item : [[routeData.item]]</span><br>
+      <span>param : [[routeData.param]]</span><br>
     </div>
   </template>
 
@@ -41,7 +41,9 @@
         }
       }
 
-      _routeChanged(){}
+      _routeChanged(){
+        console.log('routeChanged ', this.routeData);
+      }
     }
 
     window.customElements.define(ElithProduit.is, ElithProduit)

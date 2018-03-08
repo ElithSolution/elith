@@ -1,8 +1,17 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../shared-styles.html">
+
+<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
+<script>
+  // use date parser for all JSON.parse() requests
+  // make sure to call before any JSON conversions
+  JSON.useDateParser()
+</script>
 
 <dom-module id="elith-clientid">
   <template>
@@ -14,16 +23,34 @@
     </style>
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+    <app-location route="{{route}}"></app-location>
     <app-route
             route="{{route}}"
-            pattern="[[rootPath]]:param"
+            pattern="/:category/:param"
             data="{{routeData}}"
     >
     </app-route>
 
+
+    <iron-ajax id="getDetailByIdAjax"
+               auto
+               url="[[pathElith]]/[[routeData.category]]/[[routeData.param]]"
+               method="get"
+               content-type="application/json"
+               handle-as="JSON"
+               on-response="handleDetailResponse"
+               on-error="handleDetailError">
+    </iron-ajax>
+
     <div class="card">
       <div class="circle"></div>
+
+      <span>routedata : [[routeData]]</span><br>
+      <span>route : [[route.path]]</span><br>
+      <span>item : [[routeData.param]]</span><br>
+
     </div>
+
 
   </template>
 
@@ -35,16 +62,74 @@
 
       static get properties () {
         return {
-          routeData: Object,
-          route:     {
+          storedUser: Object,
+          routeData:  Object,
+          route:      {
             type:     Object,
             observer: '_routeChanged',
+          },
+          resultat:   {
+            type:  Object,
+            value: '',
           },
 
         }
       }
 
-      _routeChanged () {}
+      _routeChanged () {
+      }
+
+      ready () {
+        super.ready()
+      }
+
+      initStoredUser () {
+        if (this.storedUser.loggedin) {
+          this.callAjax()
+        }
+      }
+
+      callAjax () {
+        if (typeof(this.routeData) !== 'undefined') {
+          this.$.getDetailByIdAjax.url = 'http://localhost:8080/Elith/webresources/client/' + this.routeData.param
+          this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
+          this.$.getDetailByIdAjax.generateRequest()
+        }
+      }
+
+      compareToken () {
+        let lastToken = 'Bearer ' + this.storedUser.accessToken
+        let usedToken = this.$.getDetailByIdAjax.headers['Authorization']
+
+        if (lastToken !== usedToken) {
+          this.initStoredUser()
+        }
+      }
+
+      handleDetailResponse (event) {
+        this.compareToken()
+        let response = JSON.parse(event.detail.response)
+        this.resultat = response
+        this.error = null
+      }
+
+      handleDetailError (event) {
+        console.log('en erreur :  handleError ' + this.$.getDetailByIdAjax.url)
+        this.compareToken()
+
+        let response = JSON.parse(event.detail.request.xhr.response)
+        this.error = response
+        if (this.error.code == 401) {
+          console.log('ERREUR 401 ')
+          //this.storedUser = null;
+        }
+        if (this.error.code == 404) {
+          console.log('ERREUR 404 ')
+
+        }
+        console.log('ERREUR ' + this.error.code)
+
+      }
     }
 
     window.customElements.define(ElithClientid.is, ElithClientid)

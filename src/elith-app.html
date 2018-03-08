@@ -73,11 +73,14 @@
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title><span>LOGIN : [[storedUser.name]] !</span></div>
-
             <paper-icon-button icon="account-circle"></paper-icon-button>
             <elith-logout stored-user="{{storedUser}}"></elith-logout>
 
           </app-toolbar>
+          <div>
+            <span>route : [[route.path]]</span><br>
+            <span>sub : [[subRoute.path]]</span><br>
+          </div>
         </app-header>
 
         <iron-pages
@@ -127,8 +130,8 @@
 
       _storedUserChanged () {
         if (this.storedUser === null) {
-          this.page = 'accueil'
-          this.set('route.path', '/accueil')
+          this.page = 'accueil';
+          this.set('route.path', '/accueil');
         }
       }
 
@@ -140,7 +143,6 @@
         } else {
           this.page = page || 'accueil'
         }
-
 
         // Close a non-persistent drawer when the page & route are changed.
         if (!this.$.drawer.persistent) {
