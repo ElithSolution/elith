@@ -1,5 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../shared-styles.html">
@@ -21,17 +22,18 @@
     </style>
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+    <app-location route="{{route}}"></app-location>
     <app-route
             route="{{route}}"
-            pattern="[[rootPath]]:item"
+            pattern="/:category/:param"
             data="{{routeData}}"
     >
     </app-route>
 
 
     <iron-ajax id="getDetailByIdAjax"
-               <!--auto-->
-               url="http://localhost:8080/Elith/webresources/client/345"+[[routeData.item]]
+               auto
+               url="[[pathElith]]/[[routeData.category]]/[[routeData.param]]"
                method="get"
                content-type="application/json"
                handle-as="JSON"
@@ -44,7 +46,7 @@
 
       <span>routedata : [[routeData]]</span><br>
       <span>route : [[route.path]]</span><br>
-      <span>item : [[routeData.item]]</span><br>
+      <span>item : [[routeData.param]]</span><br>
 
     </div>
 
@@ -75,13 +77,10 @@
         }
       }
       _routeChanged(){
-        console.log('routeChanged ', this.routeData);
       }
 
       ready() {
         super.ready();
-        console.log('ready');
-        console.log('routeData ', this.routeData);
       }
 
       initStoredUser() {
@@ -93,9 +92,9 @@
       callAjax() {
         console.log('CALL AJAX');
           if (typeof(this.routeData) !== 'undefined') {
-            this.$.getDetailByIdAjax.url = "http://localhost:8080/Elith/webresources/client/345" ;
+            this.$.getDetailByIdAjax.url = "http://localhost:8080/Elith/webresources/client/" + this.routeData.param ;
             this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-            //this.$.getDetailByIdAjax.generateRequest();
+            this.$.getDetailByIdAjax.generateRequest();
           }
       }
 
