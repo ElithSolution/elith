@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../shared-styles.html">
@@ -9,7 +10,7 @@
 <script>
   // use date parser for all JSON.parse() requests
   // make sure to call before any JSON conversions
-  JSON.useDateParser();
+  JSON.useDateParser()
 </script>
 
 <dom-module id="elith-clientid">
@@ -51,85 +52,82 @@
     </div>
 
 
-
-
   </template>
 
   <script>
     class ElithClientid extends Polymer.Element {
-      static get is() {
+      static get is () {
         return 'elith-clientid'
       }
 
-      static get properties() {
+      static get properties () {
         return {
           storedUser: Object,
-          routeData: Object,
-          route: {
-            type: Object,
+          routeData:  Object,
+          route:      {
+            type:     Object,
             observer: '_routeChanged',
           },
-          resultat: {
-            type: Object,
+          resultat:   {
+            type:  Object,
             value: '',
           },
 
         }
       }
-      _routeChanged(){
+
+      _routeChanged () {
       }
 
-      ready() {
-        super.ready();
+      ready () {
+        super.ready()
       }
 
-      initStoredUser() {
+      initStoredUser () {
         if (this.storedUser.loggedin) {
-          this.callAjax();
+          this.callAjax()
         }
       }
 
-      callAjax() {
-        console.log('CALL AJAX');
-          if (typeof(this.routeData) !== 'undefined') {
-            this.$.getDetailByIdAjax.url = "http://localhost:8080/Elith/webresources/client/" + this.routeData.param ;
-            this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-            this.$.getDetailByIdAjax.generateRequest();
-          }
+      callAjax () {
+        if (typeof(this.routeData) !== 'undefined') {
+          this.$.getDetailByIdAjax.url = 'http://localhost:8080/Elith/webresources/client/' + this.routeData.param
+          this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
+          this.$.getDetailByIdAjax.generateRequest()
+        }
       }
 
-      compareToken() {
-        let lastToken = 'Bearer ' + this.storedUser.accessToken;
-        let usedToken = this.$.getDetailByIdAjax.headers['Authorization'];
+      compareToken () {
+        let lastToken = 'Bearer ' + this.storedUser.accessToken
+        let usedToken = this.$.getDetailByIdAjax.headers['Authorization']
 
         if (lastToken !== usedToken) {
-          console.log('pas meme token');
-          this.initStoredUser();
+          this.initStoredUser()
         }
       }
-      handleDetailResponse(event) {
-        console.log('handleResponse');
-        this.compareToken();
-        var response = JSON.parse(event.detail.response);
-        this.resultat = response;
-        this.error = null;
+
+      handleDetailResponse (event) {
+        this.compareToken()
+        let response = JSON.parse(event.detail.response)
+        this.resultat = response
+        this.error = null
       }
 
-      handleDetailError(event) {
-        console.log('en erreur :  handleError ' + this.$.getDetailByIdAjax.url);
-        this.compareToken();
+      handleDetailError (event) {
+        console.log('en erreur :  handleError ' + this.$.getDetailByIdAjax.url)
+        this.compareToken()
 
-        var response = JSON.parse(event.detail.request.xhr.response);
-        this.error = response;
+        let response = JSON.parse(event.detail.request.xhr.response)
+        this.error = response
         if (this.error.code == 401) {
-          console.log('ERREUR 401 ');
+          console.log('ERREUR 401 ')
           //this.storedUser = null;
         }
         if (this.error.code == 404) {
-          console.log('ERREUR 404 ');
+          console.log('ERREUR 404 ')
 
         }
-        console.log('ERREUR ' + this.error.code);
+        console.log('ERREUR ' + this.error.code)
 
       }
     }

@@ -109,7 +109,6 @@
             notify: true,
             value:  0
           },
-
         }
       }
 
@@ -128,7 +127,7 @@
       }
 
       handleClientsResponse (event) {
-        var response = JSON.parse(event.detail.response)
+        let response = JSON.parse(event.detail.response)
         this.nbRes = response.items.length
         this.clients = response.items
         this.error = null
@@ -146,7 +145,6 @@
         // By returning null when `itemId` is undefined, the href attribute won't be set and
         // the link will be disabled.
         return item ? ['/client', item.client.id].join('/') : null;
-
       }
 
       formatDate(date){
@@ -154,16 +152,11 @@
       }
     }
 
-
-
     function loadData (clientAjax, token, searchField) {
-      clientAjax.headers['Authorization'] = 'Bearer ' + token
-      clientAjax.url = Elith.PATH.ELITH_CLIENTS + '?search=' + searchField
+      clientAjax.headers['Authorization'] = `Bearer ${token}`
+      clientAjax.url = `${Elith.PATH.ELITH_CLIENTS}?search=${searchField}`
       clientAjax.generateRequest()
     }
-
-
-
 
     window.customElements.define(ElithClientsearch.is, ElithClientsearch)
   </script>

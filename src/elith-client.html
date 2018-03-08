@@ -3,10 +3,8 @@
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 
-
 <link rel="import" href="client/elith-clientid.html">
 <link rel="import" href="client/elith-clientsearch.html">
-
 <link rel="import" href="shared-styles.html">
 
 <dom-module id="elith-client">
@@ -28,8 +26,6 @@
     >
     </app-route>
 
-
-
     <div class="card" hidden$="[[masquerSearchPage]]">
       <elith-clientsearch></elith-clientsearch>
     </div>
@@ -37,6 +33,7 @@
       <template>
         <div class="card">
           <elith-clientid></elith-clientid>
+        </div>
       </template>
     </dom-if>
 
@@ -45,12 +42,9 @@
         <div class="card">
           <div class="circle"></div>
           Ajout !
+        </div>
       </template>
     </dom-if>
-
-
-
-
   </template>
 
   <script>
@@ -61,17 +55,17 @@
 
       static get properties () {
         return {
-          storedUser:   Object,
-          routeData:    Object,
-          route:        {
+          storedUser:        Object,
+          routeData:         Object,
+          route:             {
             type:     Object,
             observer: '_routeChanged',
           },
-          isIdPage:     {
+          isIdPage:          {
             type:  Boolean,
             value: false,
           },
-          isAddPage:    {
+          isAddPage:         {
             type:  Boolean,
             value: false,
           },
@@ -79,32 +73,25 @@
             type:  Boolean,
             value: false,
           },
-
         }
       }
 
-      _routeChanged() {
-        this.isIdPage = false;
-        this.isAddPage = false;
-
+      _routeChanged () {
+        this.isIdPage = false
+        this.isAddPage = false
 
         if (this.routeData.param === 'add') {
-          this.isAddPage = true;
-          this.masquerSearchPage = true;
+          this.isAddPage = true
+          this.masquerSearchPage = true
         } else if (this.routeData.param === '') {
-          this.masquerSearchPage = false;
+          this.masquerSearchPage = false
         } else if (Number(this.routeData.param)) {
-          this.isIdPage = true;
-          this.masquerSearchPage = true;
-
-          this.set('routeData.item', this.routeData.param);
-          console.log('routedata', this.routeData);
-
+          this.isIdPage = true
+          this.masquerSearchPage = true
+          this.set('routeData.item', this.routeData.param)
         }
-
         this.set('routeData.param', '')
       }
-
     }
 
     window.customElements.define(ElithClient.is, ElithClient)
