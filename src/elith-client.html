@@ -28,19 +28,16 @@
     >
     </app-route>
 
-    <div class="card">
-      <div class="circle">1</div>
-      <h1>Client</h1>
-      <p>Affichage des clients</p>
 
-      <p>Détail d'un client <a href$="[[_getItemHrefTest('fsfds')]]"> lien</a>
-      </p>
+
+    <div class="card" hidden$="[[masquerSearchPage]]">
+      <elith-clientsearch></elith-clientsearch>
     </div>
-
     <dom-if if="[[isIdPage]]" restamp>
       <template>
         <div class="card">
           <div class="circle"></div>
+          <span>item : [[routeData.item]]</span>
           <elith-clientid></elith-clientid>
       </template>
     </dom-if>
@@ -53,13 +50,8 @@
       </template>
     </dom-if>
 
-    <dom-if if="[[isSearchPage]]">
-      <template>
-        <div class="card">
-          <div class="circle"></div>
-          <elith-clientsearch></elith-clientsearch>
-      </template>
-    </dom-if>
+
+
 
   </template>
 
@@ -85,7 +77,7 @@
             type:  Boolean,
             value: false,
           },
-          isSearchPage: {
+          masquerSearchPage: {
             type:  Boolean,
             value: false,
           },
@@ -94,26 +86,27 @@
       }
 
       _routeChanged() {
-        this.isIdPage = false
-        this.isAddPage = false
-        this.isSearchPage = false
+        this.isIdPage = false;
+        this.isAddPage = false;
+
 
         if (this.routeData.param === 'add') {
-          this.isAddPage = true
-        } else if (this.routeData.param === 'search') {
-          this.isSearchPage = true
+          this.isAddPage = true;
+          this.masquerSearchPage = true;
+        } else if (this.routeData.param === '') {
+          this.masquerSearchPage = false;
         } else if (Number(this.routeData.param)) {
-          this.isIdPage = true
+          this.isIdPage = true;
+          this.masquerSearchPage = true;
+
+          this.set('routeData.item', this.routeData.param);
+          console.log('routedata', this.routeData);
+
         }
+
         this.set('routeData.param', '')
       }
 
-      _getItemHrefTest (item) {
-        // By returning null when `itemId` is undefined, the href attribute won't be set and
-        // the link will be disabled.
-        return item ? ['/client', 1380].join('/') : null
-
-      }
     }
 
     window.customElements.define(ElithClient.is, ElithClient)

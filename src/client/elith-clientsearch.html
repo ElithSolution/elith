@@ -6,7 +6,14 @@
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../shared-styles.html">
+<link rel="import" href="../elith-utils.html">
 
+<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
+<script>
+  // use date parser for all JSON.parse() requests
+  // make sure to call before any JSON conversions
+  JSON.useDateParser();
+</script>
 <dom-module id="elith-clientsearch">
   <template>
     <style include="shared-styles">
@@ -20,8 +27,9 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-route
             route="{{route}}"
-            pattern="[[rootPath]]:param"
+            pattern="[[rootPath]]:item"
             data="{{routeData}}"
+
     >
     </app-route>
 
@@ -33,6 +41,11 @@
             on-response="handleClientsResponse"
             on-error="handleClientsError">
     </iron-ajax>
+
+    <div class="card">
+      <span>routedata : [[routeData]]</span><br>
+      <span>route : [[route.path]]</span><br>
+      </div>
 
     <paper-search-panel search="{{search}}"
                         items="[[items]]"
@@ -52,16 +65,11 @@
         </template>
       </vaadin-grid-column>
       <vaadin-grid-column width="50px">
-        <template>
-          <a href$="[[_getTest(item)]]"> [[item.client.prenom]]</a>
-        </template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="50px">
         <template>[[item.client.nom]]</template>
       </vaadin-grid-column>
       <vaadin-grid-column width="50px">
-        <template>[[formatDate(item.client.dateNaissance)]]</template>
-      </vaadin-grid-column>
+      <template>[[formatDate(item.client.dateNaissance)]]</template>
+    </vaadin-grid-column>
     </vaadin-grid>
   </template>
 
@@ -133,13 +141,29 @@
           this.storedUser = null
         }
       }
+
+      _getItemHref(item){
+        // By returning null when `itemId` is undefined, the href attribute won't be set and
+        // the link will be disabled.
+        return item ? ['/client', item.client.id].join('/') : null;
+
+      }
+
+      formatDate(date){
+        return Elith.Utils.formatDate(date);
+      }
     }
+
+
 
     function loadData (clientAjax, token, searchField) {
       clientAjax.headers['Authorization'] = 'Bearer ' + token
       clientAjax.url = Elith.PATH.ELITH_CLIENTS + '?search=' + searchField
       clientAjax.generateRequest()
     }
+
+
+
 
     window.customElements.define(ElithClientsearch.is, ElithClientsearch)
   </script>

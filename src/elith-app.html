@@ -36,6 +36,11 @@
       data="{{routeData}}"
       tail="{{subRoute}}">
     </app-route>
+    <app-route
+      route="{{subRoute}}"
+      pattern="/:id"
+      data="{{subRouteData}}">
+    </app-route>
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
@@ -73,11 +78,14 @@
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
             <div main-title><span>LOGIN : [[storedUser.name]] !</span></div>
-
             <paper-icon-button icon="account-circle"></paper-icon-button>
             <elith-logout stored-user="{{storedUser}}"></elith-logout>
 
           </app-toolbar>
+          <div>
+            <span>route : [[route.path]]</span><br>
+            <span>sub : [[subRoute.path]]</span><br>
+          </div>
         </app-header>
 
         <iron-pages
@@ -110,6 +118,7 @@
             observer: '_pageChanged',
           },
           routeData: Object,
+          subRouteData: Object,
           subRoute: String,
           rootPath: String,
           storedUser: {
@@ -127,12 +136,13 @@
 
       _storedUserChanged () {
         if (this.storedUser === null) {
-          this.page = 'accueil'
-          this.set('route.path', '/accueil')
+          this.page = 'accueil';
+          this.set('route.path', '/accueil');
         }
       }
 
       _routePageChanged (page) {
+        console.log('subroutedata', this.subRouteData);
         // If no page was found in the route data, page will be an empty string.
         if (this.storedUser === null) {
           this.page = 'accueil'

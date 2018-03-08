@@ -6,7 +6,9 @@
     "src/elith-logout.html",
     "src/elith-accueil.html",
     "src/elith-client.html",
+    "src/client/elith-clientadd.html",
     "src/client/elith-clientid.html",
+    "src/client/elith-clientsearch.html",
     "src/elith-produit.html",
     "src/elith-horaire.html",
     "src/elith-view404.html"

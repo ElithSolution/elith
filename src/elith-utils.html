@@ -1,0 +1,30 @@
+<script>
+  window.Elith = window.Elith || {};
+  window.Elith.Utils = {
+    formatDate: function (date) {
+      if (date == null) {
+        return date;
+      } else {
+        var day = date.getDate();
+        var month = (date.getMonth() + 1);
+        var year = date.getFullYear();
+
+        if (day < 10) {
+          day = '0' + day;
+        }
+        if (month < 10) {
+          month = '0' + month;
+        }
+        var dateFormat = day + '-' + month + '-' + year;
+        return dateFormat;
+      }
+    },
+
+
+    test1: function () { console.log('test1') }
+  }
+
+</script>
+
+
+
