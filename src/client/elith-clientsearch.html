@@ -124,9 +124,14 @@
       }
 
       handleClientsError (event) {
-        let response = JSON.parse(event.detail.request.xhr.response)
-        this.error = response
-        if (this.error.code == 401) {
+        try{
+          this.error = JSON.parse(event.detail.request.xhr.response)
+        }catch(e){
+          console.log(e);
+          this.error = e;
+        }
+
+        if (this.error.code && this.error.code == 401) {
           this.storedUser = null
         }
       }
