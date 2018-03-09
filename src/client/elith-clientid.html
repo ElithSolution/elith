@@ -107,8 +107,13 @@
       }
 
       handleDetailResponse (event) {
+        let response;
         this.compareToken()
-        let response = JSON.parse(event.detail.response)
+        try{
+          response = JSON.parse(event.detail.response)
+        }catch (e){
+          console.log(e);
+        }
         this.resultat = response
         this.error = null
       }

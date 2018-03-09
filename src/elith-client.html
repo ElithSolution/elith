@@ -2,6 +2,8 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="client/elith-clientid.html">
 <link rel="import" href="client/elith-clientsearch.html">
@@ -26,25 +28,32 @@
     >
     </app-route>
 
-    <div class="card" hidden$="[[masquerSearchPage]]">
-      <elith-clientsearch></elith-clientsearch>
-    </div>
-    <dom-if if="[[isIdPage]]" restamp>
-      <template>
-        <div class="card">
-          <elith-clientid></elith-clientid>
-        </div>
-      </template>
-    </dom-if>
+    <iron-ajax url="https://randomuser.me/api?results=100&inc=name,email,picture,id" last-response="{{response}}" auto></iron-ajax>
 
-    <dom-if if="[[isAddPage]]">
-      <template>
-        <div class="card">
-          <div class="circle"></div>
-          Ajout !
-        </div>
-      </template>
-    </dom-if>
+    <vaadin-combo-box-light id="clientSearch" items="[[response.results]]" item-value-path="id.value" item-label-path="email" style="display: block; width: 100%;">
+      <paper-input label="Recherche client" class="input">
+        <template>
+          <style>
+            paper-icon-item img {
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+          </style>
+          <paper-icon-item>
+            <img src="[[item.picture.thumbnail]]" slot="item-icon">
+            <paper-item-body two-line>
+              <div>[[item.name.first]] [[item.name.last]]</div>
+              <div secondary>[[item.email]]</div>
+            </paper-item-body>
+          </paper-icon-item>
+        </template>
+      </paper-input>
+    </vaadin-combo-box-light>
+
+    <div class="card">
+      <p>Client sélectionné (id): <span id="selectedClient"></span></p>
+    </div>
+
   </template>
 
   <script>
@@ -53,10 +62,19 @@
         return 'elith-client'
       }
 
+      ready(){
+        super.ready();
+        let combobox = this.$.clientSearch;
+        combobox.addEventListener('value-changed', () => {
+          this.set('route.path', combobox.value);
+          this.$.selectedClient.innerHTML = combobox.value;
+        });
+      }
+
       static get properties () {
         return {
-          storedUser:        Object,
-          routeData:         Object,
+          storedUser: Object,
+          routeData: Object,
           route:             {
             type:     Object,
             observer: '_routeChanged',
