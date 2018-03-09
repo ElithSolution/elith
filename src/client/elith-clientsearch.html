@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
@@ -48,19 +49,38 @@
       </div>
     </paper-search-panel>
 
-    <vaadin-grid items="{{clients}}" size="200">
-      <vaadin-grid-column width="50px">
-        <template>
-          <a href$="[[_getItemHref(item)]]"> [[item.client.prenom]]</a>
+
+
+    <vaadin-combo-box-light  id="clientSearch"
+                             items="{{clients}}"
+                             item-value-path="client.id"
+                             item-label-path="nom ou prénom"
+                             attr-for-value="search"
+                             value="search"
+                             style="display: block; width: 100%;">
+      <paper-input label="Recherche client" class="input" onkeypress="test()">
+          <template>
+          <style>
+            paper-icon-item img {
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+          </style>
+          <paper-icon-item>
+            <paper-item-body two-line>
+              <div>[[item.client.prenom]] [[item.client.nom]]</div>
+              <div secondary>[[formatDate(item.client.dateNaissance)]]</div>
+            </paper-item-body>
+          </paper-icon-item>
         </template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="50px">
-        <template>[[item.client.nom]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="50px">
-      <template>[[formatDate(item.client.dateNaissance)]]</template>
-    </vaadin-grid-column>
-    </vaadin-grid>
+        <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+      </paper-input>
+    </vaadin-combo-box-light>
+
+    <div class="card">
+      <p>Client sélectionné (id): <span id="selectedClient"></span></p>
+    </div>
+
   </template>
 
   <script>
@@ -104,12 +124,21 @@
 
       _routeChanged(){}
 
+      ready(){
+        super.ready();
+        let combobox = this.$.clientSearch;
+        combobox.addEventListener('value-changed', () => {
+          this.set('route.path', combobox.value);
+          this.$.selectedClient.innerHTML = combobox.value;
+        });
+      }
+
       delayTyping () {
         clearTimeout(this.delayTimer)
         let head = this.$.getClientsAjax
         if (typeof(this.storedUser) !== 'undefined') {
           let token = this.storedUser.accessToken
-          let searchField = this.search
+          let searchField = this.search;
           this.delayTimer = setTimeout(function () {
             loadData(head, token, searchField)
           }, 300)
@@ -151,6 +180,17 @@
       clientAjax.headers['Authorization'] = `Bearer ${token}`
       clientAjax.url = `${Elith.PATH.ELITH_CLIENTS}?search=${searchField}`
       clientAjax.generateRequest()
+    }
+
+
+    function test(){
+      console.log('tset');
+      let combobox = this.$.clientSearch;
+      console.log('combo', combobox);
+      combobox.addEventListener('value-changed', () => {
+        this.set('route.path', combobox.value);
+        this.$.selectedClient.innerHTML = combobox.value;
+      });
     }
 
     window.customElements.define(ElithClientsearch.is, ElithClientsearch)

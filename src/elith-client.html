@@ -2,7 +2,6 @@
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="client/elith-clientid.html">
@@ -28,32 +27,27 @@
     >
     </app-route>
 
-    <iron-ajax url="https://randomuser.me/api?results=100&inc=name,email,picture,id" last-response="{{response}}" auto></iron-ajax>
-
-    <vaadin-combo-box-light id="clientSearch" items="[[response.results]]" item-value-path="id.value" item-label-path="email" style="display: block; width: 100%;">
-      <paper-input label="Recherche client" class="input">
-        <template>
-          <style>
-            paper-icon-item img {
-              border-radius: 50%;
-              margin-right: 10px;
-            }
-          </style>
-          <paper-icon-item>
-            <img src="[[item.picture.thumbnail]]" slot="item-icon">
-            <paper-item-body two-line>
-              <div>[[item.name.first]] [[item.name.last]]</div>
-              <div secondary>[[item.email]]</div>
-            </paper-item-body>
-          </paper-icon-item>
-        </template>
-        <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
-      </paper-input>
-    </vaadin-combo-box-light>
-
     <div class="card">
-      <p>Client sélectionné (id): <span id="selectedClient"></span></p>
+      <elith-clientsearch></elith-clientsearch>
     </div>
+    <dom-if if="[[isIdPage]]" restamp>
+      <template>
+        <div class="card">
+          <elith-clientid></elith-clientid>
+        </div>
+      </template>
+    </dom-if>
+
+    <dom-if if="[[isAddPage]]">
+      <template>
+        <div class="card">
+          <div class="circle"></div>
+          Ajout !
+        </div>
+      </template>
+    </dom-if>
+
+
 
   </template>
 
@@ -65,11 +59,6 @@
 
       ready(){
         super.ready();
-        let combobox = this.$.clientSearch;
-        combobox.addEventListener('value-changed', () => {
-          this.set('route.path', combobox.value);
-          this.$.selectedClient.innerHTML = combobox.value;
-        });
       }
 
       static get properties () {
