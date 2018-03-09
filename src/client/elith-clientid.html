@@ -4,7 +4,7 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../styles/elith-styles.html">
 
 <link rel="import" href="elith-clientdetail.html">
 
@@ -17,7 +17,7 @@
 
 <dom-module id="elith-clientid">
   <template>
-    <style include="shared-styles">
+    <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
@@ -45,8 +45,6 @@
     </iron-ajax>
 
     <div class="card">
-      <div class="circle"></div>
-
       <span>routedata : [[routeData]]</span><br>
       <span>route : [[route.path]]</span><br>
       <span>item : [[routeData.param]]</span><br>

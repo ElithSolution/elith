@@ -1,10 +1,10 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="styles/elith-styles.html">
 
 <dom-module id="elith-produit">
   <template>
-    <style include="shared-styles">
+    <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
@@ -19,7 +19,6 @@
     </app-route>
 
     <div class="card">
-      <div class="circle"></div>
       <span>routedata : [[routeData]]</span><br>
       <span>route : [[route.path]]</span><br>
       <span>item : [[routeData.item]]</span><br>

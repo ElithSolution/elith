@@ -15,6 +15,8 @@
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="my-icons.html">
 
+<link rel="import" href="styles/elith-styles.html">
+
 <link rel="import" href="elith-login.html">
 <link rel="import" href="elith-logout.html">
 <link rel="lazy-import" href="elith-accueil.html">
@@ -24,8 +26,56 @@
 <link rel="lazy-import" href="elith-view404.html">
 
 <dom-module id="elith-app">
-  <link rel="import" type="css" href="../src/style/elith-style.css">
   <template>
+    <style include="elith-styles">
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
+
+      app-header {
+        color: var(--elith-base-color);
+        background-color: var(--elith-secondary-color);
+      }
+
+      app-header.hidden[hidden] {
+        display: none;
+      }
+
+      app-header paper-icon-button {
+        --paper-icon-button-ink-color: var(--elith-base-color);
+      }
+
+      .drawer-list paper-icon-item {
+        width: 100%;
+      }
+
+      .drawer-list a {
+        display: block;
+        text-decoration: none;
+        color: var(--elith-secondary-color);
+        line-height: 40px;
+      }
+
+      .drawer-list iron-icon {
+        display: inline-block;
+      }
+
+      .drawer-list a.iron-selected {
+        color: var(--elith-body-text-color);
+        font-weight: var(--elith-font-weight-bold);
+      }
+
+      app-drawer-layout:not([narrow]) [drawer-toggle] {
+        display: none;
+      }
+
+      .menu-principal {
+        margin-left: 10px;
+        margin-top: 40px
+      }
+
+    </style>
+
     <app-location
       route="{{route}}"
       url-space-regex="^[[rootPath]]">
@@ -45,7 +95,6 @@
       <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" hidden$="[[!storedUser.loggedin]]">
         <app-header-layout has-scrolling-region>
           <app-header slot="header" fixed effects="waterfall">
-
             <app-toolbar>
               <slot name="logo">
                 <paper-icon-button src="../images/logo.png" class="logo">Logo</paper-icon-button>
@@ -54,19 +103,21 @@
           </app-header>
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name="elith-accueil" href="[[rootPath]]accueil">
-              <paper-icon-button icon="home"></paper-icon-button>
-              Accueil
-            </a>
-            <a name="elith-client" href="[[rootPath]]client">
-              <paper-icon-button icon="my-icons:client"></paper-icon-button>
-              Clients</a>
-            <a name="elith-produit" href="[[rootPath]]produit">
-              <paper-icon-button icon="card-giftcard"></paper-icon-button>
-              Produits</a>
-            <a name="elith-horaire" href="[[rootPath]]horaire">
-              <paper-icon-button icon="date-range"></paper-icon-button>
-              Horaire</a>
+             <div class="menu-principal">
+              <a name="elith-accueil" href="[[rootPath]]accueil">
+                <paper-icon-button icon="home"></paper-icon-button>
+                Accueil
+              </a>
+              <a name="elith-client" href="[[rootPath]]client">
+                <paper-icon-button icon="my-icons:client"></paper-icon-button>
+                Clients</a>
+              <a name="elith-produit" href="[[rootPath]]produit">
+                <paper-icon-button icon="card-giftcard"></paper-icon-button>
+                Produits</a>
+              <a name="elith-horaire" href="[[rootPath]]horaire">
+                <paper-icon-button icon="date-range"></paper-icon-button>
+                Horaire</a>
+             </div>
           </iron-selector>
         </app-header-layout>
       </app-drawer>
@@ -77,9 +128,11 @@
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
-            <div main-title><span>LOGIN : [[storedUser.name]] !</span></div>
-            <paper-icon-button icon="account-circle"></paper-icon-button>
-            <elith-logout stored-user="{{storedUser}}"></elith-logout>
+            <div hidden$="[[!storedUser.loggedin]]">
+              <div><span>LOGIN : [[storedUser.name]] !</span></div>
+              <paper-icon-button icon="account-circle"></paper-icon-button>
+              <elith-logout stored-user="{{storedUser}}"></elith-logout>
+            </div>
           </app-toolbar>
         </app-header>
 

@@ -1,0 +1,82 @@
+<link rel="import" href="../../bower_components/polymer/lib/elements/custom-style.html">
+
+<custom-style>
+  <style>
+    html {
+      /* Base colors (background-color) */
+      --elith-base-color: #ffffff;
+      --elith-base-color-light: #f7f7f7;
+      --elith-base-color-medium-light: #edefe9;
+
+      --elith-base-color-medium: #777777;
+      --elith-base-color-medium-dark: #4a4a4a;
+      --elith-base-color-dark: #3a3a3a;
+
+      /* Text colors */
+      --elith-body-text-color: #1d1d1d;
+      --elith-disabled-text-color: #b1b0b2;
+
+      /* Primary colors */
+      --elith-primary-color: #F55E25;;
+      --elith-primary-color-dark: #F55E25;;
+
+      /* Secondary colors */
+      --elith-secondary-color-light: #596b60;
+      --elith-secondary-color: #3d4641;
+
+      /* Border colors */
+      --elith-border-color-light: #e4e4e4;
+      --elith-border-color: #d3d3d3;
+
+      /* Legend color */
+      --elith-legend-color: var(--elith-base-color-medium-dark);
+
+      /* Error colors */
+      --elith-error-color: #ff0000;
+      --elith-warning-color: #f0ad4e;
+    }
+
+    body {
+      /*
+       As we use mostly the paper elements from the Polymer team,
+       which use paper-styles, we must change some of their CSS variables.
+       */
+      --primary-text-color: var(--elith-body-text-color, #212121);
+      --primary-background-color: var(--elith-base-color, #ffffff);
+      --secondary-text-color: var(--elith-base-color-medium, #737373);
+      --disabled-text-color: #9b9b9b;
+      --divider-color: var(--elith-border-color, #dbdbdb);
+      --error-color: var(--elith-error-color, #dd2c00);
+      --primary-color: var(--elith-primary-color, #3f51b5);
+      --accent-color: var(--elith-primary-color-dark, #ff4081);
+
+      /* Use by paper-toolbar */
+      --dark-theme-text-color: var(--elith-base-color, #ffffff);
+    }
+
+    body, html {
+      color: var(--elith-body-text-color);
+      background-color: var(--elith-base-color);
+    }
+  </style>
+</custom-style>
+
+<dom-module id="elith-color">
+  <template>
+    <style>
+      a {
+        color: var(--elith-primary-color);
+      }
+
+      a:hover {
+        color: var(--elith-primary-color-dark);
+      }
+
+      @media screen and (max-width: 640px) {
+        h5, h6 {
+          color: var(--elith-base-color-medium-dark);
+        }
+      }
+    </style>
+  </template>
+</dom-module>

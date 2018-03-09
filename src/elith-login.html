@@ -8,13 +8,19 @@
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="styles/elith-styles.html">
 <link rel="import" href="elith-logout.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-constantes.html">
 
 <dom-module id="elith-login">
-  <link rel="import" type="css" href="style/elith-style.css">
   <template>
+    <style include="elith-styles">
+      :host{
+        margin:0 auto;
+        witdh: 500px;
+      }
+    </style>
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
