@@ -28,6 +28,7 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
 
+
     <iron-ajax
             id="getClientsAjax"
             method="get"
@@ -38,27 +39,13 @@
     </iron-ajax>
 
 
-    <paper-search-panel search="{{search}}"
-                        items="[[items]]"
-                        has-more="[[hasMore]]"
-                        loading="[[loading]]"
-                        hide-filter-button=true>
-
-      <div>
-        [[nbRes]] résultat(s).
-      </div>
-    </paper-search-panel>
-
-
-
     <vaadin-combo-box-light  id="clientSearch"
-                             items="{{clients}}"
+                             items="[[clients]]"
                              item-value-path="client.id"
-                             item-label-path="nom ou prénom"
-                             attr-for-value="search"
-                             value="search"
+                             item-label-path="client.prenom"
                              style="display: block; width: 100%;">
-      <paper-input label="Recherche client" class="input" onkeypress="test()">
+
+      <paper-input label="Nom de la personne" class="input" value=[[search]]>
           <template>
           <style>
             paper-icon-item img {
@@ -75,10 +62,16 @@
         </template>
         <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
       </paper-input>
-    </vaadin-combo-box-light>
 
+    </vaadin-combo-box-light>
+    <div>
+      [[nbRes]] résultat(s).
+    </div>
     <div class="card">
       <p>Client sélectionné (id): <span id="selectedClient"></span></p>
+
+      <paper-button on-tap="_getItemHref"> Détail [[idclient]]</paper-button>
+
     </div>
 
   </template>
@@ -90,7 +83,7 @@
       }
 
       constructor () {
-        super()
+        super();
         this.delayTimer = function () {}
       }
 
@@ -119,6 +112,9 @@
             notify: true,
             value:  0
           },
+          idclient:{
+            type: Number,
+          }
         }
       }
 
@@ -130,8 +126,17 @@
         combobox.addEventListener('value-changed', () => {
           this.set('route.path', combobox.value);
           this.$.selectedClient.innerHTML = combobox.value;
+          this.idclient = combobox.value;
         });
       }
+
+
+/*      _filterChanged (e) {
+        // case-sensitive starts-with filtering
+        this.items = elements.filter(function(el) {
+          return el.indexOf(e.detail.value) === 0;
+        });
+      }*/
 
       delayTyping () {
         clearTimeout(this.delayTimer)
@@ -165,10 +170,12 @@
         }
       }
 
-      _getItemHref(item){
+      _getItemHref(){
         // By returning null when `itemId` is undefined, the href attribute won't be set and
         // the link will be disabled.
-        return item ? ['/client', item.client.id].join('/') : null;
+        console.log('redirection');
+
+        //return item ? ['/client', item.client.id].join('/') : null;
       }
 
       formatDate(date){
@@ -183,15 +190,7 @@
     }
 
 
-    function test(){
-      console.log('tset');
-      let combobox = this.$.clientSearch;
-      console.log('combo', combobox);
-      combobox.addEventListener('value-changed', () => {
-        this.set('route.path', combobox.value);
-        this.$.selectedClient.innerHTML = combobox.value;
-      });
-    }
+
 
     window.customElements.define(ElithClientsearch.is, ElithClientsearch)
   </script>
