@@ -4,7 +4,9 @@
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../styles/elith-styles.html">
+
+<link rel="import" href="elith-clientdetail.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
@@ -15,13 +17,15 @@
 
 <dom-module id="elith-clientid">
   <template>
-    <style include="shared-styles">
+    <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
       }
     </style>
-    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <iron-localstorage name="user-storage" value="{{storedUser}}"
+                       on-iron-localstorage-load="initStoredUser"
+                       on-iron-localstorage-load-empty="initStoredUser" ></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-location route="{{route}}"></app-location>
     <app-route
@@ -33,8 +37,6 @@
 
 
     <iron-ajax id="getDetailByIdAjax"
-               auto
-               url="[[pathElith]]/[[routeData.category]]/[[routeData.param]]"
                method="get"
                content-type="application/json"
                handle-as="JSON"
@@ -43,12 +45,12 @@
     </iron-ajax>
 
     <div class="card">
-      <div class="circle"></div>
-
       <span>routedata : [[routeData]]</span><br>
       <span>route : [[route.path]]</span><br>
       <span>item : [[routeData.param]]</span><br>
+      <span>resultat : [[resultat.items.0.client.nom]] </span><br>
 
+      <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
     </div>
 
 
@@ -72,11 +74,12 @@
             type:  Object,
             value: '',
           },
-
         }
       }
 
       _routeChanged () {
+        console.log("   changement de la route  ")
+       
       }
 
       ready () {
@@ -91,7 +94,7 @@
 
       callAjax () {
         if (typeof(this.routeData) !== 'undefined') {
-          this.$.getDetailByIdAjax.url = 'http://localhost:8080/Elith/webresources/client/' + this.routeData.param
+          this.$.getDetailByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.routeData.param}`
           this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
           this.$.getDetailByIdAjax.generateRequest()
         }
@@ -107,8 +110,13 @@
       }
 
       handleDetailResponse (event) {
+        let response;
         this.compareToken()
-        let response = JSON.parse(event.detail.response)
+        try{
+          response = JSON.parse(event.detail.response)
+        }catch (e){
+          console.log(e);
+        }
         this.resultat = response
         this.error = null
       }

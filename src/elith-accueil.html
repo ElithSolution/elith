@@ -3,7 +3,7 @@
 <link rel="import" href="../bower_components/iron-sessionstorage/iron-sessionstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 
-<link rel="import" href="shared-styles.html">
+<link rel="import" href="styles/elith-styles.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-login.html">
 
@@ -12,7 +12,7 @@
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-    <style include="shared-styles">
+    <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
@@ -39,6 +39,7 @@
       <h1>Accueil</h1>
       <div main-title><span id="test">LOGIN : [[storedUser.name]] !</span></div>
       <p>Bienvenu sur la page d'accueil de votre compte Elith</p>
+      <elith-clientsearch></elith-clientsearch>
     </div>
 
     <div class="container flex-horizontal-with-ratios" hidden$="[[!storedUser.loggedin]]">

@@ -5,7 +5,7 @@
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../shared-styles.html">
+<link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-utils.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
@@ -16,7 +16,7 @@
 </script>
 <dom-module id="elith-clientsearch">
   <template>
-    <style include="shared-styles">
+    <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
@@ -25,13 +25,6 @@
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-    <app-route
-            route="{{route}}"
-            pattern="[[rootPath]]:item"
-            data="{{routeData}}"
-
-    >
-    </app-route>
 
     <iron-ajax
             id="getClientsAjax"
@@ -41,11 +34,6 @@
             on-response="handleClientsResponse"
             on-error="handleClientsError">
     </iron-ajax>
-
-    <div class="card">
-      <span>routedata : [[routeData]]</span><br>
-      <span>route : [[route.path]]</span><br>
-      </div>
 
     <paper-search-panel search="{{search}}"
                         items="[[items]]"
@@ -134,9 +122,14 @@
       }
 
       handleClientsError (event) {
-        let response = JSON.parse(event.detail.request.xhr.response)
-        this.error = response
-        if (this.error.code == 401) {
+        try{
+          this.error = JSON.parse(event.detail.request.xhr.response)
+        }catch(e){
+          console.log(e);
+          this.error = e;
+        }
+
+        if (this.error.code && this.error.code == 401) {
           this.storedUser = null
         }
       }
