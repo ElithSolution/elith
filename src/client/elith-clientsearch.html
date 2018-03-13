@@ -27,6 +27,18 @@
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+    <app-location
+            route="{{route}}"
+            url-space-regex="^[[rootPath]]">
+    </app-location>
+    <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
+    >
+    </app-route>
+
+
     <iron-ajax
             id="getClientsAjax"
             method="get"
@@ -37,7 +49,7 @@
     </iron-ajax>
     
     <vaadin-combo-box-light  id="clientSearch"
-                             items="[[clients]]"
+                             items="{{clients}}"
                              item-value-path="client.id"
                              item-label-path="client.prenom"
                              style="display: block; width: 100%;">
@@ -62,13 +74,7 @@
 
     </vaadin-combo-box-light>
     <div>
-      [[nbRes]] résultat(s).
-    </div>
-    <div class="card">
-      <p>Client sélectionné (id): <span id="selectedClient"></span></p>
-
-      <paper-button on-tap="_getItemHref"> Détail [[idclient]]</paper-button>
-
+      [[nbRes]] résultats.
     </div>
 
   </template>
@@ -121,9 +127,9 @@
         super.ready();
         let combobox = this.$.clientSearch;
         combobox.addEventListener('value-changed', () => {
-          this.set('route.path', combobox.value);
-          this.$.selectedClient.innerHTML = combobox.value;
           this.idclient = combobox.value;
+          let path = ['/client', this.idclient].join('/') ;
+          this.set('route.path', path);
         });
       }
 
@@ -171,6 +177,11 @@
         // By returning null when `itemId` is undefined, the href attribute won't be set and
         // the link will be disabled.
         console.log('redirection');
+        console.log('route', this.route);
+        let path = ['/client', this.idclient].join('/') ;
+
+        this.set('route.path', path);
+        console.log('route', this.route);
 
         //return item ? ['/client', item.client.id].join('/') : null;
       }
