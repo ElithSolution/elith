@@ -1,6 +1,9 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../styles/elith-styles.html">
+<link rel="import" href="../my-icons.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
@@ -25,46 +28,89 @@
                 box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
                 display: block;
             }
+
+            .flex-horizontal-with-ratios {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild {
+                @apply --layout-flex;
+            }
+
+            .flex2child {
+                @apply --layout-flex-2;
+            }
+            paper-toggle-button.pink {
+                --paper-toggle-button-checked-bar-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-button-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-ink-color: var(--paper-pink-500);
+                --paper-toggle-button-unchecked-bar-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
+            }
         </style>
 
 
 
     <dom-if if="{{hasResult}}">
         <template>
-            <div class="card">
-                <span> Nom :  [[resultat.items.0.client.nom]] </span><br>
-                <span> Prénom :  [[resultat.items.0.client.prenom]] </span><br>
-                <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
-                <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
-                <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
-                <span> Email :  [[resultat.items.0.client.email]] </span><br>
-                <span> Date de naissance :  [[formatDate(resultat.items.0.client.dateNaissance)]] </span><br>
-                <span> Enfants :  [[resultat.items.0.client.enfants]] </span><br>
-                <span> Emploi :  [[resultat.items.0.client.emploi]] </span><br>
-                <span> Loisirs :  [[resultat.items.0.client.loisirs]] </span><br>
-                <span> Historique de la douleur :  [[resultat.items.0.client.histoDouleur]] </span><br>
-                <span> Constatations :  [[resultat.items.0.client.constatations]] </span><br>
-                <span> Attention :  [[resultat.items.0.client.attentions]] </span><br>
-                <span> À ne pas masser :  [[resultat.items.0.client.pasMasser]] </span><br>
-                <span> Note :  [[resultat.items.0.client.note]] </span><br>
-                <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
-                <span> Autres thérapies :  [[resultat.items.0.client.autresTherapies]] </span><br>
-                <span> Médicaments :  [[resultat.items.0.client.medicaments]] </span><br>
-                <span> Compléments :  [[resultat.items.0.client.complements]] </span><br>
-                <span> Cardiaque :  [[resultat.items.0.client.cardiaque]] </span><br>
-                <span> Asthme :  [[resultat.items.0.client.asthme]] </span><br>
-                <span> Hypoglycémie :  [[resultat.items.0.client.hypoglycemie]] </span><br>
-                <span> Diabète :  [[resultat.items.0.client.diabete]] </span><br>
-                <span> Problème de peau :  [[resultat.items.0.client.peau]] </span><br>
-                <span> Fumeur :  [[resultat.items.0.client.fumeur]] </span><br>
-                <span> Ostéoporose :  [[resultat.items.0.client.osteoporose]] </span><br>
-                <span> Arthrose :  [[resultat.items.0.client.arthrose]] </span><br>
-                <span> Constipation :  [[resultat.items.0.client.constipation]] </span><br>
-                <span> Allergies :  [[resultat.items.0.client.allergies]] </span><br>
-                <span> Opérations :  [[resultat.items.0.client.operations]] </span><br>
+            <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+            <paper-icon-button icon="my-icons:edit"></paper-icon-button>
 
-                <br><br><br>
+            <div class="container flex-horizontal-with-ratios">
+            <div class="flex2child">
+                <div class="card">
+                    <span>Né(e) le :  [[formatDate(resultat.items.0.client.dateNaissance)]] </span><br>
+                    <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
+                    <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
+                    <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
+                    <span> Email :  [[resultat.items.0.client.email]] </span><br>
+                    <span> Enfant(s) :  [[resultat.items.0.client.enfants]] </span><br>
+                    <span> Emploi :  [[resultat.items.0.client.emploi]] </span><br>
+                    <span> Loisirs :  [[resultat.items.0.client.loisirs]] </span><br>
+                </div>
             </div>
+            <div class="flexchild">
+                <div class="card">
+                    <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
+                    <span> Autres thérapies :  [[resultat.items.0.client.autresTherapies]] </span><br>
+                    <span> Médicaments :  [[resultat.items.0.client.medicaments]] </span><br>
+                    <span> Compléments :  [[resultat.items.0.client.complements]] </span><br>
+                    <span> Constipation :  [[resultat.items.0.client.constipation]] </span><br>
+                    <span> Allergies :  [[resultat.items.0.client.allergies]] </span><br>
+                    <span> Opérations :  [[resultat.items.0.client.operations]] </span><br>
+                </div>
+            </div>
+
+        </div>
+            <div class="container flex-horizontal-with-ratios">
+                <div class="flex2child">
+                    <div class="card">
+                        <span> Historique de la douleur :  [[resultat.items.0.client.histoDouleur]] </span><br>
+                        <span> Constatations :  [[resultat.items.0.client.constatations]] </span><br>
+                        <span> Attention :  [[resultat.items.0.client.attentions]] </span><br>
+                        <span> À ne pas masser :  [[resultat.items.0.client.pasMasser]] </span><br>
+                        <span> Note :  [[resultat.items.0.client.note]] </span><br>
+
+
+                    </div>
+                </div>
+                <div class="flexchild">
+                    <div class="card">
+                        <paper-toggle-button checked="[[resultat.items.0.client.cardiaque]]" class="pink">Cardiaque</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.asthme]]" class="pink">Asthme</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.hypoglycemie]]" class="pink">Hypoglycémie</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.diabete]]" class="pink">Diabète</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.peau]]" class="pink">Problème de peau</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.fumeur]]" class="pink">Fumeur</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.osteoporose]]" class="pink">Ostéporose</paper-toggle-button>
+                        <paper-toggle-button checked="[[resultat.items.0.client.arthrose]]" class="pink">Arthrose</paper-toggle-button>
+
+                    </div>
+
+                </div>
+            </div>
+
         </template>
     </dom-if>
 
