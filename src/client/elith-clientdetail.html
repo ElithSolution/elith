@@ -52,99 +52,105 @@
 
 
 
-    <dom-if if="{{hasResult}}">
-        <template>
-            <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-            <paper-icon-button icon="my-icons:edit"></paper-icon-button>
+        <dom-if if="{{hasResult}}">
+            <template>
+                <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                <paper-icon-button icon="my-icons:edit"></paper-icon-button>
 
-            <div class="container flex-horizontal-with-ratios">
-            <div class="flex2child">
-                <div class="card">
-                    <span>Né(e) le :  [[formatDate(resultat.items.0.client.dateNaissance)]] </span><br>
-                    <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
-                    <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
-                    <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
-                    <span> Email :  [[resultat.items.0.client.email]] </span><br>
-                    <span> Enfant(s) :  [[resultat.items.0.client.enfants]] </span><br>
-                    <span> Emploi :  [[resultat.items.0.client.emploi]] </span><br>
-                    <span> Loisirs :  [[resultat.items.0.client.loisirs]] </span><br>
-                </div>
-            </div>
-            <div class="flexchild">
-                <div class="card">
-                    <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
-                    <span> Autres thérapies :  [[resultat.items.0.client.autresTherapies]] </span><br>
-                    <span> Médicaments :  [[resultat.items.0.client.medicaments]] </span><br>
-                    <span> Compléments :  [[resultat.items.0.client.complements]] </span><br>
-                    <span> Constipation :  [[resultat.items.0.client.constipation]] </span><br>
-                    <span> Allergies :  [[resultat.items.0.client.allergies]] </span><br>
-                    <span> Opérations :  [[resultat.items.0.client.operations]] </span><br>
-                </div>
-            </div>
-
-        </div>
-            <div class="container flex-horizontal-with-ratios">
+                <div class="container flex-horizontal-with-ratios">
                 <div class="flex2child">
                     <div class="card">
-                        <span> Historique de la douleur :  [[resultat.items.0.client.histoDouleur]] </span><br>
-                        <span> Constatations :  [[resultat.items.0.client.constatations]] </span><br>
-                        <span> Attention :  [[resultat.items.0.client.attentions]] </span><br>
-                        <span> À ne pas masser :  [[resultat.items.0.client.pasMasser]] </span><br>
-                        <span> Note :  [[resultat.items.0.client.note]] </span><br>
-
-
+                        <span>Né(e) le :  [[formatDate(resultat.items.0.client.dateNaissance)]] </span><br>
+                        <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
+                        <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
+                        <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
+                        <span> Email :  [[resultat.items.0.client.email]] </span><br>
+                        <span> Enfant(s) :  [[resultat.items.0.client.enfants]] </span><br>
+                        <span> Emploi :  [[resultat.items.0.client.emploi]] </span><br>
+                        <span> Loisirs :  [[resultat.items.0.client.loisirs]] </span><br>
                     </div>
                 </div>
                 <div class="flexchild">
                     <div class="card">
-                        <paper-toggle-button checked="[[resultat.items.0.client.cardiaque]]" class="pink">Cardiaque</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.asthme]]" class="pink">Asthme</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.hypoglycemie]]" class="pink">Hypoglycémie</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.diabete]]" class="pink">Diabète</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.peau]]" class="pink">Problème de peau</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.fumeur]]" class="pink">Fumeur</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.osteoporose]]" class="pink">Ostéporose</paper-toggle-button>
-                        <paper-toggle-button checked="[[resultat.items.0.client.arthrose]]" class="pink">Arthrose</paper-toggle-button>
+                        <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
+                        <span> Autres thérapies :  [[resultat.items.0.client.autresTherapies]] </span><br>
+                        <span> Médicaments :  [[resultat.items.0.client.medicaments]] </span><br>
+                        <span> Compléments :  [[resultat.items.0.client.complements]] </span><br>
+                        <span> Constipation :  [[resultat.items.0.client.constipation]] </span><br>
+                        <span> Allergies :  [[resultat.items.0.client.allergies]] </span><br>
+                        <span> Opérations :  [[resultat.items.0.client.operations]] </span><br>
+                    </div>
+                </div>
+
+            </div>
+                <div class="container flex-horizontal-with-ratios">
+                    <div class="flex2child">
+                        <div class="card">
+                            <span> Historique de la douleur :  [[resultat.items.0.client.histoDouleur]] </span><br>
+                            <span> Constatations :  [[resultat.items.0.client.constatations]] </span><br>
+                            <span> Attention :  [[resultat.items.0.client.attentions]] </span><br>
+                            <span> À ne pas masser :  [[resultat.items.0.client.pasMasser]] </span><br>
+                            <span> Note :  [[resultat.items.0.client.note]] </span><br>
+
+
+                        </div>
+                    </div>
+                    <div class="flexchild">
+                        <div class="card">
+                            <paper-toggle-button checked="[[resultat.items.0.client.cardiaque]]" class="pink">Cardiaque</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.asthme]]" class="pink">Asthme</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.hypoglycemie]]" class="pink">Hypoglycémie</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.diabete]]" class="pink">Diabète</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.peau]]" class="pink">Problème de peau</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.fumeur]]" class="pink">Fumeur</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.osteoporose]]" class="pink">Ostéporose</paper-toggle-button>
+                            <paper-toggle-button checked="[[resultat.items.0.client.arthrose]]" class="pink">Arthrose</paper-toggle-button>
+
+                        </div>
 
                     </div>
-
                 </div>
-            </div>
 
-        </template>
-    </dom-if>
+            </template>
+        </dom-if>
 
+        <iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements
+        <vaadin-grid active-item="{{activeItem}}"
+                     id="grid"
+                     items="[[resultat.items.0.client.traitements]]"
+                     size="200"
+                     >
 
-
-<div>
-
-    <iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements
-    <vaadin-grid on-active-item-changed="_onActiveItemChanged"
-                 id="grid"
-                 items="[[resultat.items.0.client.traitements]]"
-                 size="200"
-                 >
-
-        <template class="row-details">
-            <div class="details">
-                <span>Traitement : [[item.traitement]]</span><br>
-                <span>Conseils : [[item.conseils]]</span><br>
-                <span>Commentaires : [[item.commentaires]]</span><br>
-            </div>
-        </template>
-        <vaadin-grid-column width="50px">
-            <template>[[formatDate(item.dateVisite)]]</template>
-        </vaadin-grid-column>
-        <vaadin-grid-column width="50px"><template>[[item.raison]]</template></vaadin-grid-column>
-        <vaadin-grid-column width="50px"><template>[[item.login]]</template></vaadin-grid-column>
-        <vaadin-grid-column width="50px"><template>[[item.prix]]$ ([[item.modePaiement]])</template></vaadin-grid-column>
-    </vaadin-grid>
-
-
-</div>
-
-
-
+            <template class="row-details">
+                <div class="details">
+                    <span><strong>Traitement </strong>: [[item.traitement]]</span><br>
+                    <span>Conseils : [[item.conseils]]</span><br>
+                    <span>Commentaires : [[item.commentaires]]</span><br>
+                </div>
+            </template>
+            <vaadin-grid-column width="20%">
+                <template class="header">Date visite</template>
+                <template>[[formatDate(item.dateVisite)]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="20%">
+                <template class="header">Raison</template>
+                <template>[[item.raison]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="20%">
+                <template class="header">Thérapeute</template>
+                <template>[[item.login]]</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="20%">
+                <template class="header">Mode paiement</template>
+                <template>[[item.prix]]$ ([[item.modePaiement]])</template>
+            </vaadin-grid-column>
+            <vaadin-grid-column width="10px">
+                <template class="header">Plus</template>
+                <template>
+                    <paper-checkbox checked="{{detailsOpened}}"></paper-checkbox>
+                </template>
+            </vaadin-grid-column>
+        </vaadin-grid>
 
     </template>
 
