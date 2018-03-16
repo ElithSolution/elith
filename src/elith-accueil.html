@@ -6,6 +6,7 @@
 <link rel="import" href="styles/elith-styles.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-login.html">
+<link rel="import" href="client/elith-clientsearch.html">
 
 <dom-module id="elith-accueil">
   <template>
@@ -40,6 +41,7 @@
       <div main-title><span id="test">LOGIN : [[storedUser.name]] !</span></div>
       <p>Bienvenu sur la page d'accueil de votre compte Elith</p>
       <elith-clientsearch></elith-clientsearch>
+
     </div>
 
     <div class="container flex-horizontal-with-ratios" hidden$="[[!storedUser.loggedin]]">
@@ -54,6 +56,9 @@
         </div>
       </div>
     </div>
+
+
+
   </template>
 
   <script>

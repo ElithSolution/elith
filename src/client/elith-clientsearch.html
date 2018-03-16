@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-route/app-route.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
@@ -26,6 +27,18 @@
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+    <app-location
+            route="{{route}}"
+            url-space-regex="^[[rootPath]]">
+    </app-location>
+    <app-route
+            route="{{route}}"
+            pattern="[[rootPath]]:param"
+            data="{{routeData}}"
+    >
+    </app-route>
+
+
     <iron-ajax
             id="getClientsAjax"
             method="get"
@@ -34,31 +47,36 @@
             on-response="handleClientsResponse"
             on-error="handleClientsError">
     </iron-ajax>
+    
+    <vaadin-combo-box-light  id="clientSearch"
+                             items="{{clients}}"
+                             item-value-path="client.id"
+                             item-label-path="client.prenom"
+                             style="display: block; width: 100%;">
 
-    <paper-search-panel search="{{search}}"
-                        items="[[items]]"
-                        has-more="[[hasMore]]"
-                        loading="[[loading]]"
-                        hide-filter-button=true>
-
-      <div>
-        [[nbRes]] résultat(s).
-      </div>
-    </paper-search-panel>
-
-    <vaadin-grid items="{{clients}}" size="200">
-      <vaadin-grid-column width="50px">
-        <template>
-          <a href$="[[_getItemHref(item)]]"> [[item.client.prenom]]</a>
+      <paper-input label="Nom de la personne" class="input" value=[[search]]>
+          <template>
+          <style>
+            paper-icon-item img {
+              border-radius: 50%;
+              margin-right: 10px;
+            }
+          </style>
+          <paper-icon-item>
+            <paper-item-body two-line>
+              <div>[[item.client.prenom]] [[item.client.nom]]</div>
+              <div secondary>[[formatDate(item.client.dateNaissance)]]</div>
+            </paper-item-body>
+          </paper-icon-item>
         </template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="50px">
-        <template>[[item.client.nom]]</template>
-      </vaadin-grid-column>
-      <vaadin-grid-column width="50px">
-      <template>[[formatDate(item.client.dateNaissance)]]</template>
-    </vaadin-grid-column>
-    </vaadin-grid>
+        <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+      </paper-input>
+
+    </vaadin-combo-box-light>
+    <div>
+      [[nbRes]] résultats.
+    </div>
+
   </template>
 
   <script>
@@ -68,7 +86,7 @@
       }
 
       constructor () {
-        super()
+        super();
         this.delayTimer = function () {}
       }
 
@@ -97,17 +115,38 @@
             notify: true,
             value:  0
           },
+          idclient:{
+            type: Number,
+          }
         }
       }
 
       _routeChanged(){}
+
+      ready(){
+        super.ready();
+        let combobox = this.$.clientSearch;
+        combobox.addEventListener('value-changed', () => {
+          this.idclient = combobox.value;
+          let path = ['/client', this.idclient].join('/') ;
+          this.set('route.path', path);
+        });
+      }
+
+
+/*      _filterChanged (e) {
+        // case-sensitive starts-with filtering
+        this.items = elements.filter(function(el) {
+          return el.indexOf(e.detail.value) === 0;
+        });
+      }*/
 
       delayTyping () {
         clearTimeout(this.delayTimer)
         let head = this.$.getClientsAjax
         if (typeof(this.storedUser) !== 'undefined') {
           let token = this.storedUser.accessToken
-          let searchField = this.search
+          let searchField = this.search;
           this.delayTimer = setTimeout(function () {
             loadData(head, token, searchField)
           }, 300)
@@ -134,10 +173,17 @@
         }
       }
 
-      _getItemHref(item){
+      _getItemHref(){
         // By returning null when `itemId` is undefined, the href attribute won't be set and
         // the link will be disabled.
-        return item ? ['/client', item.client.id].join('/') : null;
+        console.log('redirection');
+        console.log('route', this.route);
+        let path = ['/client', this.idclient].join('/') ;
+
+        this.set('route.path', path);
+        console.log('route', this.route);
+
+        //return item ? ['/client', item.client.id].join('/') : null;
       }
 
       formatDate(date){

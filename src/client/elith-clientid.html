@@ -27,6 +27,7 @@
                        on-iron-localstorage-load="initStoredUser"
                        on-iron-localstorage-load-empty="initStoredUser" ></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
     <app-location route="{{route}}"></app-location>
     <app-route
             route="{{route}}"
@@ -44,14 +45,9 @@
                on-error="handleDetailError">
     </iron-ajax>
 
-    <div class="card">
-      <span>routedata : [[routeData]]</span><br>
-      <span>route : [[route.path]]</span><br>
-      <span>item : [[routeData.param]]</span><br>
-      <span>resultat : [[resultat.items.0.client.nom]] </span><br>
+    <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
 
-      <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
-    </div>
+
 
 
   </template>
@@ -78,32 +74,36 @@
       }
 
       _routeChanged () {
-        console.log("   changement de la route  ")
-       
+        this.callAjax();
       }
 
       ready () {
-        super.ready()
+        super.ready();
       }
 
       initStoredUser () {
         if (this.storedUser.loggedin) {
-          this.callAjax()
+          this.callAjax();
         }
       }
 
       callAjax () {
-        if (typeof(this.routeData) !== 'undefined') {
-          this.$.getDetailByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.routeData.param}`
-          this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
-          this.$.getDetailByIdAjax.generateRequest()
+        if (typeof(this.routeData) !== 'undefined' && typeof(this.storedUser) !== 'undefined'){
+          // aucun ID
+          if(this.routeData.param === '') {
+            this.resultat = null;
+          }else{
+            this.$.getDetailByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.routeData.param}`;
+            this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
+            this.$.getDetailByIdAjax.generateRequest();
+          }
+
         }
       }
 
       compareToken () {
-        let lastToken = 'Bearer ' + this.storedUser.accessToken
-        let usedToken = this.$.getDetailByIdAjax.headers['Authorization']
-
+        let lastToken = 'Bearer ' + this.storedUser.accessToken;
+        let usedToken = this.$.getDetailByIdAjax.headers['Authorization'];
         if (lastToken !== usedToken) {
           this.initStoredUser()
         }
@@ -117,13 +117,13 @@
         }catch (e){
           console.log(e);
         }
-        this.resultat = response
-        this.error = null
+        this.resultat = response;
+        this.error = null;
       }
 
       handleDetailError (event) {
         console.log('en erreur :  handleError ' + this.$.getDetailByIdAjax.url)
-        this.compareToken()
+        this.compareToken();
 
         let response = JSON.parse(event.detail.request.xhr.response)
         this.error = response
@@ -133,7 +133,6 @@
         }
         if (this.error.code == 404) {
           console.log('ERREUR 404 ')
-
         }
         console.log('ERREUR ' + this.error.code)
 

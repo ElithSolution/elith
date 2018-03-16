@@ -42,7 +42,7 @@
       }
 
       app-header paper-icon-button {
-        --paper-icon-button-ink-color: var(--elith-base-color);
+        --paper-icon-button-ink-color: var(--elith-secondary-color-light);
       }
 
       .drawer-list paper-icon-item {
@@ -128,8 +128,9 @@
         <app-header slot="header" condenses reveals effects="waterfall">
           <app-toolbar>
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
+
             <div hidden$="[[!storedUser.loggedin]]">
-              <div><span>LOGIN : [[storedUser.name]] !</span></div>
+              <span>LOGIN : [[storedUser.name]] !</span>
               <paper-icon-button icon="account-circle"></paper-icon-button>
               <elith-logout stored-user="{{storedUser}}"></elith-logout>
             </div>
