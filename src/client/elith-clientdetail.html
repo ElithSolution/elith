@@ -2,6 +2,9 @@
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../my-icons.html">
 
@@ -48,28 +51,57 @@
                 --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
                 --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
             }
+
+            .clientNameHeader{
+                border-bottom: 2px solid;
+                margin-bottom: 40px;
+            }
+            .clientNameHeader h1{
+                display: inline;
+            }
+            .clientNameHeader paper-icon-button{
+                display: inline-flex;
+            }
         </style>
 
 
 
         <dom-if if="{{hasResult}}">
             <template>
-                <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                 <paper-icon-button icon="my-icons:edit"></paper-icon-button>
+                </div>
+
+                <iron-form>
+                    <form action="">
+                        <fieldset>
+                            <legend>Renseignements personnels</legend>
+                            <vaadin-form-layout>
+                                <paper-input label="Nom" value="[[resultat.items.0.client.nom]]"></paper-input>
+                                <paper-input label="Prénom" value="[[resultat.items.0.client.prenom]]"></paper-input>
+                                <paper-input label="Naissance" value="[[formatDate(resultat.items.0.client.dateNaissance)]]"></paper-input>
+                                <br>
+                                <paper-input label="Adresse" value="[[resultat.items.0.client.adresse]]"></paper-input>
+                                <paper-input label="Ville" value="[[resultat.items.0.client.ville]]"></paper-input>
+                                <br>
+                                <paper-input label="Téléphone" value="[[resultat.items.0.client.telephone]]"></paper-input>
+                                <br>
+                                <paper-input label="Courriel" value="[[resultat.items.0.client.email]]"></paper-input>
+                                <br>
+                                <paper-input label="Enfant(s)" value="[[resultat.items.0.client.enfants]]"></paper-input>
+                                <br>
+                                <paper-input label="Emploi" value="[[resultat.items.0.client.emploi]]"></paper-input>
+                                <br>
+                                <paper-input label="Loisirs" value="[[resultat.items.0.client.loisirs]]"></paper-input>
+                                <br>
+
+                            </vaadin-form-layout>
+                        </fieldset>
+
+                    </form>
+                </iron-form>
 
                 <div class="container flex-horizontal-with-ratios">
-                <div class="flex2child">
-                    <div class="card">
-                        <span>Né(e) le :  [[formatDate(resultat.items.0.client.dateNaissance)]] </span><br>
-                        <span> Adresse :  [[resultat.items.0.client.adresse]] </span><br>
-                        <span> Ville :  [[resultat.items.0.client.ville]] </span><br>
-                        <span> Téléphone :  [[resultat.items.0.client.telephone]] </span><br>
-                        <span> Email :  [[resultat.items.0.client.email]] </span><br>
-                        <span> Enfant(s) :  [[resultat.items.0.client.enfants]] </span><br>
-                        <span> Emploi :  [[resultat.items.0.client.emploi]] </span><br>
-                        <span> Loisirs :  [[resultat.items.0.client.loisirs]] </span><br>
-                    </div>
-                </div>
                 <div class="flexchild">
                     <div class="card">
                         <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
