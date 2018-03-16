@@ -5,6 +5,8 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../my-icons.html">
 
@@ -64,35 +66,45 @@
             }
         </style>
 
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+        <iron-ajax
+                id="updateClientAjax"
+                method="post"
+                content-type="application/json"
+                handle-as="text/json"
+                on-response="handleLoginResponse"
+                on-error="handleUserError">
+        </iron-ajax>
 
         <dom-if if="{{hasResult}}">
             <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-                <paper-icon-button icon="my-icons:edit"></paper-icon-button>
+                <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition"></paper-icon-button>
                 </div>
 
-                <iron-form>
-                    <form action="">
+                <iron-form id="modifClient">
+                    <form action="postUpdateClient">
                         <fieldset>
                             <legend>Renseignements personnels</legend>
                             <vaadin-form-layout>
-                                <paper-input label="Nom" value="[[resultat.items.0.client.nom]]"></paper-input>
-                                <paper-input label="Prénom" value="[[resultat.items.0.client.prenom]]"></paper-input>
-                                <paper-input label="Naissance" value="[[formatDate(resultat.items.0.client.dateNaissance)]]"></paper-input>
+                                <paper-input label="Nom" value="[[resultat.items.0.client.nom]]" readonly$="[[!modeEdition]]"></paper-input>
+                                <paper-input label="Prénom" value="[[resultat.items.0.client.prenom]]" readonly$="[[!modeEdition]]"></paper-input>
+                                <paper-input label="Naissance" value="[[formatDate(resultat.items.0.client.dateNaissance)]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Adresse" value="[[resultat.items.0.client.adresse]]"></paper-input>
-                                <paper-input label="Ville" value="[[resultat.items.0.client.ville]]"></paper-input>
+                                <paper-input label="Adresse" value="[[resultat.items.0.client.adresse]]" readonly$="[[!modeEdition]]"></paper-input>
+                                <paper-input label="Ville" value="[[resultat.items.0.client.ville]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Téléphone" value="[[resultat.items.0.client.telephone]]"></paper-input>
+                                <paper-input label="Téléphone" value="[[resultat.items.0.client.telephone]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Courriel" value="[[resultat.items.0.client.email]]"></paper-input>
+                                <paper-input label="Courriel" value="[[resultat.items.0.client.email]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Enfant(s)" value="[[resultat.items.0.client.enfants]]"></paper-input>
+                                <paper-input label="Enfant(s)" value="[[resultat.items.0.client.enfants]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Emploi" value="[[resultat.items.0.client.emploi]]"></paper-input>
+                                <paper-input label="Emploi" value="[[resultat.items.0.client.emploi]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
-                                <paper-input label="Loisirs" value="[[resultat.items.0.client.loisirs]]"></paper-input>
+                                <paper-input label="Loisirs" value="[[resultat.items.0.client.loisirs]]" readonly$="[[!modeEdition]]"></paper-input>
                                 <br>
 
                             </vaadin-form-layout>
@@ -145,7 +157,9 @@
 
             </template>
         </dom-if>
-
+        <!------------------------------------------------------------------------------------------------>
+        <!--------------------        Affichage des traitements de la personne        -------------------->
+        <!------------------------------------------------------------------------------------------------>
         <iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements
         <vaadin-grid active-item="{{activeItem}}"
                      id="grid"
@@ -200,6 +214,10 @@
             },
             hasResult: {
               type: Boolean,
+            },
+            modeEdition: {
+              type: Boolean,
+              value: false,
             }
 
           }
@@ -214,14 +232,31 @@
           (this.resultat != null) ? this.hasResult = true : this.hasResult = false;
         }
 
-        formatDate(date){
-          return Elith.Utils.formatDate(date);
-        }
-
         _onActiveItemChanged(e) {
              this.$.grid.expandedItems = [e.detail.value];
              console.log(this.$.grid.expandedItems);
         }
+
+        activeModeEdition () {
+          console.log('mode édition', this.modeEdition);
+          this.modeEdition = true ;
+          //this.hasResult = false;
+          console.log(this.modeEdition);
+        }
+
+        formatDate(date){
+          return Elith.Utils.formatDate(date);
+        }
+
+        _setReqBody () {
+          //this.$.updateClientAjax.body = this.formData;
+        }
+        postUpdateClient () {
+          this.$.updateClientAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
+          this._setReqBody();
+          this.$.updateClientAjax.generateRequest();
+        }
+
 
       }
 
