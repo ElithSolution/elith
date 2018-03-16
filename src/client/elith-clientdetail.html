@@ -51,14 +51,23 @@
                 --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
                 --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
             }
+
+            .clientNameHeader{
+                border-bottom: 2px solid;
+                margin-bottom: 40px;
+            }
+            .clientNameHeader h1{
+                display: inline;
+            }
         </style>
 
 
 
         <dom-if if="{{hasResult}}">
             <template>
-                <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                 <paper-icon-button icon="my-icons:edit"></paper-icon-button>
+                </div>
 
                 <iron-form>
                     <form action="">
