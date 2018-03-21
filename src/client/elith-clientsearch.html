@@ -55,6 +55,7 @@
                              style="display: block; width: 100%;">
 
       <paper-input label="Nom de la personne" class="input" value=[[search]]>
+
           <template>
           <style>
             paper-icon-item img {
@@ -121,7 +122,10 @@
         }
       }
 
-      _routeChanged(){}
+      _routeChanged(){
+        console.log('routeChanged', this.route.path);
+        console.log('routeData', this.routeData);
+      }
 
       ready(){
         super.ready();
@@ -149,7 +153,8 @@
           let searchField = this.search;
           this.delayTimer = setTimeout(function () {
             loadData(head, token, searchField)
-          }, 300)
+          }, 500)
+          //loadData(head, token, searchField);
         }
       }
 

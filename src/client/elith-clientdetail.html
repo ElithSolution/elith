@@ -168,6 +168,12 @@
 
             </template>
         </dom-if>
+        <dom-if if="{{isDeleted}}">
+            <template>
+                <span> Le client a été supprimé !</span>
+            </template>
+
+        </dom-if>
 
 
     </template>
@@ -190,6 +196,9 @@
             hasResult: {
               type: Boolean,
             },
+            isDeleted: {
+              type: Boolean,
+            },
             modeEdition: {
               type: Boolean,
               value: false,
@@ -205,7 +214,8 @@
 
         _resultatChanged () {
           if(this.resultat != null){
-            this.hasResult = true
+            this.hasResult = true;
+            this.isDeleted = false;
             let item = this.resultat.items;
             if(typeof(item) !== 'undefined'){
               this.idClient = item["0"].client.id;
@@ -247,11 +257,12 @@
 
         deleteClient(){
           console.log('  DELETE CLIENT', this.idClient);
-          console.log(this.storedUser.accessToken);
           this.$.deleteByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.deleteByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idClient}`;
           //this.$.deleteByIdAjax.generateRequest();
           // TODO : rafraichir l'affichage et rappeler le search
+          this.hasResult = false;
+          this.isDeleted = true ;
         }
 
         handleDeleteResponse(event) {
