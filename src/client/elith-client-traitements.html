@@ -13,7 +13,7 @@
   JSON.useDateParser()
 </script>
 
-<dom-module id="elith-clienttraitements">
+<dom-module id="elith-client-traitements">
     <template>
         <style include="elith-styles">
             :host {
@@ -23,9 +23,6 @@
 
         </style>
 
-                <!------------------------------------------------------------------------------------------------>
-                <!--------------------        Affichage des traitements de la personne        -------------------->
-                <!------------------------------------------------------------------------------------------------>
                 <fieldset>
                     <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
                         <vaadin-grid active-item="{{activeItem}}"
@@ -72,7 +69,7 @@
     <script>
       class ElithClienttraitements extends Polymer.Element {
         static get is () {
-          return 'elith-clienttraitements'
+          return 'elith-client-traitements'
         }
 
         static get properties () {
