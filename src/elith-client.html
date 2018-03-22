@@ -33,9 +33,10 @@
 
     <dom-if if="[[isIdPage]]" restamp>
       <template>
-          <elith-client-id></elith-client-id>
+          <elith-client-id idclient="{{idClient}}"></elith-client-id>
       </template>
     </dom-if>
+
 
     <dom-if if="[[isAddPage]]">
       <template>
@@ -55,6 +56,7 @@
       static get is () {
         return 'elith-client'
       }
+
 
       ready(){
         super.ready();
@@ -76,6 +78,9 @@
             type:  Boolean,
             value: false,
           },
+          idClient:{
+            type: Number,
+          }
         }
       }
 
@@ -89,6 +94,7 @@
           this.masquerSearchPage = false
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true
+          this.idClient = this.routeData.param;
           this.set('routeData.item', this.routeData.param)
         }
         this.set('routeData.param', '')

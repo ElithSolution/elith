@@ -125,6 +125,14 @@
       _routeChanged(){
         console.log('routeChanged', this.route.path);
         console.log('routeData', this.routeData);
+        if (this.routeData.param !== 'client') return;
+
+        let head = this.$.getClientsAjax;
+        if (typeof(this.storedUser) !== 'undefined') {
+          let token = this.storedUser.accessToken
+          let searchField = this.search;
+          loadData(head, token, searchField);
+        }
       }
 
       ready(){

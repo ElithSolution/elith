@@ -23,9 +23,7 @@
         padding: 10px;
       }
     </style>
-    <iron-localstorage name="user-storage" value="{{storedUser}}"
-                       on-iron-localstorage-load="initStoredUser"
-                       on-iron-localstorage-load-empty="initStoredUser" ></iron-localstorage>
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
     <app-location route="{{route}}"></app-location>
@@ -44,11 +42,17 @@
                on-error="handleDetailError">
     </iron-ajax>
 
+    <span>[[idclient]]</span>
     <dom-if if="{{hasResult}}">
       <template>
+
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
     </dom-if>
+
+
+
+
   </template>
 
   <script>
@@ -72,31 +76,34 @@
           hasResult: {
             type: Boolean,
           },
+          idclient:{
+            type: Number,
+          }
+
         }
       }
 
+      ready(){
+        super.ready();
+        this.callAjax();
+
+      }
       _resultatChanged () {
         (this.resultat != null)? this.hasResult = true : this.hasResult = false ;
       }
 
-      _routeChanged () {
-        this.callAjax();
-      }
 
-      initStoredUser () {
-        console.log('initstoreduser');
-        if (this.storedUser.loggedin) {
-          this.callAjax();
-        }
-      }
+
 
       callAjax () {
+        // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
+        console.log('callAjax');
         if (typeof(this.routeData) !== 'undefined' && typeof(this.storedUser) !== 'undefined'){
           // aucun ID
-          if(this.routeData.param === '') {
+          if(this.idclient === '') {
             this.resultat = null;
           }else{
-            this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.routeData.param}`;
+            this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
           }
