@@ -88,13 +88,15 @@
       }
 
       _routeChanged () {
+        console.log(' ROUTE CHANGED');
         this.isIdPage = false
         this.isAddPage = false
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
           this.masquerSearchPage = false;
-          this.idclient = 0 ;
+          //this.idClient = 0 ;
+          console.log(' RAFRAICHIR LA LISTE DU SEARCH ');
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true
           this.idClient = this.routeData.param;

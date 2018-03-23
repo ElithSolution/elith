@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
@@ -70,7 +71,7 @@
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-
+        <app-location route="{{route}}"></app-location>
         <iron-ajax
                 id="updateClientAjax"
                 method="post"
@@ -88,12 +89,18 @@
         </iron-ajax>
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
+        <dom-if if="{{isDeleted}}">
+            <template>
+                <span> Le client a été supprimé !</span>
+            </template>
 
-
+        </dom-if>
+        <dom-if if="{{!isDeleted}}">
+            <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-                <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                <paper-icon-button icon="my-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
-                <paper-icon-button icon="my-icons:delete" on-tap="deleteClient"></paper-icon-button>
+                    <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                    <paper-icon-button icon="my-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                    <paper-icon-button icon="my-icons:delete" on-tap="deleteClient"></paper-icon-button>
                 </div>
 
                 <iron-form id="modifClient">
@@ -105,14 +112,14 @@
                 <!--------------------        Affichage des traitements de la personne        -------------------->
                 <!------------------------------------------------------------------------------------------------>
                 <elith-client-traitements traitements="{{traitements}}"></elith-client-traitements>
-
-
-        <dom-if if="{{isDeleted}}">
-            <template>
-                <span> Le client a été supprimé !</span>
             </template>
 
         </dom-if>
+
+
+
+
+
 
 
     </template>
@@ -195,6 +202,8 @@
           // TODO : rafraichir l'affichage et rappeler le search
           this.isDeleted = true ;
           this.resultat = null ;
+          let path = '/client' ;
+          this.set('route.path', path);
         }
 
         handleDeleteResponse(event) {
