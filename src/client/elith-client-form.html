@@ -1,0 +1,148 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../styles/elith-styles.html">
+<link rel="import" href="../my-icons.html">
+
+
+<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
+<script>
+  JSON.useDateParser()
+</script>
+
+
+<dom-module id="elith-client-form">
+    <template>
+        <style include="elith-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+
+            .flex-horizontal-with-ratios {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild {
+                @apply --layout-flex;
+            }
+
+            .flex2child {
+                @apply --layout-flex-2;
+            }
+            paper-toggle-button.pink {
+                --paper-toggle-button-checked-bar-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-button-color:  var(--paper-pink-500);
+                --paper-toggle-button-checked-ink-color: var(--paper-pink-500);
+                --paper-toggle-button-unchecked-bar-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
+                --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
+            }
+
+            .clientNameHeader{
+                border-bottom: 2px solid;
+                margin-bottom: 40px;
+            }
+            .clientNameHeader h1{
+                display: inline;
+            }
+            .clientNameHeader paper-icon-button{
+                display: inline-flex;
+            }
+        </style>
+
+
+        <fieldset>
+            <legend>Renseignements personnels</legend>
+            <vaadin-form-layout>
+
+                <paper-input label="Nom" value="[[client.nom]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Prénom" value="[[client.prenom]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Naissance" value="[[formatDate(client.dateNaissance)]]" readonly$="[[!edition]]"></paper-input>
+                <br>
+                <paper-textarea label="Adresse" value="[[client.adresse]]" readonly$="[[!edition]]"></paper-textarea>
+                <paper-input label="Ville" value="[[client.ville]]" readonly$="[[!edition]]"></paper-input>
+                <br>
+                <paper-input label="Téléphone" value="[[client.telephone]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Courriel" value="[[client.email]]" readonly$="[[!edition]]"></paper-input>
+                <br>
+                <paper-input label="Enfant(s)" value="[[client.enfants]]" readonly$="[[!edition]]"></paper-input>
+                <br>
+                <paper-input label="Emploi" value="[[client.emploi]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Loisirs" value="[[client.loisirs]]" readonly$="[[!edition]]"></paper-input>
+                <br>
+            </vaadin-form-layout>
+        </fieldset>
+    <fieldset>
+        <legend>Informations médicales</legend>
+        <vaadin-form-layout>
+            <paper-textarea label="Autres thérapies" value="[[client.autresTherapies]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Médicaments" value="[[client.medicaments]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Compléments" value="[[client.complements]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Constipation" value="[[client.constipation]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+            <paper-textarea label="Allergies" value="[[client.allergies]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Opérations" value="[[client.operations]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+            <paper-textarea label="Autre" value="[[client.autre]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+
+            <paper-toggle-button checked="[[client.cardiaque]]" class="pink" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
+            <paper-toggle-button checked="[[client.asthme]]" class="pink" disabled="[[!edition]]">Asthme</paper-toggle-button>
+            <paper-toggle-button checked="[[client.hypoglycemie]]" class="pink" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>
+            <paper-toggle-button checked="[[client.diabete]]" class="pink" disabled="[[!edition]]">Diabète</paper-toggle-button>
+            <paper-toggle-button checked="[[client.peau]]" class="pink" disabled="[[!edition]]">Problème de peau</paper-toggle-button>
+            <paper-toggle-button checked="[[client.fumeur]]" class="pink" disabled="[[!edition]]">Fumeur</paper-toggle-button>
+            <paper-toggle-button checked="[[client.osteoporose]]" class="pink" disabled="[[!edition]]">Ostéporose</paper-toggle-button>
+            <paper-toggle-button checked="[[client.arthrose]]" class="pink" disabled="[[!edition]]">Arthrose</paper-toggle-button>
+        </vaadin-form-layout>
+    </fieldset>
+    <fieldset>
+        <legend>Notes du thérapeute</legend>
+        <vaadin-form-layout>
+            <paper-textarea label="Historique de la douleur" value="[[client.histoDouleur]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-input label="Référé par" value="[[client.refere]]" readonly$="[[!edition]]"></paper-input>
+            <br>
+            <paper-textarea label="Constatations" value="[[client.constatations]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+            <paper-textarea label="Attention" value="[[client.attentions]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="À ne pas masser" value="[[client.pasMasser]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+            <paper-textarea label="Note" value="[[client.note]]" readonly$="[[!edition]]"></paper-textarea>
+            <br>
+        </vaadin-form-layout>
+    </fieldset>
+
+</template>
+
+    <script>
+      class ElithClientform extends Polymer.Element {
+        static get is () {
+          return 'elith-client-form'
+        }
+
+        static get properties () {
+          return {
+            client: {
+              type: Object,
+            },
+
+
+          }
+        }
+
+        formatDate(date){
+         return Elith.Utils.formatDate(date);
+        }
+
+      }
+
+
+      window.customElements.define(ElithClientform.is, ElithClientform)
+    </script>
+</dom-module>

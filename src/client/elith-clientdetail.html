@@ -1,17 +1,21 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../my-icons.html">
 
+<link rel="import" href="elith-client-traitements.html">
+<link rel="import" href="elith-client-form.html">
+
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
-  // use date parser for all JSON.parse() requests
-  // make sure to call before any JSON conversions
   JSON.useDateParser()
 </script>
 
@@ -64,125 +68,52 @@
             }
         </style>
 
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
+        <iron-ajax
+                id="updateClientAjax"
+                method="post"
+                content-type="application/json"
+                handle-as="text/json"
+                on-response="handleUpdateResponse"
+                on-error="handleUpdateError">
+        </iron-ajax>
+        <iron-ajax id="deleteByIdAjax"
+                   method="delete"
+                   content-type="application/json"
+                   handle-as="JSON"
+                   on-response="handleDeleteResponse"
+                   on-error="handleDeleteError">
+        </iron-ajax>
+        <!------------------------------------------------------------------------------------------------>
+        <!------------------------------------------------------------------------------------------------>
 
 
-        <dom-if if="{{hasResult}}">
-            <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-                <paper-icon-button icon="my-icons:edit"></paper-icon-button>
+                <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                <paper-icon-button icon="my-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                <paper-icon-button icon="my-icons:delete" on-tap="deleteClient"></paper-icon-button>
                 </div>
 
-                <iron-form>
-                    <form action="">
-                        <fieldset>
-                            <legend>Renseignements personnels</legend>
-                            <vaadin-form-layout>
-                                <paper-input label="Nom" value="[[resultat.items.0.client.nom]]"></paper-input>
-                                <paper-input label="Prénom" value="[[resultat.items.0.client.prenom]]"></paper-input>
-                                <paper-input label="Naissance" value="[[formatDate(resultat.items.0.client.dateNaissance)]]"></paper-input>
-                                <br>
-                                <paper-input label="Adresse" value="[[resultat.items.0.client.adresse]]"></paper-input>
-                                <paper-input label="Ville" value="[[resultat.items.0.client.ville]]"></paper-input>
-                                <br>
-                                <paper-input label="Téléphone" value="[[resultat.items.0.client.telephone]]"></paper-input>
-                                <br>
-                                <paper-input label="Courriel" value="[[resultat.items.0.client.email]]"></paper-input>
-                                <br>
-                                <paper-input label="Enfant(s)" value="[[resultat.items.0.client.enfants]]"></paper-input>
-                                <br>
-                                <paper-input label="Emploi" value="[[resultat.items.0.client.emploi]]"></paper-input>
-                                <br>
-                                <paper-input label="Loisirs" value="[[resultat.items.0.client.loisirs]]"></paper-input>
-                                <br>
-
-                            </vaadin-form-layout>
-                        </fieldset>
-
+                <iron-form id="modifClient">
+                    <form is="iron-form" id="updateClient" method="post">
+                        <elith-client-form client="{{client}}" edition="{{modeEdition}}"></elith-client-form>
                     </form>
                 </iron-form>
-
-                <div class="container flex-horizontal-with-ratios">
-                <div class="flexchild">
-                    <div class="card">
-                        <span> Référé par :  [[resultat.items.0.client.refere]] </span><br>
-                        <span> Autres thérapies :  [[resultat.items.0.client.autresTherapies]] </span><br>
-                        <span> Médicaments :  [[resultat.items.0.client.medicaments]] </span><br>
-                        <span> Compléments :  [[resultat.items.0.client.complements]] </span><br>
-                        <span> Constipation :  [[resultat.items.0.client.constipation]] </span><br>
-                        <span> Allergies :  [[resultat.items.0.client.allergies]] </span><br>
-                        <span> Opérations :  [[resultat.items.0.client.operations]] </span><br>
-                    </div>
-                </div>
-
-            </div>
-                <div class="container flex-horizontal-with-ratios">
-                    <div class="flex2child">
-                        <div class="card">
-                            <span> Historique de la douleur :  [[resultat.items.0.client.histoDouleur]] </span><br>
-                            <span> Constatations :  [[resultat.items.0.client.constatations]] </span><br>
-                            <span> Attention :  [[resultat.items.0.client.attentions]] </span><br>
-                            <span> À ne pas masser :  [[resultat.items.0.client.pasMasser]] </span><br>
-                            <span> Note :  [[resultat.items.0.client.note]] </span><br>
+                <!------------------------------------------------------------------------------------------------>
+                <!--------------------        Affichage des traitements de la personne        -------------------->
+                <!------------------------------------------------------------------------------------------------>
+                <elith-client-traitements traitements="{{traitements}}"></elith-client-traitements>
 
 
-                        </div>
-                    </div>
-                    <div class="flexchild">
-                        <div class="card">
-                            <paper-toggle-button checked="[[resultat.items.0.client.cardiaque]]" class="pink">Cardiaque</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.asthme]]" class="pink">Asthme</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.hypoglycemie]]" class="pink">Hypoglycémie</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.diabete]]" class="pink">Diabète</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.peau]]" class="pink">Problème de peau</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.fumeur]]" class="pink">Fumeur</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.osteoporose]]" class="pink">Ostéporose</paper-toggle-button>
-                            <paper-toggle-button checked="[[resultat.items.0.client.arthrose]]" class="pink">Arthrose</paper-toggle-button>
-
-                        </div>
-
-                    </div>
-                </div>
-
+        <dom-if if="{{isDeleted}}">
+            <template>
+                <span> Le client a été supprimé !</span>
             </template>
+
         </dom-if>
 
-        <iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements
-        <vaadin-grid active-item="{{activeItem}}"
-                     id="grid"
-                     items="[[resultat.items.0.client.traitements]]"
-                     size="200"
-                     >
-
-            <template class="row-details">
-                <div class="details">
-                    <span><strong>Traitement </strong>: [[item.traitement]]</span><br>
-                    <span>Conseils : [[item.conseils]]</span><br>
-                    <span>Commentaires : [[item.commentaires]]</span><br>
-                </div>
-            </template>
-            <vaadin-grid-column width="20%">
-                <template class="header">Date visite</template>
-                <template>[[formatDate(item.dateVisite)]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="20%">
-                <template class="header">Raison</template>
-                <template>[[item.raison]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="20%">
-                <template class="header">Thérapeute</template>
-                <template>[[item.login]]</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="20%">
-                <template class="header">Mode paiement</template>
-                <template>[[item.prix]]$ ([[item.modePaiement]])</template>
-            </vaadin-grid-column>
-            <vaadin-grid-column width="10px">
-                <template class="header">Plus</template>
-                <template>
-                    <paper-checkbox checked="{{detailsOpened}}"></paper-checkbox>
-                </template>
-            </vaadin-grid-column>
-        </vaadin-grid>
 
     </template>
 
@@ -198,29 +129,87 @@
               type: Object,
               observer: '_resultatChanged',
             },
-            hasResult: {
+            client: {
+              type: Object,
+            },
+            traitements:{
+              type: Object,
+            },
+            isDeleted: {
               type: Boolean,
-            }
+            },
+            modeEdition:{
+              type: Object,
+            },
 
           }
         }
 
-        ready(){
-          super.ready();
-        }
 
 
         _resultatChanged () {
-          (this.resultat != null) ? this.hasResult = true : this.hasResult = false;
+          if(this.resultat != null){
+            this.isDeleted = false;
+            let item = this.resultat.items;
+            if(typeof(item) !== 'undefined'){
+              this.client = item["0"].client;
+              this.traitements = this.client.traitements;
+              this.modeEdition = false;
+
+            }
+          }else{
+            this.traitements = null ;
+          }
+        }
+
+        _onActiveItemChanged(e) {
+             this.$.grid.expandedItems = [e.detail.value];
+             console.log(this.$.grid.expandedItems);
+        }
+
+        activeModeEdition () {
+          this.modeEdition = true ;
         }
 
         formatDate(date){
           return Elith.Utils.formatDate(date);
         }
 
-        _onActiveItemChanged(e) {
-             this.$.grid.expandedItems = [e.detail.value];
-             console.log(this.$.grid.expandedItems);
+        _setReqBody () {
+          //this.$.updateClientAjax.body = this.formData;
+        }
+        postUpdateClient () {
+          // TODO : faire le service updateClient
+          console.log(' UPDATE CLIENT');
+          //this.$.updateClientAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
+          //this._setReqBody();
+          //this.$.updateClientAjax.generateRequest();
+          this.modeEdition = false;
+        }
+
+        deleteClient(){
+          console.log('  DELETE CLIENT', this.client.id);
+          this.$.deleteByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+          this.$.deleteByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.client.id}`;
+          //this.$.deleteByIdAjax.generateRequest();
+          // TODO : rafraichir l'affichage et rappeler le search
+          this.isDeleted = true ;
+          this.resultat = null ;
+        }
+
+        handleDeleteResponse(event) {
+          this.handleResponse(event);
+        }
+
+        handleResponse(event) {
+          console.log('  handleResponse  ');
+          var response = JSON.parse(event.detail.response);
+          console.log("réponse de la requête ajax : " + response);
+        }
+
+        handleDeleteError (event) {
+          console.log('en erreur :  handleError ');
+
         }
 
       }

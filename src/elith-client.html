@@ -1,10 +1,11 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 
-<link rel="import" href="client/elith-clientid.html">
+<link rel="import" href="client/elith-client-id.html">
 <link rel="import" href="client/elith-clientsearch.html">
 <link rel="import" href="styles/elith-styles.html">
 
@@ -20,9 +21,12 @@
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+    <app-location
+            route="{{route}}">
+    </app-location>
     <app-route
             route="{{route}}"
-            pattern="[[rootPath]]:param"
+            pattern="/client/:param"
             data="{{routeData}}"
     >
     </app-route>
@@ -30,13 +34,13 @@
     <div class="card">
       <elith-clientsearch></elith-clientsearch>
     </div>
+
     <dom-if if="[[isIdPage]]" restamp>
       <template>
-        <div class="card">
-          <elith-clientid></elith-clientid>
-        </div>
+          <elith-client-id idclient="{{idClient}}"></elith-client-id>
       </template>
     </dom-if>
+
 
     <dom-if if="[[isAddPage]]">
       <template>
@@ -77,23 +81,27 @@
             type:  Boolean,
             value: false,
           },
+          idClient:{
+            type: Number,
+          }
         }
       }
 
       _routeChanged () {
         this.isIdPage = false
         this.isAddPage = false
-
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
-          this.masquerSearchPage = false
+          this.masquerSearchPage = false;
+          this.idclient = 0 ;
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true
-          this.set('routeData.item', this.routeData.param)
+          this.idClient = this.routeData.param;
         }
-        this.set('routeData.param', '')
       }
+
+
     }
 
     window.customElements.define(ElithClient.is, ElithClient)

@@ -1,0 +1,92 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
+<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../styles/elith-styles.html">
+<link rel="import" href="../my-icons.html">
+
+<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
+<script>
+  JSON.useDateParser()
+</script>
+
+<dom-module id="elith-client-traitements">
+    <template>
+        <style include="elith-styles">
+            :host {
+                display: block;
+                padding: 10px;
+            }
+
+        </style>
+
+                <fieldset>
+                    <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
+                        <vaadin-grid active-item="{{activeItem}}"
+                                     id="grid"
+                                     items="[[traitements]]"
+                                     colspan="2"
+                                     column-reordering-allowed>
+
+                            <template class="row-details">
+                                <div class="details">
+                                    <span><strong>Traitement </strong>: [[item.traitement]]</span><br>
+                                    <span>Conseils : [[item.conseils]]</span><br>
+                                    <span>Commentaires : [[item.commentaires]]</span><br>
+                                </div>
+                            </template>
+                            <vaadin-grid-column width="15%">
+                                <template class="header">Date visite</template>
+                                <template>[[formatDate(item.dateVisite)]]</template>
+                            </vaadin-grid-column>
+                            <vaadin-grid-column width="35%">
+                                <template class="header">Raison</template>
+                                <template>[[item.raison]]</template>
+                            </vaadin-grid-column>
+                            <vaadin-grid-column width="20%">
+                                <template class="header">Thérapeute</template>
+                                <template>[[item.login]]</template>
+                            </vaadin-grid-column>
+                            <vaadin-grid-column width="20%">
+                                <template class="header">Mode paiement</template>
+                                <template>[[item.prix]]$ ([[item.modePaiement]])</template>
+                            </vaadin-grid-column>
+                            <vaadin-grid-column width="10%">
+                                <template class="header" align="center"> <paper-icon-button icon="my-icons:visibility"></paper-icon-button></template>
+                                <template>
+                                    <paper-checkbox checked="{{detailsOpened}}"></paper-checkbox>
+                                </template>
+                            </vaadin-grid-column>
+                        </vaadin-grid>
+                </fieldset>
+
+
+    </template>
+
+    <script>
+      class ElithClienttraitements extends Polymer.Element {
+        static get is () {
+          return 'elith-client-traitements'
+        }
+
+        static get properties () {
+          return {
+            traitements:{
+              type: Object,
+
+            },
+          }
+        }
+
+        formatDate(date){
+          return Elith.Utils.formatDate(date);
+        }
+      }
+
+
+      window.customElements.define(ElithClienttraitements.is, ElithClienttraitements)
+    </script>
+</dom-module>

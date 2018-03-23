@@ -1,6 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
@@ -15,7 +13,7 @@
   JSON.useDateParser()
 </script>
 
-<dom-module id="elith-clientid">
+<dom-module id="elith-client-id">
   <template>
     <style include="elith-styles">
       :host {
@@ -23,21 +21,10 @@
         padding: 10px;
       }
     </style>
-    <iron-localstorage name="user-storage" value="{{storedUser}}"
-                       on-iron-localstorage-load="initStoredUser"
-                       on-iron-localstorage-load-empty="initStoredUser" ></iron-localstorage>
+    <iron-localstorage name="user-storage" value="{{storedUser}}" on-iron-localstorage-load="initStoredUser"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-    <app-location route="{{route}}"></app-location>
-    <app-route
-            route="{{route}}"
-            pattern="/:category/:param"
-            data="{{routeData}}"
-    >
-    </app-route>
-
-
-    <iron-ajax id="getDetailByIdAjax"
+    <iron-ajax id="getClientByIdAjax"
                method="get"
                content-type="application/json"
                handle-as="JSON"
@@ -45,7 +32,13 @@
                on-error="handleDetailError">
     </iron-ajax>
 
-    <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
+    <span>[[idclient]]</span>
+    <dom-if if="{{hasResult}}">
+      <template>
+
+        <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
+      </template>
+    </dom-if>
 
 
 
@@ -55,47 +48,55 @@
   <script>
     class ElithClientid extends Polymer.Element {
       static get is () {
-        return 'elith-clientid'
+        return 'elith-client-id'
       }
 
       static get properties () {
         return {
           storedUser: Object,
-          routeData:  Object,
-          route:      {
-            type:     Object,
-            observer: '_routeChanged',
-          },
           resultat:   {
             type:  Object,
-            value: '',
           },
+          hasResult: {
+            type: Boolean,
+          },
+          idclient:{
+            type: Number,
+            observer : '_idclientChanged',
+          }
+
         }
       }
 
-      _routeChanged () {
-        this.callAjax();
-      }
 
-      ready () {
-        super.ready();
-      }
-
-      initStoredUser () {
+      initStoredUser(){
         if (this.storedUser.loggedin) {
           this.callAjax();
         }
       }
 
+      _idclientChanged(){
+        if (typeof(this.storedUser) !== 'undefined' && this.storedUser.loggedin) {
+          this.callAjax();
+        }
+      }
+
+
+
       callAjax () {
-        if (typeof(this.routeData) !== 'undefined' && typeof(this.storedUser) !== 'undefined'){
+        // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
+        console.log('callAjax');
+        console.log('storeduser', this.storedUser);
+        if (typeof(this.storedUser) !== 'undefined'){
           // aucun ID
-          if(this.routeData.param === '') {
+          if(this.idclient === 0) {
             this.resultat = null;
+            this.hasResult = false;
           }else{
-            this.$.getDetailByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.routeData.param}`;
-            this.$.getDetailByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
-            this.$.getDetailByIdAjax.generateRequest();
+            this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
+            this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
+            this.$.getClientByIdAjax.generateRequest();
+            this.hasResult = true;
           }
 
         }
@@ -103,8 +104,9 @@
 
       compareToken () {
         let lastToken = 'Bearer ' + this.storedUser.accessToken;
-        let usedToken = this.$.getDetailByIdAjax.headers['Authorization'];
+        let usedToken = this.$.getClientByIdAjax.headers['Authorization'];
         if (lastToken !== usedToken) {
+          console.log('token diff');
           this.initStoredUser()
         }
       }
@@ -122,7 +124,7 @@
       }
 
       handleDetailError (event) {
-        console.log('en erreur :  handleError ' + this.$.getDetailByIdAjax.url)
+        console.log('en erreur :  handleError ' + this.$.getClientByIdAjax.url)
         this.compareToken();
 
         let response = JSON.parse(event.detail.request.xhr.response)
