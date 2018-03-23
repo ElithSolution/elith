@@ -13,7 +13,7 @@ jobs:
           command: npm install
       - run:
           name: install bower globally
-          command: npm i bower -g
+          command: npm i bower
       - run:
           name: install-dependencies-bower
           command: bower install
