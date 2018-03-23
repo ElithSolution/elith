@@ -82,11 +82,7 @@
       }
 
 
-
       callAjax () {
-        // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
-        console.log('callAjax');
-        console.log('storeduser', this.storedUser);
         if (typeof(this.storedUser) !== 'undefined'){
           // aucun ID
           if(this.idclient === 0) {
