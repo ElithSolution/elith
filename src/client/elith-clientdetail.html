@@ -198,8 +198,7 @@
           console.log('  DELETE CLIENT', this.client.id);
           this.$.deleteByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.deleteByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.client.id}`;
-          //this.$.deleteByIdAjax.generateRequest();
-          // TODO : rafraichir l'affichage et rappeler le search
+          this.$.deleteByIdAjax.generateRequest();
           this.isDeleted = true ;
           this.resultat = null ;
           let path = '/client' ;

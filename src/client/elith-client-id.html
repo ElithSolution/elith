@@ -82,7 +82,6 @@
 
       callAjax () {
         if (typeof(this.storedUser) !== 'undefined'){
-
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();

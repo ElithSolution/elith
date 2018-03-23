@@ -15,7 +15,7 @@
   // make sure to call before any JSON conversions
   JSON.useDateParser();
 </script>
-<dom-module id="elith-clientsearch">
+<dom-module id="elith-client-search">
   <template>
     <style include="elith-styles">
       :host {
@@ -45,7 +45,6 @@
                              style="display: block; width: 100%;">
 
       <paper-input label="Nom de la personne" class="input" value=[[search]]>
-
           <template>
           <style>
             paper-icon-item img {
@@ -62,7 +61,6 @@
         </template>
         <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
       </paper-input>
-
     </vaadin-combo-box-light>
     <div>
       [[nbRes]] résultats.
@@ -73,7 +71,7 @@
   <script>
     class ElithClientsearch extends Polymer.Element {
       static get is () {
-        return 'elith-clientsearch'
+        return 'elith-client-search'
       }
 
       constructor () {
@@ -88,25 +86,19 @@
             notify: true,
           },
           routeData:  Object,
-          route:      {
-            type:     Object,
-          },
-          clients:    {
-            type: Object
-          },
+          route:      Object,
+          clients:    Object,
           error:      String,
           search:     {
             type:     String,
             value:    '',
-            observer: 'delayTyping'
+            observer: '_searchChanged'
           },
-          nbRes:      {
-            type:   Number,
-            notify: true,
-            value:  0
-          },
-          idclient:{
-            type: Number,
+          nbRes: Number,
+          idclient: Number,
+          update:{
+            type : Boolean,
+            observer: '_updateChanged'
           }
         }
       }
@@ -121,24 +113,25 @@
         });
       }
 
-      delayTyping () {
-        clearTimeout(this.delayTimer)
-        let head = this.$.getClientsAjax
+      _updateChanged() {
+        if(this.update){
+          this._searchChanged();
+        }
+      }
+      _searchChanged () {
+        let head = this.$.getClientsAjax;
         if (typeof(this.storedUser) !== 'undefined') {
-          let token = this.storedUser.accessToken
+          let token = this.storedUser.accessToken;
           let searchField = this.search;
-          this.delayTimer = setTimeout(function () {
-            loadData(head, token, searchField)
-          }, 500)
-          //loadData(head, token, searchField);
+          loadData(head, token, searchField);
         }
       }
 
       handleClientsResponse (event) {
-        let response = JSON.parse(event.detail.response)
-        this.nbRes = response.items.length
-        this.clients = response.items
-        this.error = null
+        let response = JSON.parse(event.detail.response);
+        this.nbRes = response.items.length;
+        this.clients = response.items;
+        this.error = null;
       }
 
       handleClientsError (event) {
@@ -148,7 +141,6 @@
           console.log(e);
           this.error = e;
         }
-
         if (this.error.code && this.error.code == 401) {
           this.storedUser = null
         }
