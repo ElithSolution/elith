@@ -1,6 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-route/app-route.html">
-<link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
@@ -23,16 +21,8 @@
         padding: 10px;
       }
     </style>
-    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <iron-localstorage name="user-storage" value="{{storedUser}}" on-iron-localstorage-load="initStoredUser"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-
-    <app-location route="{{route}}"></app-location>
-    <app-route
-            route="{{route}}"
-            pattern="/:category/:param"
-            data="{{routeData}}"
-    >
-    </app-route>
 
     <iron-ajax id="getClientByIdAjax"
                method="get"
@@ -64,48 +54,49 @@
       static get properties () {
         return {
           storedUser: Object,
-          routeData:  Object,
-          route:      {
-            type:     Object,
-            observer: '_routeChanged',
-          },
           resultat:   {
             type:  Object,
-            observer: '_resultatChanged',
           },
           hasResult: {
             type: Boolean,
           },
           idclient:{
             type: Number,
+            observer : '_idclientChanged',
           }
 
         }
       }
 
-      ready(){
-        super.ready();
-        this.callAjax();
 
-      }
-      _resultatChanged () {
-        (this.resultat != null)? this.hasResult = true : this.hasResult = false ;
+      initStoredUser(){
+        if (this.storedUser.loggedin) {
+          this.callAjax();
+        }
       }
 
+      _idclientChanged(){
+        if (typeof(this.storedUser) !== 'undefined' && this.storedUser.loggedin) {
+          this.callAjax();
+        }
+      }
 
 
 
       callAjax () {
         // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
         console.log('callAjax');
-        if (typeof(this.routeData) !== 'undefined' && typeof(this.storedUser) !== 'undefined'){
+        console.log('storeduser', this.storedUser);
+        if (typeof(this.storedUser) !== 'undefined'){
           // aucun ID
-          if(this.idclient === '') {
+          if(this.idclient === 0) {
             this.resultat = null;
+            this.hasResult = false;
           }else{
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
+            this.hasResult = true;
           }
 
         }

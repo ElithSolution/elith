@@ -1,5 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/app-route/app-route.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
@@ -29,15 +29,8 @@
 
     <app-location
             route="{{route}}"
-            url-space-regex="^[[rootPath]]">
-    </app-location>
-    <app-route
-            route="{{route}}"
-            pattern="[[rootPath]]:param"
-            data="{{routeData}}"
     >
-    </app-route>
-
+    </app-location>
 
     <iron-ajax
             id="getClientsAjax"
@@ -100,7 +93,6 @@
           routeData:  Object,
           route:      {
             type:     Object,
-            observer: '_routeChanged',
           },
           clients:    {
             type: Object
@@ -122,19 +114,6 @@
         }
       }
 
-      _routeChanged(){
-        console.log('routeChanged', this.route.path);
-        console.log('routeData', this.routeData);
-        if (this.routeData.param !== 'client') return;
-
-        let head = this.$.getClientsAjax;
-        if (typeof(this.storedUser) !== 'undefined') {
-          let token = this.storedUser.accessToken
-          let searchField = this.search;
-          loadData(head, token, searchField);
-        }
-      }
-
       ready(){
         super.ready();
         let combobox = this.$.clientSearch;
@@ -144,14 +123,6 @@
           this.set('route.path', path);
         });
       }
-
-
-/*      _filterChanged (e) {
-        // case-sensitive starts-with filtering
-        this.items = elements.filter(function(el) {
-          return el.indexOf(e.detail.value) === 0;
-        });
-      }*/
 
       delayTyping () {
         clearTimeout(this.delayTimer)
@@ -185,19 +156,6 @@
           this.storedUser = null
         }
       }
-
-   /*   _getItemHref(){
-        // By returning null when `itemId` is undefined, the href attribute won't be set and
-        // the link will be disabled.
-        console.log('redirection');
-        console.log('route', this.route);
-        let path = ['/client', this.idclient].join('/') ;
-
-        this.set('route.path', path);
-        console.log('route', this.route);
-
-        //return item ? ['/client', item.client.id].join('/') : null;
-      }*/
 
       formatDate(date){
         return Elith.Utils.formatDate(date);

@@ -1,5 +1,6 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
@@ -20,9 +21,12 @@
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
+    <app-location
+            route="{{route}}">
+    </app-location>
     <app-route
             route="{{route}}"
-            pattern="[[rootPath]]:param"
+            pattern="/client/:param"
             data="{{routeData}}"
     >
     </app-route>
@@ -57,7 +61,6 @@
         return 'elith-client'
       }
 
-
       ready(){
         super.ready();
       }
@@ -87,18 +90,18 @@
       _routeChanged () {
         this.isIdPage = false
         this.isAddPage = false
-
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
-          this.masquerSearchPage = false
+          this.masquerSearchPage = false;
+          this.idclient = 0 ;
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true
           this.idClient = this.routeData.param;
-          this.set('routeData.item', this.routeData.param)
         }
-        this.set('routeData.param', '')
       }
+
+
     }
 
     window.customElements.define(ElithClient.is, ElithClient)
