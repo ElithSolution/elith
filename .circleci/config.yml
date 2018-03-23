@@ -1,7 +1,6 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/elith
     docker:
       - image: circleci/node:8.9-browsers
     steps:
