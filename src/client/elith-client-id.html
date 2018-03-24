@@ -85,8 +85,6 @@
 
       callAjax () {
         // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
-        console.log('callAjax');
-        console.log('storeduser', this.storedUser);
         if (typeof(this.storedUser) !== 'undefined'){
           // aucun ID
           if(this.idclient === 0) {
@@ -106,7 +104,6 @@
         let lastToken = 'Bearer ' + this.storedUser.accessToken;
         let usedToken = this.$.getClientByIdAjax.headers['Authorization'];
         if (lastToken !== usedToken) {
-          console.log('token diff');
           this.initStoredUser()
         }
       }
@@ -117,26 +114,20 @@
         try{
           response = JSON.parse(event.detail.response)
         }catch (e){
-          console.log(e);
         }
         this.resultat = response;
         this.error = null;
       }
 
       handleDetailError (event) {
-        console.log('en erreur :  handleError ' + this.$.getClientByIdAjax.url)
         this.compareToken();
 
         let response = JSON.parse(event.detail.request.xhr.response)
         this.error = response
         if (this.error.code == 401) {
-          console.log('ERREUR 401 ')
-          //this.storedUser = null;
         }
         if (this.error.code == 404) {
-          console.log('ERREUR 404 ')
         }
-        console.log('ERREUR ' + this.error.code)
 
       }
     }

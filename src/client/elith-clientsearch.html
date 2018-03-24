@@ -148,7 +148,6 @@
         try{
           this.error = JSON.parse(event.detail.request.xhr.response)
         }catch(e){
-          console.log(e);
           this.error = e;
         }
 
