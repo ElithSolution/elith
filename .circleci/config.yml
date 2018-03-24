@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/elith
     docker:
-      - image: circleci/node:8.9-browsers
+      - image: jefferyb/polymer-cli
     steps:
       - checkout
       - restore_cache:
@@ -11,12 +11,6 @@ jobs:
       - run:
           name: install-dependencies-npm
           command: npm install
-      - run:
-          name: install bower globally
-          command: sudo npm i -g bower
-      - run:
-          name: install polymer cli globally
-          command: sudo npm i -g polymer-cli
       - run:
           name: install-dependencies-bower
           command: bower install
