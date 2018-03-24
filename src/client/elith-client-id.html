@@ -114,6 +114,7 @@
         try{
           response = JSON.parse(event.detail.response)
         }catch (e){
+          this.error = e;
         }
         this.resultat = response;
         this.error = null;
@@ -125,8 +126,10 @@
         let response = JSON.parse(event.detail.request.xhr.response)
         this.error = response
         if (this.error.code == 401) {
+          alert(`Erreur ${this.error.code}`);
         }
         if (this.error.code == 404) {
+          alert(`Erreur ${this.error.code}`);
         }
 
       }

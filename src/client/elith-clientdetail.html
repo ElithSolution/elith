@@ -199,11 +199,13 @@
         }
 
         handleResponse(event) {
-          var response = JSON.parse(event.detail.response);
+          let response = JSON.parse(event.detail.response);
+          return response;
         }
 
         handleDeleteError (event) {
-
+          let response = JSON.parse(event.detail.response);
+          return response;
         }
 
       }
