@@ -5,6 +5,7 @@
 <link rel="import" href="../styles/elith-styles.html">
 
 <link rel="import" href="elith-clientdetail.html">
+<link rel="import" href="../elith-error.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
@@ -34,6 +35,7 @@
 
     <dom-if if="{{hasResult}}">
       <template>
+        <elith-error code="{{codeerror}}"></elith-error>
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
     </dom-if>
@@ -61,7 +63,8 @@
           idclient:{
             type: Number,
             observer : '_idclientChanged',
-          }
+          },
+          codeerror: Object,
 
         }
       }
@@ -107,6 +110,7 @@
           console.log(e);
         }
         this.resultat = response;
+        this.codeerror = this.resultat.errorResponse.code;
         this.error = null;
       }
 

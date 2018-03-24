@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
@@ -6,7 +7,7 @@
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../styles/elith-styles.html">
-<link rel="import" href="../my-icons.html">
+<link rel="import" href="../elith-icons.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
@@ -55,7 +56,7 @@
                                 <template>[[item.prix]]$ ([[item.modePaiement]])</template>
                             </vaadin-grid-column>
                             <vaadin-grid-column width="10%">
-                                <template class="header" align="center"> <paper-icon-button icon="my-icons:visibility"></paper-icon-button></template>
+                                <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility"></paper-icon-button></template>
                                 <template>
                                     <paper-checkbox checked="{{detailsOpened}}"></paper-checkbox>
                                 </template>

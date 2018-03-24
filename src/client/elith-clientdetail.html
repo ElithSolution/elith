@@ -10,7 +10,7 @@
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
-<link rel="import" href="../my-icons.html">
+<link rel="import" href="../elith-icons.html">
 
 <link rel="import" href="elith-client-traitements.html">
 <link rel="import" href="elith-client-form.html">
@@ -98,9 +98,9 @@
         <dom-if if="{{!isDeleted}}">
             <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-                    <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="my-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="my-icons:delete" on-tap="deleteClient"></paper-icon-button>
+                    <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                    <paper-icon-button icon="elith-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                    <paper-icon-button icon="elith-icons:delete" on-tap="deleteClient"></paper-icon-button>
                 </div>
 
                 <iron-form id="modifClient">
