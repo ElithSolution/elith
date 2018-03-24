@@ -15,6 +15,9 @@ jobs:
           name: install bower globally
           command: sudo npm i -g bower
       - run:
+          name: install polymer cli globally
+          command: sudo npm i -g polymer-cli
+      - run:
           name: install-dependencies-bower
           command: bower install
       - save_cache:
