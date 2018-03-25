@@ -33,9 +33,13 @@
                on-error="handleDetailError">
     </iron-ajax>
 
-    <dom-if if="{{hasResult}}">
+    <dom-if if="{{hasError}}">
       <template>
-        <elith-error code="{{codeerror}}"></elith-error>
+        <elith-error code="{{codeError}}"></elith-error>
+      </template>
+    </dom-if>
+    <dom-if if="{{!hasError}}">
+      <template>
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
     </dom-if>
@@ -57,29 +61,28 @@
           resultat:   {
             type:  Object,
           },
-          hasResult: {
-            type: Boolean,
-          },
           idclient:{
             type: Number,
             observer : '_idclientChanged',
           },
-          codeerror: Object,
+          codeError: Object,
+          hasError: {
+            type: Boolean,
+            value : false,
+          },
 
         }
       }
 
 
       initStoredUser(){
-        if (this.storedUser.loggedin) {
+        if (typeof(this.storedUser) !== 'undefined' && this.storedUser.loggedin) {
           this.callAjax();
         }
       }
 
       _idclientChanged(){
-        if (typeof(this.storedUser) !== 'undefined' && this.storedUser.loggedin) {
-          this.callAjax();
-        }
+        this.initStoredUser();
       }
 
 
@@ -88,7 +91,6 @@
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
-            this.hasResult = true;
         }
       }
 
@@ -102,6 +104,7 @@
       }
 
       handleDetailResponse (event) {
+        this.hasError = false ;
         let response;
         this.compareToken()
         try{
@@ -110,24 +113,23 @@
           console.log(e);
         }
         this.resultat = response;
-        this.codeerror = this.resultat.errorResponse.code;
-        this.error = null;
+        this.codeError = this.resultat.errorResponse.code;
+        if(this.codeError != 200){
+          this.hasError = true ;
+        }
       }
 
       handleDetailError (event) {
+        this.hasError = true ;
         console.log('en erreur :  handleError ' + this.$.getClientByIdAjax.url)
         this.compareToken();
 
-        let response = JSON.parse(event.detail.request.xhr.response)
-        this.error = response
-        if (this.error.code == 401) {
-          console.log('ERREUR 401 ')
-          //this.storedUser = null;
+        let response = JSON.parse(event.detail.request.xhr.response);
+        this.codeError = response.errorResponse.code;
+        if(this.codeError == 200){
+          this.hasError = false ;
         }
-        if (this.error.code == 404) {
-          console.log('ERREUR 404 ')
-        }
-        console.log('ERREUR ' + this.error.code)
+        console.log('ERREUR ' + this.codeError);
 
       }
     }

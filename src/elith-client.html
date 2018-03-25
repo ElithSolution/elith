@@ -28,9 +28,14 @@
       <elith-client-search update="{{update}}"></elith-client-search>
     </div>
 
-    <dom-if if="[[isIdPage]]">
+    <dom-if if="[[affichagePermis(isIdPage,update)]]">
       <template>
           <elith-client-id idclient="{{idClient}}"></elith-client-id>
+      </template>
+    </dom-if>
+    <dom-if if="[[isDeleted]]">
+      <template>
+        <span> Client supprimé !</span>
       </template>
     </dom-if>
 
@@ -57,8 +62,8 @@
 
       static get properties () {
         return {
-          route: Object,
-          routeData:             {
+          route : Object,
+          routeData: {
             type:     Object,
             observer: '_routeDataChanged',
           },
@@ -66,14 +71,17 @@
           isIdPage: Boolean,
           isAddPage: Boolean,
           update : Boolean,
+          isDeleted:Boolean,
         }
       }
+
 
 
       _routeDataChanged(){
         this.isIdPage = false;
         this.isAddPage = false;
         this.update = false;
+        this.isDeleted=false;
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
@@ -82,13 +90,18 @@
           if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
             this.isIdPage = true ;
           }
+        } else if (this.routeData.param === 'deleted') {
+          this.update = true ;
+          this.isDeleted = true;
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true;
           this.idClient = this.routeData.param;
         }
       }
 
-
+      affichagePermis(isIdPage,update){
+        return (isIdPage && !update);
+      }
     }
 
     window.customElements.define(ElithClient.is, ElithClient)
