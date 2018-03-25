@@ -171,7 +171,6 @@
 
         _onActiveItemChanged(e) {
              this.$.grid.expandedItems = [e.detail.value];
-             console.log(this.$.grid.expandedItems);
         }
 
         activeModeEdition () {
@@ -187,7 +186,6 @@
         }
         postUpdateClient () {
           // TODO : faire le service updateClient
-          console.log(' UPDATE CLIENT');
           //this.$.updateClientAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
           //this._setReqBody();
           //this.$.updateClientAjax.generateRequest();
@@ -195,7 +193,6 @@
         }
 
         deleteClient(){
-          console.log('  DELETE CLIENT', this.client.id);
           this.$.deleteByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.deleteByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.client.id}`;
           this.$.deleteByIdAjax.generateRequest();
@@ -210,14 +207,13 @@
         }
 
         handleResponse(event) {
-          console.log('  handleResponse  ');
-          var response = JSON.parse(event.detail.response);
-          console.log("réponse de la requête ajax : " + response);
+          let response = JSON.parse(event.detail.response);
+          return response;
         }
 
         handleDeleteError (event) {
-          console.log('en erreur :  handleError ');
-
+          let response = JSON.parse(event.detail.response);
+          return response;
         }
 
       }

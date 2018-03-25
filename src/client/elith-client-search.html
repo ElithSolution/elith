@@ -138,7 +138,6 @@
         try{
           this.error = JSON.parse(event.detail.request.xhr.response)
         }catch(e){
-          console.log(e);
           this.error = e;
         }
         if (this.error.code && this.error.code == 401) {
