@@ -1,12 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
-<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
-<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../bower_components/paper-input/paper-input.html">
 
 <link rel="import" href="client/elith-client-id.html">
-<link rel="import" href="client/elith-clientsearch.html">
+<link rel="import" href="client/elith-client-search.html">
 <link rel="import" href="styles/elith-styles.html">
 
 <dom-module id="elith-client">
@@ -18,12 +15,8 @@
       }
     </style>
 
-    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
-    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-    <app-location
-            route="{{route}}">
-    </app-location>
+    <app-location route="{{route}}"></app-location>
     <app-route
             route="{{route}}"
             pattern="/client/:param"
@@ -32,10 +25,10 @@
     </app-route>
 
     <div class="card">
-      <elith-clientsearch></elith-clientsearch>
+      <elith-client-search update="{{update}}"></elith-client-search>
     </div>
 
-    <dom-if if="[[isIdPage]]" restamp>
+    <dom-if if="[[isIdPage]]">
       <template>
           <elith-client-id idclient="{{idClient}}"></elith-client-id>
       </template>
@@ -61,42 +54,36 @@
         return 'elith-client'
       }
 
-      ready(){
-        super.ready();
-      }
 
       static get properties () {
         return {
-          storedUser: Object,
-          routeData: Object,
-          route:             {
+          route: Object,
+          routeData:             {
             type:     Object,
-            observer: '_routeChanged',
+            observer: '_routeDataChanged',
           },
-          isIdPage:          {
-            type:  Boolean,
-            value: false,
-          },
-          isAddPage:         {
-            type:  Boolean,
-            value: false,
-          },
-          idClient:{
-            type: Number,
-          }
+          idClient: Number,
+          isIdPage: Boolean,
+          isAddPage: Boolean,
+          update : Boolean,
         }
       }
 
-      _routeChanged () {
-        this.isIdPage = false
-        this.isAddPage = false
+
+      _routeDataChanged(){
+        this.isIdPage = false;
+        this.isAddPage = false;
+        this.update = false;
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
-          this.masquerSearchPage = false;
-          this.idclient = 0 ;
+          console.log(' RAFRAICHIR LA LISTE DU SEARCH ');
+          this.update = true ;
+          if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
+            this.isIdPage = true ;
+          }
         } else if (Number(this.routeData.param)) {
-          this.isIdPage = true
+          this.isIdPage = true;
           this.idClient = this.routeData.param;
         }
       }

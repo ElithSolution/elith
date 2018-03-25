@@ -32,10 +32,8 @@
                on-error="handleDetailError">
     </iron-ajax>
 
-    <span>[[idclient]]</span>
     <dom-if if="{{hasResult}}">
       <template>
-
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
     </dom-if>
@@ -82,21 +80,13 @@
       }
 
 
-
       callAjax () {
         // todo : ne pas appeler le service si storedUser = null ou si y a pas de client dans la route
         if (typeof(this.storedUser) !== 'undefined'){
-          // aucun ID
-          if(this.idclient === 0) {
-            this.resultat = null;
-            this.hasResult = false;
-          }else{
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
             this.hasResult = true;
-          }
-
         }
       }
 
