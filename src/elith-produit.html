@@ -36,14 +36,10 @@
         return {
           routeData: {
             type: Object,
-            observer: '_routeDataChanged',
           }
         }
       }
 
-      _routeDataChanged(){
-        console.log('routeDataChanged produit ', this.routeData);
-      }
     }
 
     window.customElements.define(ElithProduit.is, ElithProduit)

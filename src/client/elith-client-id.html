@@ -39,6 +39,7 @@
       </template>
     </dom-if>
     <dom-if if="{{!hasError}}">
+
       <template>
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
@@ -91,6 +92,7 @@
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
+
         }
       }
 
@@ -98,7 +100,6 @@
         let lastToken = 'Bearer ' + this.storedUser.accessToken;
         let usedToken = this.$.getClientByIdAjax.headers['Authorization'];
         if (lastToken !== usedToken) {
-          console.log('token diff');
           this.initStoredUser()
         }
       }
@@ -110,7 +111,7 @@
         try{
           response = JSON.parse(event.detail.response)
         }catch (e){
-          console.log(e);
+          this.error = e;
         }
         this.resultat = response;
         this.codeError = this.resultat.errorResponse.code;
@@ -121,7 +122,6 @@
 
       handleDetailError (event) {
         this.hasError = true ;
-        console.log('en erreur :  handleError ' + this.$.getClientByIdAjax.url)
         this.compareToken();
 
         let response = JSON.parse(event.detail.request.xhr.response);
@@ -129,7 +129,7 @@
         if(this.codeError == 200){
           this.hasError = false ;
         }
-        console.log('ERREUR ' + this.codeError);
+
 
       }
     }

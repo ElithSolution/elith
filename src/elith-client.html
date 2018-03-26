@@ -62,7 +62,7 @@
 
       static get properties () {
         return {
-          route : Object,
+          route: Object,
           routeData: {
             type:     Object,
             observer: '_routeDataChanged',
@@ -76,7 +76,6 @@
       }
 
 
-
       _routeDataChanged(){
         this.isIdPage = false;
         this.isAddPage = false;
@@ -85,7 +84,6 @@
         if (this.routeData.param === 'add') {
           this.isAddPage = true
         } else if (this.routeData.param === '') {
-          console.log(' RAFRAICHIR LA LISTE DU SEARCH ');
           this.update = true ;
           if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
             this.isIdPage = true ;
