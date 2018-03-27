@@ -1,0 +1,68 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="styles/elith-styles.html">
+<link rel="import" href="elith-icons.html">
+
+
+<dom-module id="elith-error">
+
+
+
+
+    <dom-module id="elith-client-form">
+        <template>
+            <style include="elith-styles">
+
+            </style>
+            <dom-if if="{{!success}}">
+                <template>
+                    <div class="card">
+                        <span><iron-icon class="grayIcon" icon="elith-icons:warning" slot="item-icon"></iron-icon>[[message]]</span>
+                    </div>
+                </template>
+            </dom-if>
+
+        </template>
+    </dom-module>
+
+
+
+
+    <script>
+      class ElithError extends Polymer.Element {
+        static get is () { return 'elith-error' }
+
+
+        static get properties () {
+          return {
+            code : {
+                type: Number,
+                observer : '_codeErrorChanged'
+            },
+            message : {
+              type : String,
+            },
+            success : Boolean,
+
+          }
+        }
+
+        _codeErrorChanged(){
+          console.log('code error changed', this.code);
+          this.success = false;
+          switch (parseInt(this.code)){
+            case 200 : {
+              this.message = 'OK';
+              this.success = true;
+            } break;
+            case 204 : this.message = 'Aucun contenu'; break;
+            default : this.message = 'à définir...';
+          }
+
+        }
+
+      }
+
+      window.customElements.define(ElithError.is, ElithError)
+    </script>
+</dom-module>

@@ -37,7 +37,6 @@
             on-response="handleClientsResponse"
             on-error="handleClientsError">
     </iron-ajax>
-    
     <vaadin-combo-box-light  id="clientSearch"
                              items="{{clients}}"
                              item-value-path="client.id"
@@ -84,6 +83,7 @@
           storedUser: {
             type:   Object,
             notify: true,
+            observer: '_onStoredUserChanged',
           },
           routeData:  Object,
           route:      Object,
@@ -98,9 +98,25 @@
           idclient: Number,
           update:{
             type : Boolean,
+            notify: true,
             observer: '_updateChanged'
           }
         }
+      }
+
+
+      _onStoredUserChanged(){
+        if (this.storedUser !== null && typeof(this.storedUser) !== 'undefined') {
+          let lastToken = 'Bearer ' + this.storedUser.accessToken;
+          let usedToken = this.$.getClientsAjax.headers['Authorization'];
+          if (lastToken !== usedToken) {
+            console.log('user différent');
+            this.update = true;
+            this._searchChanged();
+
+          }
+        }
+
       }
 
       ready(){
