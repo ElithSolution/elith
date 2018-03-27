@@ -98,15 +98,9 @@
         <dom-if if="{{!isDeleted}}">
             <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-<<<<<<< HEAD
                     <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
                     <paper-icon-button icon="elith-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
                     <paper-icon-button icon="elith-icons:delete" on-tap="deleteClient"></paper-icon-button>
-=======
-                    <paper-icon-button icon="my-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="my-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="my-icons:delete" on-tap="deleteClient"></paper-icon-button>
->>>>>>> master
                 </div>
 
                 <iron-form id="modifClient">
