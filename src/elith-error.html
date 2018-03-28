@@ -12,7 +12,10 @@
     <dom-module id="elith-client-form">
         <template>
             <style include="elith-styles">
-
+                div.card {
+                    background-color:var(--elith-warning-color);
+                    font-weight: bold;
+                }
             </style>
             <dom-if if="{{!success}}">
                 <template>

@@ -35,14 +35,7 @@
             .flex2child {
                 @apply --layout-flex-2;
             }
-            paper-toggle-button.pink {
-                --paper-toggle-button-checked-bar-color:  var(--paper-pink-500);
-                --paper-toggle-button-checked-button-color:  var(--paper-pink-500);
-                --paper-toggle-button-checked-ink-color: var(--paper-pink-500);
-                --paper-toggle-button-unchecked-bar-color:  var(--paper-indigo-900);
-                --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
-                --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
-            }
+
 
             .clientNameHeader{
                 border-bottom: 2px solid;
@@ -54,6 +47,7 @@
             .clientNameHeader paper-icon-button{
                 display: inline-flex;
             }
+
         </style>
 
 
@@ -92,14 +86,14 @@
             <paper-textarea label="Autre" value="[[client.autre]]" readonly$="[[!edition]]"></paper-textarea>
             <br>
 
-            <paper-toggle-button checked="[[client.cardiaque]]" class="pink" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
-            <paper-toggle-button checked="[[client.asthme]]" class="pink" disabled="[[!edition]]">Asthme</paper-toggle-button>
-            <paper-toggle-button checked="[[client.hypoglycemie]]" class="pink" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>
-            <paper-toggle-button checked="[[client.diabete]]" class="pink" disabled="[[!edition]]">Diabète</paper-toggle-button>
-            <paper-toggle-button checked="[[client.peau]]" class="pink" disabled="[[!edition]]">Problème de peau</paper-toggle-button>
-            <paper-toggle-button checked="[[client.fumeur]]" class="pink" disabled="[[!edition]]">Fumeur</paper-toggle-button>
-            <paper-toggle-button checked="[[client.osteoporose]]" class="pink" disabled="[[!edition]]">Ostéporose</paper-toggle-button>
-            <paper-toggle-button checked="[[client.arthrose]]" class="pink" disabled="[[!edition]]">Arthrose</paper-toggle-button>
+            <paper-toggle-button checked="[[client.cardiaque]]" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
+            <paper-toggle-button checked="[[client.asthme]]" disabled="[[!edition]]">Asthme</paper-toggle-button>
+            <paper-toggle-button checked="[[client.hypoglycemie]]" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>
+            <paper-toggle-button checked="[[client.diabete]]" disabled="[[!edition]]">Diabète</paper-toggle-button>
+            <paper-toggle-button checked="[[client.peau]]" disabled="[[!edition]]">Problème de peau</paper-toggle-button>
+            <paper-toggle-button checked="[[client.fumeur]]" disabled="[[!edition]]">Fumeur</paper-toggle-button>
+            <paper-toggle-button checked="[[client.osteoporose]]" disabled="[[!edition]]">Ostéporose</paper-toggle-button>
+            <paper-toggle-button checked="[[client.arthrose]]" disabled="[[!edition]]">Arthrose</paper-toggle-button>
         </vaadin-form-layout>
     </fieldset>
     <fieldset>

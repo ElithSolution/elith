@@ -43,16 +43,33 @@
                              item-label-path="client.prenom"
                              style="display: block; width: 100%;">
 
-      <paper-input label="Nom de la personne" class="input" value=[[search]]>
+        <style is="custom-style">
+          paper-item.fancy {
+            --paper-item-focused: {
+              background: var(--paper-amber-500);
+              font-weight: bold;
+            };
+            --paper-item-focused-before: {
+              opacity: 0;
+            };
+          }
+          paper-input paper-icon-item.fancy {
+            --paper-item-focused: {
+              background: var(--paper-amber-500);
+              font-weight: bold;
+            };
+            --paper-item-focused-before: {
+              opacity: 0;
+            };
+          }
+        </style>
+        <paper-item class="fancy">Inbox</paper-item>
+
+
+      <paper-input label="Nom de la personne" value=[[search]]>
           <template>
-          <style>
-            paper-icon-item img {
-              border-radius: 50%;
-              margin-right: 10px;
-            }
-          </style>
-          <paper-icon-item>
-            <paper-item-body two-line>
+          <paper-icon-item class="fancy">
+            <paper-item-body two-line >
               <div>[[item.client.prenom]] [[item.client.nom]]</div>
               <div secondary>[[formatDate(item.client.dateNaissance)]]</div>
             </paper-item-body>

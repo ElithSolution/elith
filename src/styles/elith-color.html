@@ -4,8 +4,8 @@
   <style>
     html {
       /* Base colors (background-color) */
-      --elith-base-color: #ffffff;
-      --elith-base-color-light: #f7f7f7;
+      --elith-base-color: var( --primary-color);
+      --elith-base-color-light: var( --primary-background-color);
       --elith-base-color-medium-light: #edefe9;
 
       --elith-base-color-medium: #777777;
@@ -17,12 +17,12 @@
       --elith-disabled-text-color: #b1b0b2;
 
       /* Primary colors */
-      --elith-primary-color: #F55E25;
-      --elith-primary-color-dark: #F55E25;
+      --elith-primary-color: #ccdb38;
+      --elith-primary-color-dark: #98aa00;
 
       /* Secondary colors */
-      --elith-secondary-color-light: #596b60;
-      --elith-secondary-color: #3d4641;
+      --elith-secondary-color-light: var(--secondary-dark-color);
+      --elith-secondary-color: var(--primary-dark-color);
 
       /* Border colors */
       --elith-border-color-light: #e4e4e4;
@@ -33,7 +33,36 @@
 
       /* Error colors */
       --elith-error-color: #ff0000;
-      --elith-warning-color: #f0ad4e;
+      --elith-warning-color: var(--paper-amber-500);
+
+
+
+      /* THEME AJUSTABLE */
+      --primary-color: #37474f;
+      --primary-light-color: #62727b;
+      --primary-background-color: #F5F5F6;
+      --primary-dark-color: #102027;
+      --secondary-color: #ccdb38;
+      --secondary-light-color: #ffff6d;
+      --secondary-dark-color: #98aa00;
+      --primary-text-color: #ffffff;
+      --secondary-text-color: #000000;
+
+
+
+
+      /* Components */
+
+      /* paper-drawer-panel */
+      --drawer-menu-color:           #ffffff;
+      --drawer-border-color:         1px solid #ccc;
+      --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+
+      /* paper-menu */
+      --paper-menu-background-color: #fff;
+      --menu-link-color:             #111111;
+      --paper-input-container-input-color :#98aa00;
+
     }
 
     body {
@@ -52,12 +81,16 @@
 
       /* Use by paper-toolbar */
       --dark-theme-text-color: var(--elith-base-color, #ffffff);
-    }
+
+      }
 
     body, html {
       color: var(--elith-body-text-color);
       background-color: var(--elith-base-color);
     }
+
+
+
   </style>
 </custom-style>
 
