@@ -22,6 +22,10 @@
         display: block;
         padding: 10px;
       }
+
+      vaadin-combo-box-item:hover {
+        background-color: #0b97c4 !important;
+      }
     </style>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -55,12 +59,16 @@
           }
           paper-input paper-icon-item.fancy {
             --paper-item-focused: {
-              background: var(--paper-amber-500);
+              background: var(--paper-amber-500) !important;
               font-weight: bold;
             };
             --paper-item-focused-before: {
               opacity: 0;
             };
+          }
+
+          vaadin-combo-box-item:hover {
+            background-color: #0b97c4 !important;
           }
         </style>
         <paper-item class="fancy">Inbox</paper-item>
