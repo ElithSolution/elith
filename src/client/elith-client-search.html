@@ -110,7 +110,6 @@
           let lastToken = 'Bearer ' + this.storedUser.accessToken;
           let usedToken = this.$.getClientsAjax.headers['Authorization'];
           if (lastToken !== usedToken) {
-            console.log('user différent');
             this.update = true;
             this._searchChanged();
 
