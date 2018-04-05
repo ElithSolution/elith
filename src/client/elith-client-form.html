@@ -35,14 +35,7 @@
             .flex2child {
                 @apply --layout-flex-2;
             }
-            paper-toggle-button.pink {
-                --paper-toggle-button-checked-bar-color:  var(--paper-pink-500);
-                --paper-toggle-button-checked-button-color:  var(--paper-pink-500);
-                --paper-toggle-button-checked-ink-color: var(--paper-pink-500);
-                --paper-toggle-button-unchecked-bar-color:  var(--paper-indigo-900);
-                --paper-toggle-button-unchecked-button-color:  var(--paper-indigo-900);
-                --paper-toggle-button-unchecked-ink-color: var(--paper-indigo-900);
-            }
+
 
             .clientNameHeader{
                 border-bottom: 2px solid;
@@ -54,6 +47,7 @@
             .clientNameHeader paper-icon-button{
                 display: inline-flex;
             }
+
         </style>
 
 
@@ -61,59 +55,59 @@
             <legend>Renseignements personnels</legend>
             <vaadin-form-layout>
 
-                <paper-input label="Nom" value="[[client.nom]]" readonly$="[[!edition]]"></paper-input>
-                <paper-input label="Prénom" value="[[client.prenom]]" readonly$="[[!edition]]"></paper-input>
-                <paper-input label="Naissance" value="[[formatDate(client.dateNaissance)]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Nom" value="[[client.nom]]" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Prénom" value="[[client.prenom]]" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Naissance" value="[[formatDate(client.dateNaissance)]]" disabled$="[[!edition]]"></paper-input>
                 <br>
-                <paper-textarea label="Adresse" value="[[client.adresse]]" readonly$="[[!edition]]"></paper-textarea>
-                <paper-input label="Ville" value="[[client.ville]]" readonly$="[[!edition]]"></paper-input>
+                <paper-textarea label="Adresse" value="[[client.adresse]]" disabled$="[[!edition]]"></paper-textarea>
+                <paper-input label="Ville" value="[[client.ville]]" disabled$="[[!edition]]"></paper-input>
                 <br>
-                <paper-input label="Téléphone" value="[[client.telephone]]" readonly$="[[!edition]]"></paper-input>
-                <paper-input label="Courriel" value="[[client.email]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Téléphone" value="[[client.telephone]]" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Courriel" value="[[client.email]]" disabled$="[[!edition]]"></paper-input>
                 <br>
-                <paper-input label="Enfant(s)" value="[[client.enfants]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Enfant(s)" value="[[client.enfants]]" disabled$="[[!edition]]"></paper-input>
                 <br>
-                <paper-input label="Emploi" value="[[client.emploi]]" readonly$="[[!edition]]"></paper-input>
-                <paper-input label="Loisirs" value="[[client.loisirs]]" readonly$="[[!edition]]"></paper-input>
+                <paper-input label="Emploi" value="[[client.emploi]]" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Loisirs" value="[[client.loisirs]]" disabled$="[[!edition]]"></paper-input>
                 <br>
             </vaadin-form-layout>
         </fieldset>
     <fieldset>
         <legend>Informations médicales</legend>
         <vaadin-form-layout>
-            <paper-textarea label="Autres thérapies" value="[[client.autresTherapies]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="Médicaments" value="[[client.medicaments]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="Compléments" value="[[client.complements]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="Constipation" value="[[client.constipation]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Autres thérapies" value="[[client.autresTherapies]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Médicaments" value="[[client.medicaments]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Compléments" value="[[client.complements]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Constipation" value="[[client.constipation]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
-            <paper-textarea label="Allergies" value="[[client.allergies]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="Opérations" value="[[client.operations]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Allergies" value="[[client.allergies]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Opérations" value="[[client.operations]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
-            <paper-textarea label="Autre" value="[[client.autre]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Autre" value="[[client.autre]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
 
-            <paper-toggle-button checked="[[client.cardiaque]]" class="pink" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
-            <paper-toggle-button checked="[[client.asthme]]" class="pink" disabled="[[!edition]]">Asthme</paper-toggle-button>
-            <paper-toggle-button checked="[[client.hypoglycemie]]" class="pink" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>
-            <paper-toggle-button checked="[[client.diabete]]" class="pink" disabled="[[!edition]]">Diabète</paper-toggle-button>
-            <paper-toggle-button checked="[[client.peau]]" class="pink" disabled="[[!edition]]">Problème de peau</paper-toggle-button>
-            <paper-toggle-button checked="[[client.fumeur]]" class="pink" disabled="[[!edition]]">Fumeur</paper-toggle-button>
-            <paper-toggle-button checked="[[client.osteoporose]]" class="pink" disabled="[[!edition]]">Ostéporose</paper-toggle-button>
-            <paper-toggle-button checked="[[client.arthrose]]" class="pink" disabled="[[!edition]]">Arthrose</paper-toggle-button>
+            <paper-toggle-button checked="[[client.cardiaque]]" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
+            <paper-toggle-button checked="[[client.asthme]]" disabled="[[!edition]]">Asthme</paper-toggle-button>
+            <paper-toggle-button checked="[[client.hypoglycemie]]" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>
+            <paper-toggle-button checked="[[client.diabete]]" disabled="[[!edition]]">Diabète</paper-toggle-button>
+            <paper-toggle-button checked="[[client.peau]]" disabled="[[!edition]]">Problème de peau</paper-toggle-button>
+            <paper-toggle-button checked="[[client.fumeur]]" disabled="[[!edition]]">Fumeur</paper-toggle-button>
+            <paper-toggle-button checked="[[client.osteoporose]]" disabled="[[!edition]]">Ostéporose</paper-toggle-button>
+            <paper-toggle-button checked="[[client.arthrose]]" disabled="[[!edition]]">Arthrose</paper-toggle-button>
         </vaadin-form-layout>
     </fieldset>
     <fieldset>
         <legend>Notes du thérapeute</legend>
         <vaadin-form-layout>
-            <paper-textarea label="Historique de la douleur" value="[[client.histoDouleur]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-input label="Référé par" value="[[client.refere]]" readonly$="[[!edition]]"></paper-input>
+            <paper-textarea label="Historique de la douleur" value="[[client.histoDouleur]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-input label="Référé par" value="[[client.refere]]" disabled$="[[!edition]]"></paper-input>
             <br>
-            <paper-textarea label="Constatations" value="[[client.constatations]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Constatations" value="[[client.constatations]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
-            <paper-textarea label="Attention" value="[[client.attentions]]" readonly$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="À ne pas masser" value="[[client.pasMasser]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Attention" value="[[client.attentions]]" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="À ne pas masser" value="[[client.pasMasser]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
-            <paper-textarea label="Note" value="[[client.note]]" readonly$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Note" value="[[client.note]]" disabled$="[[!edition]]"></paper-textarea>
             <br>
         </vaadin-form-layout>
     </fieldset>
