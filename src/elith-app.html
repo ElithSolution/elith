@@ -28,6 +28,14 @@
 <dom-module id="elith-app">
   <template>
     <style include="elith-styles">
+      app-drawer {
+        --app-drawer-scrim-background: rgba(0, 0, 100, 0.8);
+        --app-drawer-content-container: {
+          color: var(--elith-menu-text-color);
+          background-color: var(--elith-base-color-light);
+        }
+      }
+
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
@@ -52,9 +60,14 @@
       .drawer-list a {
         display: block;
         text-decoration: none;
-        color: var(--elith-secondary-color);
+        color: var(--elith-menu-text-color);
         line-height: 40px;
       }
+
+      .drawer-list a:hover {
+        color: var(--elith-primary-color-dark);
+      }
+
 
       .drawer-list iron-icon {
         display: inline-block;
@@ -73,6 +86,8 @@
         margin-left: 10px;
         margin-top: 40px
       }
+
+
 
     </style>
 

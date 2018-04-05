@@ -5,15 +5,12 @@
     html {
       /* Base colors (background-color) */
       --elith-base-color: var( --primary-color);
-      --elith-base-color-light: var( --primary-background-color);
-      --elith-base-color-medium-light: #edefe9;
-
-      --elith-base-color-medium: #777777;
-      --elith-base-color-medium-dark: #4a4a4a;
-      --elith-base-color-dark: #3a3a3a;
+      --elith-base-color-light: var( --primary-light-color);
+      --elith-base-color-dark: var( --primary-dark-color);
 
       /* Text colors */
-      --elith-body-text-color: #1d1d1d;
+      --elith-body-text-color: var(--secondary-text-color);
+      --elith-menu-text-color: var(--primary-text-color);
       --elith-disabled-text-color: #b1b0b2;
       --elith-header-text-color: var(--primary-text-color);
 
@@ -62,7 +59,8 @@
       /* paper-menu */
       --paper-menu-background-color: #fff;
       --menu-link-color:             #111111;
-      --paper-input-container-input-color :#98aa00;
+      --paper-item-body-secondary-color: var(--secondary-text-color);
+
 
     }
 
@@ -72,8 +70,8 @@
        which use paper-styles, we must change some of their CSS variables.
        */
       --primary-text-color: var(--elith-body-text-color, #212121);
-      --primary-background-color: var(--elith-base-color, #ffffff);
-      --secondary-text-color: var(--elith-base-color-medium, #737373);
+      --primary-background-color: #ffffff;
+      --secondary-text-color: var(--elith-body-text-color, #737373);
       --disabled-text-color: #9b9b9b;
       --divider-color: var(--elith-border-color, #dbdbdb);
       --error-color: var(--elith-error-color, #dd2c00);
@@ -83,11 +81,8 @@
       /* Use by paper-toolbar */
       --dark-theme-text-color: var(--elith-base-color, #ffffff);
 
-      }
-
-    body, html {
       color: var(--elith-body-text-color);
-      background-color: var(--elith-base-color);
+      background-color: var(--primary-background-color);
     }
 
 

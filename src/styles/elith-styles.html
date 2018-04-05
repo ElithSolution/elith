@@ -4,6 +4,16 @@
 <dom-module id="elith-styles">
   <template>
     <style include="elith-color elith-typography">
+      paper-input,paper-textarea{
+        --paper-input-container-input-color: var(--elith-body-text-color);
+        --paper-input-container-disabled:{
+          color: var(--elith-disabled-text-color);
+        };
+        --paper-input-container-underline-disabled: {
+          display: none;
+        };
+      }
+
       paper-icon-item:first-child {
         margin-top: 40px
       }
