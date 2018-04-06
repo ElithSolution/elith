@@ -4,30 +4,32 @@
   <style>
     html {
       /* Base colors (background-color) */
-      --elith-base-color: var( --primary-color);
-      --elith-base-color-light: var( --primary-light-color);
-      --elith-base-color-dark: var( --primary-dark-color);
+      --elith-base-color: var( --secondary-color);
+      --elith-base-color-light: var( --secondary-light-color);
+      --elith-base-color-dark: var( --secondary-dark-color);
+      --elith-background-color: var(--secondary-background-color);
+      --elith-white: #ffffff;
 
       /* Text colors */
-      --elith-body-text-color: var(--secondary-text-color);
-      --elith-menu-text-color: var(--primary-text-color);
+      --elith-body-text-color: var(--primary-text-color);
+      --elith-menu-text-color: var(--secondary-text-color);
       --elith-disabled-text-color: #b1b0b2;
-      --elith-header-text-color: var(--primary-text-color);
+      --elith-header-text-color: var(--secondary-text-color);
 
       /* Primary colors */
-      --elith-primary-color: #ccdb38;
-      --elith-primary-color-dark: #98aa00;
+      --elith-primary-color: var(--primary-color);
+      --elith-primary-color-dark: var(--primary-dark-color);
 
       /* Secondary colors */
-      --elith-secondary-color-light: var(--secondary-dark-color);
-      --elith-secondary-color: var(--primary-dark-color);
+      --elith-secondary-color-light: var(--secondary-light-color);
+      --elith-secondary-color: var(--secondary-dark-color);
 
       /* Border colors */
       --elith-border-color-light: #e4e4e4;
       --elith-border-color: #d3d3d3;
 
       /* Legend color */
-      --elith-legend-color: var(--elith-base-color-medium-dark);
+      --elith-legend-color: var(--elith-base-color-dark);
 
       /* Error colors */
       --elith-error-color: #ff0000;
@@ -36,15 +38,15 @@
 
 
       /* THEME AJUSTABLE */
-      --primary-color: #37474f;
-      --primary-light-color: #62727b;
-      --primary-background-color: #F5F5F6;
-      --primary-dark-color: #102027;
-      --secondary-color: #ccdb38;
-      --secondary-light-color: #ffff6d;
-      --secondary-dark-color: #98aa00;
-      --primary-text-color: #ffffff;
-      --secondary-text-color: #000000;
+      --secondary-color: #37474f;
+      --secondary-light-color: #62727b;
+      --secondary-background-color: #F5F5F6;
+      --secondary-dark-color: #102027;
+      --primary-color: #ccdb38;
+      --primary-light-color: #ffff6d;
+      --primary-dark-color: #98aa00;
+      --secondary-text-color: #ffffff;
+      --primary-text-color: #000000;
 
 
 
@@ -70,7 +72,7 @@
        which use paper-styles, we must change some of their CSS variables.
        */
       --primary-text-color: var(--elith-body-text-color, #212121);
-      --primary-background-color: #ffffff;
+      --primary-background-color: var(--elith-background-color);
       --secondary-text-color: var(--elith-body-text-color, #737373);
       --disabled-text-color: #9b9b9b;
       --divider-color: var(--elith-border-color, #dbdbdb);
