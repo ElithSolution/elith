@@ -45,50 +45,21 @@
     <vaadin-combo-box-light  id="clientSearch"
                              items="{{clients}}"
                              item-value-path="client.id"
-                             item-label-path="client.prenom"
+                             item-label-path="client.nomComplet"
                              style="display: block; width: 100%;">
 
-        <style is="custom-style">
-          paper-item.fancy {
-            --paper-item-focused: {
-              background: var(--paper-amber-500);
-              font-weight: bold;
-            };
-            --paper-item-focused-before: {
-              opacity: 0;
-            };
-          }
-          paper-input paper-item.fancy {
-            --paper-item-focused: {
-              background: var(--paper-amber-500) !important;
-              font-weight: bold;
-            };
-            --paper-item-focused-before: {
-              opacity: 0;
-              background: #0b8043 !important;
-            };
-          }
 
-          vaadin-combo-box-item:hover {
-            background-color: #0b97c4 !important;
-          }
-
-        </style>
 
       <paper-input label="Nom de la personne" value=[[search]]>
           <template>
               <style is="custom-style">
-                  paper-item.fancy:hover {
-                          background: var(--paper-amber-500) !important;
-                          font-weight: bold;
-                  }
-                  paper-item.fancy:before {
-                      opacity: 0;
-                      background: #0b8043 !important;
+                  paper-item:hover {
+                      background: var(--elith-primary-color) !important;
+                      font-weight: bold;
                   }
 
               </style>
-              <paper-item class="fancy">
+              <paper-item>
                 <paper-item-body two-line>
                   <div>[[item.client.prenom]] [[item.client.nom]]</div>
                   <div secondary>[[formatDate(item.client.dateNaissance)]]</div>
