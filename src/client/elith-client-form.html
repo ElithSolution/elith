@@ -125,8 +125,25 @@
             client: {
               type: Object,
             },
+            edition: {
+              observer: 'editionChanged'
+            }
 
+          }
+        }
 
+        editionChanged(modeEdition){
+          let fieldsets = Polymer.dom(this.root).querySelectorAll('fieldset');
+          if(modeEdition){
+            for (let i=0; i<fieldsets.length; i++) {
+              // assigns style properties
+              fieldsets[i].classList.add('card-form');
+            }
+          }else{
+            for (let i=0; i<fieldsets.length; i++) {
+              // assigns style properties
+              fieldsets[i].classList.remove('card-form');
+            }
           }
         }
 
