@@ -67,8 +67,7 @@
         <app-location route="{{route}}"></app-location>
         <iron-ajax
                 id="updateClientAjax"
-                method="post"
-                content-type="application/json"
+                method="put"
                 handle-as="text/json"
                 on-response="handleUpdateResponse"
                 on-error="handleUpdateError">
@@ -176,14 +175,12 @@
           return Elith.Utils.formatDate(date);
         }
 
-        _setReqBody () {
-          //this.$.updateClientAjax.body = this.formData;
-        }
         postUpdateClient () {
-          // TODO : faire le service updateClient
-          //this.$.updateClientAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
-          //this._setReqBody();
-          //this.$.updateClientAjax.generateRequest();
+          this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+          this.$.updateClientAjax.headers['Content-type'] = 'application/json';
+          this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
+          this.$.updateClientAjax.body = this.client;
+          this.$.updateClientAjax.generateRequest();
           this.modeEdition = false;
         }
 
@@ -193,11 +190,25 @@
           this.$.deleteByIdAjax.generateRequest();
         }
 
-        handleDeleteResponse(event) {
-          this.handleResponse(event);
+        handleUpdateResponse(event) {
+          console.log('handeupdateresponse');
+          //this.hasError = false ;
+          let response;
+          try{
+            response = JSON.parse(event.detail.response)
+          }catch (e){
+            this.error = e;
+          }
+          this.client = response;
+          console.log(this.client);
+         /* this.codeError = this.resultat.errorResponse.code;
+          if(this.codeError != 200){
+            this.hasError = true ;
+          }
+          */
         }
 
-        handleResponse(event) {
+        handleDeleteResponse(event) {
           let response = JSON.parse(event.detail.response);
           this.isDeleted = true ;
           this.resultat = null ;
