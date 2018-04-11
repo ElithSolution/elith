@@ -14,6 +14,7 @@
 
 <link rel="import" href="elith-client-traitements.html">
 <link rel="import" href="elith-client-form.html">
+<link rel="import" href="../elith-error.html">
 
 <script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
 <script>
@@ -82,13 +83,19 @@
         </iron-ajax>
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
+        <dom-if if="{{hasError}}">
+            <template>
+                <elith-error code="{{codeError}}"></elith-error>
+            </template>
+        </dom-if>
+
         <dom-if if="{{isDeleted}}">
             <template>
                 <span> Le client a été supprimé !</span>
             </template>
 
         </dom-if>
-        <dom-if if="{{!isDeleted}}">
+        <dom-if if="{{!hasError}}">
             <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
@@ -143,6 +150,10 @@
             modeEdition:{
               type: Object,
             },
+            hasError: {
+              type: Boolean,
+              value : false,
+            },
 
           }
         }
@@ -152,6 +163,7 @@
         _resultatChanged () {
           if(this.resultat != null){
             this.isDeleted = false;
+            this.hasError = false ;
             let item = this.resultat.items;
             if(typeof(item) !== 'undefined'){
               this.client = item["0"].client;
@@ -179,9 +191,10 @@
         postUpdateClient () {
           this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
+          console.log(this.client);
           this.$.updateClientAjax.body = this.client;
           this.$.updateClientAjax.generateRequest();
-          this.modeEdition = false;
+
         }
 
         deleteClient(){
@@ -191,21 +204,20 @@
         }
 
         handleUpdateResponse(event) {
-          console.log('handeupdateresponse');
-          //this.hasError = false ;
+          this.hasError = false ;
           let response;
           try{
             response = JSON.parse(event.detail.response)
           }catch (e){
             this.error = e;
           }
-          this.client = response;
-          console.log(this.client);
-         /* this.codeError = this.resultat.errorResponse.code;
+          this.resultat = response;
+          this.modeEdition = false;
+          this.codeError = this.resultat.errorResponse.code;
           if(this.codeError != 200){
             this.hasError = true ;
           }
-          */
+
         }
 
         handleDeleteResponse(event) {
@@ -222,7 +234,10 @@
           return response;
         }
 
+
+
       }
+
 
 
       window.customElements.define(ElithClientdetail.is, ElithClientdetail)

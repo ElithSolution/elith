@@ -38,8 +38,8 @@
         <elith-error code="{{codeError}}"></elith-error>
       </template>
     </dom-if>
-    <dom-if if="{{!hasError}}">
 
+    <dom-if if="{{!hasError}}">
       <template>
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
@@ -88,7 +88,7 @@
 
 
       callAjax () {
-        if (typeof(this.storedUser) !== 'undefined'){
+      if (typeof(this.storedUser) !== 'undefined'){
             this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
             this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
             this.$.getClientByIdAjax.generateRequest();
