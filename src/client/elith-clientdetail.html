@@ -191,7 +191,6 @@
         postUpdateClient () {
           this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
-          console.log(this.client);
           this.$.updateClientAjax.body = this.client;
           this.$.updateClientAjax.generateRequest();
 
