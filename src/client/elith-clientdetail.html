@@ -68,6 +68,7 @@
         <iron-ajax
                 id="updateClientAjax"
                 method="put"
+                content-type="application/json;charset=utf-8"
                 handle-as="text/json"
                 on-response="handleUpdateResponse"
                 on-error="handleUpdateError">
@@ -177,7 +178,6 @@
 
         postUpdateClient () {
           this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.updateClientAjax.headers['Content-type'] = 'application/json';
           this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
           this.$.updateClientAjax.body = this.client;
           this.$.updateClientAjax.generateRequest();
