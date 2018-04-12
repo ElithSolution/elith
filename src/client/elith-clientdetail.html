@@ -203,20 +203,22 @@
         }
 
         handleUpdateResponse(event) {
-          this.hasError = false ;
           let response;
           try{
             response = JSON.parse(event.detail.response)
+            this.resultat = response;
+            this.codeError = this.resultat.errorResponse.code;
           }catch (e){
-            this.error = e;
+            this.codeError = 999;
           }
-          this.resultat = response;
           this.modeEdition = false;
-          this.codeError = this.resultat.errorResponse.code;
-          if(this.codeError != 200){
-            this.hasError = true ;
-          }
+          this.hasError = Elith.Utils.hasError(this.codeError);
+        }
 
+        handleUpdateError(event){
+          let response = JSON.parse(event.detail.request.xhr.response);
+          this.codeError = response.errorResponse.code;
+          this.hasError = Elith.Utils.hasError(this.codeError);
         }
 
         handleDeleteResponse(event) {

@@ -55,17 +55,17 @@
             <legend>Renseignements personnels</legend>
             <vaadin-form-layout>
 
-                <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]"></paper-input>
-                <paper-input label="Prénom" value="{{client.prenom}}" disabled$="[[!edition]]"></paper-input>
-                <paper-input label="Naissance" value="{{formatDate(client.dateNaissance)}}" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]" auto-validate required></paper-input>
+                <paper-input label="Prénom" value="{{client.prenom}}" disabled$="[[!edition]]" auto-validate required></paper-input>
+                <paper-input label="Naissance" value="{{formatDate(client.dateNaissance)}}" disabled$="[[!edition]]" auto-validate pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-]\d{4}$" error-message="Utiliser le format jj-mm-aaaa"></paper-input>
                 <br>
                 <paper-textarea label="Adresse" value="{{client.adresse}}" disabled$="[[!edition]]"></paper-textarea>
                 <paper-input label="Ville" value="{{client.ville}}" disabled$="[[!edition]]"></paper-input>
                 <br>
                 <paper-input label="Téléphone" value="{{client.telephone}}" disabled$="[[!edition]]"></paper-input>
-                <paper-input label="Courriel" value="{{client.email}}" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Courriel" value="{{client.email}}" disabled$="[[!edition]]" auto-validate type="email"></paper-input>
                 <br>
-                <paper-input label="Enfant(s)" value="{{client.enfants}}" disabled$="[[!edition]]"></paper-input>
+                <paper-input label="Enfant(s)" value="{{client.enfants}}" disabled$="[[!edition]]" auto-validate pattern="[0-9]*" error-message="Veuillez saisir un chiffre"></paper-input>
                 <br>
                 <paper-input label="Emploi" value="{{client.emploi}}" disabled$="[[!edition]]"></paper-input>
                 <paper-input label="Loisirs" value="{{client.loisirs}}" disabled$="[[!edition]]"></paper-input>

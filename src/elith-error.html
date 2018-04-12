@@ -35,7 +35,6 @@
       class ElithError extends Polymer.Element {
         static get is () { return 'elith-error' }
 
-
         static get properties () {
           return {
             code : {
@@ -58,11 +57,10 @@
               this.success = true;
             } break;
             case 204 : this.message = 'Aucun contenu'; break;
+            case 999 : this.message = 'Erreur JSON'; break;
             default : this.message = 'à définir...';
           }
-
         }
-
       }
 
       window.customElements.define(ElithError.is, ElithError)

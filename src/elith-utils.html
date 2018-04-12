@@ -18,6 +18,13 @@
         const dateFormat = `${day}-${month}-${year}`
         return dateFormat
       }
+    },
+
+    hasError: function(code){
+        switch (parseInt(code)){
+        case 200 || 201 : return false;
+        default : return true;
+      }
     }
   }
 </script>

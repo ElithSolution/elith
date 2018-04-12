@@ -105,30 +105,23 @@
       }
 
       handleDetailResponse (event) {
-        this.hasError = false ;
         let response;
         this.compareToken()
         try{
-          response = JSON.parse(event.detail.response)
+          response = JSON.parse(event.detail.response);
+          this.resultat = response;
+          this.codeError = this.resultat.errorResponse.code;
         }catch (e){
-          this.error = e;
+          this.codeError = 999;
         }
-        this.resultat = response;
-        this.codeError = this.resultat.errorResponse.code;
-        if(this.codeError != 200){
-          this.hasError = true ;
-        }
+        this.hasError = Elith.Utils.hasError(this.codeError);
       }
 
       handleDetailError (event) {
-        this.hasError = true ;
         this.compareToken();
-
         let response = JSON.parse(event.detail.request.xhr.response);
         this.codeError = response.errorResponse.code;
-        if(this.codeError == 200){
-          this.hasError = false ;
-        }
+        this.hasError = Elith.Utils.hasError(this.codeError);
 
 
       }
