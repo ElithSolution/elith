@@ -10,11 +10,6 @@
 <link rel="import" href="../elith-icons.html">
 
 
-<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
-<script>
-  JSON.useDateParser()
-</script>
-
 
 <dom-module id="elith-client-form">
     <template>
@@ -148,10 +143,6 @@
               fieldsets[i].classList.remove('card-form');
             }
           }
-        }
-
-        formatDate(date){
-         return Elith.Utils.formatDate(date);
         }
 
       }

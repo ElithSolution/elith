@@ -6,6 +6,7 @@
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
+<link rel="import" href="../../bower_components/vaadin-text-field/vaadin-text-field.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-icons.html">
 
@@ -20,6 +21,19 @@
             :host {
                 display: block;
                 padding: 10px;
+
+            }
+
+            vaadin-grid vaadin-text-field {
+                width: 100%;
+            }
+            vaadin-grid vaadin-text-field.multiple {
+                width: 40%;
+            }
+
+            vaadin-grid vaadin-text-field.edition {
+                background-color: #a5d6a7;
+
             }
 
         </style>
@@ -34,31 +48,52 @@
 
                             <template class="row-details">
                                 <div class="details">
-                                    <span><strong>Traitement </strong>: [[item.traitement]]</span><br>
-                                    <span>Conseils : [[item.conseils]]</span><br>
-                                    <span>Commentaires : [[item.commentaires]]</span><br>
+                                    <span><strong>Traitement </strong>:
+                                        <vaadin-text-field id="traitementt-[[item.id]]" value="[[item.traitement]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                    </span><br>
+                                    <span><strong>Traitement </strong>:
+                                        <paper-input id="traitement-[[item.id]]" value="[[item.traitement]]" readonly$="[[!_isEditing(editing, item)]]"></paper-input>
+                                    </span><br>
+                                    <span><strong>Conseils </strong>:  <vaadin-text-field id="conseils-[[item.id]]" value="[[item.conseils]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field></span><br>
+                                    <span><strong>Commentaires </strong>:  <vaadin-text-field id="commentaires-[[item.id]]" value="[[item.commentaires]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field></span><br>
                                 </div>
                             </template>
-                            <vaadin-grid-column width="15%">
+                            <vaadin-grid-column width="10%" resizable>
                                 <template class="header">Date visite</template>
                                 <template>[[formatDate(item.dateVisite)]]</template>
                             </vaadin-grid-column>
-                            <vaadin-grid-column width="35%">
+                            <vaadin-grid-column width="35%" resizable>
                                 <template class="header">Raison</template>
-                                <template>[[item.raison]]</template>
+                                <template>
+                                    <vaadin-text-field id="raison-[[item.id]]" value="[[item.raison]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>
+                                </template>
                             </vaadin-grid-column>
-                            <vaadin-grid-column width="20%">
+                            <vaadin-grid-column width="10%" resizable>
                                 <template class="header">Thérapeute</template>
-                                <template>[[item.login]]</template>
+                                <template>[[item.nomTherapeute]]</template>
                             </vaadin-grid-column>
-                            <vaadin-grid-column width="20%">
+                            <vaadin-grid-column width="25%" resizable>
                                 <template class="header">Mode paiement</template>
-                                <template>[[item.prix]]$ ([[item.modePaiement]])</template>
+                                <template>
+                                    <vaadin-text-field class="multiple" id="prix-[[item.prix]]" value="[[item.prix]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>$
+                                   (<vaadin-text-field class="multiple" id="modePaiement-[[item.modePaiement]]" value="[[item.modePaiement]]" readonly$="[[!_isEditing(editing, item)]]"></vaadin-text-field>)
+                                </template>
                             </vaadin-grid-column>
-                            <vaadin-grid-column width="10%">
+                            <vaadin-grid-column width="5%" resizable>
                                 <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility"></paper-icon-button></template>
                                 <template>
                                     <paper-checkbox checked="{{detailsOpened}}"></paper-checkbox>
+                                </template>
+                            </vaadin-grid-column>
+                            <vaadin-grid-column width="15%" resizable>
+                                <template>
+                                    <div style="text-align: right;">
+                                        <paper-icon-button hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
+                                        <paper-icon-button hidden="[[editing]]" on-tap="_remove" aria-label="Delete" icon="elith-icons:delete"></paper-icon-button>
+                                        <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_save" focus-target$="[[editing]]" icon="elith-icons:save"></paper-icon-button>
+
+                                        <vaadin-button hidden="[[!_isEditing(editing, item)]]" on-click="_cancel">Cancel</vaadin-button>
+                                    </div>
                                 </template>
                             </vaadin-grid-column>
                         </vaadin-grid>
@@ -77,13 +112,80 @@
           return {
             traitements:{
               type: Object,
-
             },
+            editing: {
+              type : Object,
+              observer: 'editionChanged'
+            },
+
           }
+        }
+
+        ready() {
+          super.ready();
+          this.editing = null;
+        }
+
+
+        _isEditing(editing, item) {
+          return item === editing;
+        }
+
+        _edit(e) {
+          var item = e.model.item;
+          this.editing = item;
+          this.$.grid.querySelector('#raison-' + e.model.item.id).focus();
+        }
+
+        _save(e) {
+          var item = e.model.item;
+          item.name.first = this.$.grid.querySelector('#first-' + e.model.index).value;
+          item.name.last = this.$.grid.querySelector('#last-' + e.model.index).value;
+
+          this.editing = null;
+          this.$.grid.querySelector('#edit-button').focus();
+        }
+
+        _cancel() {
+          this.editing = null;
+
+          this.$.grid.querySelector('#edit-button').focus();
+        }
+
+        _add(e) {
+          if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
+            this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
+
+            this.$.firstname.value = '';
+            this.$.lastname.value = '';
+          } else {
+            alert('First Name and Last Name required');
+          }
+        }
+
+        _remove(e) {
+          var index = this.items.indexOf(e.model.item);
+          this.items.splice(index, 1);
+
         }
 
         formatDate(date){
           return Elith.Utils.formatDate(date);
+        }
+
+        editionChanged(editing){
+          let vaadin = Polymer.dom(this.root).querySelectorAll('vaadin-text-field');
+          if(editing === null){
+            for (let i=0; i<vaadin.length; i++) {
+              // assigns style properties
+              vaadin[i].classList.add('edition');
+            }
+          }else{
+            for (let i=0; i<vaadin.length; i++) {
+              // assigns style properties
+              vaadin[i].classList.remove('edition');
+            }
+          }
         }
       }
 
