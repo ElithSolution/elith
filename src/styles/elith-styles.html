@@ -4,14 +4,30 @@
 <dom-module id="elith-styles">
   <template>
     <style include="elith-color elith-typography">
-      paper-input,paper-textarea{
-        --paper-input-container-input-color: var(--elith-body-text-color);
-        --paper-input-container-disabled:{
-          color: var(--elith-disabled-text-color);
+
+      paper-input, paper-textarea, paper-dropdown-menu, paper-tab{
+        --paper-input-container-input-color: {
+          var(--elith-body-text-color);
         };
-        --paper-input-container-underline-disabled: {
-          display: none;
-        };
+        --paper-input-container-underline: { display: none; height: 0;};
+        --paper-input-container-underline-disabled: {display: none;};
+      }
+
+      :host paper-input, paper-textarea, paper-dropdown-menu, paper-tab[disabled] {
+        --paper-input-container-input-color: {var(--elith-disabled-text-color);};
+        --paper-input-container-disabled: {opacity: 1;};
+        --paper-input-container-underline: { display: none; height: 0;};
+      }
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: var(--elith-primary-color);
+      }
+
+      paper-tab.iron-selected {
+        color: var(--elith-primary-color);
+      }
+      paper-tab {
+        --paper-tab-ink: var(--elith-primary-color-light);
       }
 
       paper-icon-item:first-child {

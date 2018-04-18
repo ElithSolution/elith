@@ -16,10 +16,7 @@
 <link rel="import" href="elith-client-form.html">
 <link rel="import" href="../elith-error.html">
 
-<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
-<script>
-  JSON.useDateParser()
-</script>
+
 
 <dom-module id="elith-clientdetail">
     <template>
@@ -99,7 +96,7 @@
             <template>
                 <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="elith-icons:check-circle" on-tap="postUpdateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                    <paper-icon-button icon="elith-icons:check-circle" on-tap="updateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
                     <paper-icon-button icon="elith-icons:delete" on-tap="deleteClient"></paper-icon-button>
                 </div>
 
@@ -184,16 +181,11 @@
           this.modeEdition = true ;
         }
 
-        formatDate(date){
-          return Elith.Utils.formatDate(date);
-        }
-
-        postUpdateClient () {
+        updateClient () {
           this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
           this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
           this.$.updateClientAjax.body = this.client;
           this.$.updateClientAjax.generateRequest();
-
         }
 
         deleteClient(){
