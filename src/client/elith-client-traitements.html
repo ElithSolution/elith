@@ -7,11 +7,13 @@
 <link rel="import" href="../../bower_components/paper-dropdown-menu/paper-dropdown-menu.html">
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-
+<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-icons.html">
+<link rel="import" href="../elith-iron-ajax.html">
 
 
 <dom-module id="elith-client-traitements">
@@ -28,26 +30,10 @@
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-        <iron-ajax
-                id="updateTraitementAjax"
-                method="put"
-                content-type="application/json;charset=utf-8"
-                handle-as="text/json"
-                on-response="handleUpdateResponse"
-                on-error="handleUpdateError">
-        </iron-ajax>
-        <iron-ajax id="deleteByIdAjax"
-                   method="delete"
-                   content-type="application/json"
-                   handle-as="JSON"
-                   on-response="handleDeleteResponse"
-                   on-error="handleDeleteError">
-        </iron-ajax>
-
 
         <fieldset>
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
-            <div align="right"> [[traitements.length]] résultats.</div>
+            <div id="nbRes" align="right"> [[nbElt]] résultats.</div>
                 <vaadin-grid active-item="{{activeItem}}"
                              id="grid"
                              items="[[traitements]]"
@@ -56,15 +42,15 @@
 
                     <template class="row-details">
                         <div class="details">
-                            <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="[[item.traitement]]" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                            <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="[[item.conseils]]" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                            <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="[[item.commentaires]]" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                            <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                            <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                            <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                         </div>
                     </template>
                     <vaadin-grid-column width="15%" resizable>
                         <template class="header">Date visite</template>
                         <template>
-                            <paper-input id="date-[[item.id]]"  value="[[item.dateVisiteString]]" disabled$="[[!_isEditing(editing, item)]]"required auto-validate
+                            <paper-input id="date-[[item.id]]"  value="{{item.dateVisiteString}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate
                                          pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-](19|20)\d{2}$" error-message="Utiliser le format jj-mm-aaaa">
                             </paper-input>
                          </template>
@@ -72,19 +58,19 @@
                     <vaadin-grid-column width="25%" resizable>
                         <template class="header">Raison</template>
                         <template>
-                            <paper-input id="raison-[[item.id]]"  value="[[item.raison]]" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
+                            <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
                         </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="10%" resizable>
                         <template class="header">Thérapeute</template>
                         <template>
-                            <paper-input id="therapeute-[[item.id]]"  value="[[item.nomTherapeute]]" disabled></paper-input>
+                            <paper-input id="therapeute-[[item.id]]"  value="{{item.nomTherapeute}}" disabled></paper-input>
                         </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="15%" resizable>
                         <template class="header">Paiement</template>
                         <template>
-                            <paper-input type="number" max="9999" id="prix-[[item.id]]"  value="[[item.prix]]" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
+                            <paper-input type="number" max="9999" id="prix-[[item.id]]"  value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
                                 <div slot="prefix">$</div>
                             </paper-input>
                         </template>
@@ -92,7 +78,7 @@
                     <vaadin-grid-column width="15%" resizable>
                         <template class="header">Mode de paiement</template>
                         <template>
-                            <paper-dropdown-menu id="modePaiement-[[item.id]]"  value="[[item.modePaiement]]" disabled$="[[!_isEditing(editing, item)]]">
+                            <paper-dropdown-menu id="modePaiement-[[item.id]]"  value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
                                 <paper-tabs slot="dropdown-content"
                                             selected="[[_isModePaiement(item.modePaiement)]]">
                                     <paper-tab>espèces</paper-tab>
@@ -103,18 +89,18 @@
                             </paper-dropdown-menu>
                         </template>
                     </vaadin-grid-column>
-                    <vaadin-grid-column width="5%" resizable>
+                    <vaadin-grid-column width="5%">
                         <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility"></paper-icon-button></template>
                         <template>
-                            <paper-checkbox id="papercheck-[[item.id]]" checked="{{detailsOpened}}"></paper-checkbox>
+                            <paper-checkbox id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
                         </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="15%" resizable>
                         <template>
                             <div style="text-align: right;">
                                 <paper-icon-button id="edit-button" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
-                                <paper-icon-button hidden="[[editing]]" on-tap="_remove" aria-label="Delete" icon="elith-icons:delete"></paper-icon-button>
-                                <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_save" focus-target$="[[editing]]" icon="elith-icons:save"></paper-icon-button>
+                                <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
+                                <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                 <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                             </div>
                         </template>
@@ -122,14 +108,6 @@
                 </vaadin-grid>
         </fieldset>
 
-
-        <paper-dialog id="modal" modal style="width: 300px; height: 150px;">
-            <p>Êtes-vous sûr de vouloir supprimer ?</p>
-            <div class="buttons">
-                <paper-button dialog-dismiss>Annuler</paper-button>
-                <paper-button dialog-confirm autofocus>OK</paper-button>
-            </div>
-        </paper-dialog>
 
     </template>
 
@@ -143,11 +121,13 @@
           return {
             traitements:{
               type: Object,
+              observer: '_traitementsChanged',
             },
             editing: {
               type : Object,
             },
-
+            traitement : Object,
+            nbElt:Number,
           }
         }
 
@@ -158,12 +138,22 @@
 
 
 
+
+        _traitementsChanged(){
+          if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
+            this.nbElt = this.traitements.length;
+            this.$.grid.clearCache();
+          }
+        }
+
+
         _isEditing(editing, item) {
           // en édition, il faut ouvrir le détail sinon les modifications ne sont pas conservées
           if(item != null && item === editing){
             let check = this.$.grid.querySelector('#papercheck-' + item.id);
             if(check != null){
               this.$.grid.querySelector('#papercheck-' + item.id).checked = true ;
+              this.$.grid.querySelector('#papercheck-' + item.id).disabled = true ;
             }
           }
           return item === editing;
@@ -175,23 +165,12 @@
           this.$.grid.querySelector('#raison-' + e.model.item.id).focus();
         }
 
-        _save(e) {
-          var item = e.model.item;
-          item.name.first = this.$.grid.querySelector('#first-' + e.model.index).value;
-          item.name.last = this.$.grid.querySelector('#last-' + e.model.index).value;
-
-          this.editing = null;
-          this.$.grid.querySelector('#edit-button').focus();
-        }
-
         _cancel(e) {
-          var item = e.model.item;
           this.editing = null;
           this.$.grid.clearCache();
-          this.$.grid.querySelector('#papercheck-' + item.id).checked = false ;
-          this.$.grid.querySelector('#edit-button').focus();
         }
 
+        //todo
         _add(e) {
           if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
             this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
@@ -203,57 +182,8 @@
           }
         }
 
-        _modal(){
-          var body = document.querySelector('body');
-          Polymer.dom(body).appendChild(this.$.modal);
-          this.$.modal.open();
-        }
 
-        _remove(e){
-          // confirmation
-          this._modal();
-          //todo si c'est ok on poursuit, sinon on annule
-
-          var item = e.model.item;
-          console.log(item.id);
-          console.log(this.traitements);
-          var index = this.traitements.indexOf(e.model.item);
-          console.log(index);
-          // todo : modifier le nb de traitements
-          this.deleteTraitement(item.id);
-          this.traitements.splice(index, 1);
-          this.$.grid.clearCache();
-
-        }
-
-        updateTraitement () {
-          this.$.updateTraitementAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.updateTraitementAjax.url = Elith.PATH.ELITH_TRAITEMENT;
-          this.$.updateTraitementAjax.body = this.traitement;
-          this.$.updateTraitementAjax.generateRequest();
-        }
-
-
-        deleteTraitement(idTraitement){
-          this.$.deleteByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.deleteByIdAjax.url = `${Elith.PATH.ELITH_TRAITEMENT}/${idTraitement}`;
-          this.$.deleteByIdAjax.generateRequest();
-        }
-
-          handleUpdateResponse(event){
-            let response;
-            try{
-              response = JSON.parse(event.detail.response)
-              this.resultat = response;
-              this.codeError = this.resultat.errorResponse.code;
-            }catch (e){
-              this.codeError = 999;
-            }
-            this.modeEdition = false;
-            this.hasError = Elith.Utils.hasError(this.codeError);
-          }
-
-
+         // todo : le mode de paiement vient d'une table
         _isModePaiement(modePaiement){
           let n = 0 ;
           switch (modePaiement){

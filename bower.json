@@ -32,7 +32,8 @@
     "vaadin-form-layout": "v1.0.4",
     "vaadin-text-field": "^2.0.0",
     "paper-dropdown-input": "Juravenator/paper-dropdown-input#^2.5.2",
-    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1"
+    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
+    "paper-alert-dialog": "Collaborne/paper-alert-dialog#^2.0.1"
   },
   "resolutions": {
     "polymer": "^2.0.0"

@@ -25,6 +25,16 @@
         case 200 || 201 : return false;
         default : return true;
       }
+    },
+
+    getModule: function(module){
+      switch(module){
+        case 'client' : return window.Elith.PATH.ELITH_CLIENTTH_CLIENT;
+        case 'clients' : return window.Elith.PATH.ELITH_CLIENTS;
+        case 'traitement' : return window.Elith.PATH.ELITH_TRAITEMENT ;
+        default : return window.Elith.ROOT;
+      }
     }
+
   }
 </script>

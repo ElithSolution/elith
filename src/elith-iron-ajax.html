@@ -1,0 +1,154 @@
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+
+
+
+<dom-module id="elith-iron-ajax">
+    <template>
+        <style include="elith-styles">
+            :host{
+                margin:0 auto;
+                witdh: 500px;
+            }
+
+        </style>
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
+            <iron-ajax id="ajax"
+                   method="[[methode]]"
+                   content-type="application/json;charset=utf-8"
+                   handle-as="JSON"
+                   on-response="handleResponse"
+                   on-error="handleError">
+            </iron-ajax>
+
+            <paper-icon-button id="[[id]]"
+                               focus-target="[[focus]]"
+                               hidden="[[hidden]]"
+                               disabled="[[hidden]]"
+                               on-tap="_onAction"
+                               icon="elith-icons:[[methode]]">
+
+            </paper-icon-button>
+            <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm" on-dismiss="dismiss">
+                Êtes-vous sûr de vouloir supprimer ?
+            </paper-alert-dialog>
+
+    </template>
+
+
+    <script>
+      class ElithIronAjax extends Polymer.Element {
+        static get is () { return 'elith-iron-ajax' }
+
+        static get properties () {
+          return {
+            elements : {
+              type : Object,
+              notify: true,
+            },
+            element : Object,
+            module: String,
+            hidden: Object,
+            methode : String,
+            id: String,
+            focus: {
+              type: Boolean,
+              notify: true,
+            },
+          }
+        }
+
+        _onAction(e) {
+          switch (this.methode) {
+            case 'delete': this._delete(e); break;
+            case 'put' : this._update(e); break ;
+            default : this._default(e);
+          }
+        }
+
+        /**************************************************************************************************************/
+        _default(e){
+          console.log('default');
+        }
+        /**************************************************************************************************************/
+        _update(e){
+          this.updateElement();
+        }
+
+        updateElement () {
+          this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+          this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
+          this.$.ajax.body = this.element;
+          this.$.ajax.generateRequest();
+
+          this.focus = null ;
+        }
+        /**************************************************************************************************************/
+        _delete(e){
+          this._modal();
+        }
+
+        _modal(){
+          var body = document.querySelector('body');
+          Polymer.dom(body).appendChild(this.$.dialog);
+          this.$.dialog.open();
+        }
+
+        dismiss(){
+          // mettre à null l'élément sélectionné
+          this.element = null ;
+        }
+
+        confirm(){
+          let index = this.elements.indexOf(this.element);
+          this.deleteElement(this.element.id);
+
+          // si c'est dans un tableau :
+          this.elements.splice(index, 1);
+          // POUR QUE ÇA NOTIFIE LE CHANGEMENT
+          this.elements = this.elements.slice();
+        }
+
+        deleteElement(idElement){
+          this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+          this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
+          this.$.ajax.generateRequest();
+        }
+        /**************************************************************************************************************/
+
+        handleResponse(event) {
+          let response;
+          try{
+            response = JSON.parse(event.detail.response)
+            //this.resultat = response;
+            //this.codeError = this.resultat.errorResponse.code;
+          }catch (e){
+            console.log('erreur', e);
+            //this.codeError = 999;
+          }
+          console.log('ok', response);
+          return response ;
+        }
+
+        handleError (event) {
+          let erreur = event.detail.request.xhr.response;
+          console.log('handelerreur', erreur);
+          let response ;
+          try{
+            response = JSON.parse(event.detail.request.xhr.response);
+          }catch (e){
+            console.log('erreur', e);
+            //this.codeError = 999;
+          }
+
+          return response;
+        }
+
+      }
+
+      window.customElements.define(ElithIronAjax.is, ElithIronAjax)
+    </script>
+</dom-module>
