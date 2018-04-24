@@ -21,8 +21,18 @@
         <style include="elith-styles">
             :host {
                 display: block;
-                padding: 10px;
 
+            }
+
+            .details {
+                box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14);
+                font-size: 20px;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .bouton {
+                text-align: right;
             }
 
 
@@ -30,22 +40,28 @@
         </style>
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-
         <fieldset>
+
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
             <div id="nbRes" align="right"> [[nbElt]] résultats.</div>
                 <vaadin-grid active-item="{{activeItem}}"
                              id="grid"
                              items="[[traitements]]"
-                             colspan="2"
                              column-reordering-allowed>
 
                     <template class="row-details">
+
                         <div class="details">
                             <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                             <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                             <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                            <div class="bouton">
+                                <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                            </div>
                         </div>
+
+
                     </template>
                     <vaadin-grid-column width="15%" resizable>
                         <template class="header">Date visite</template>
@@ -55,7 +71,7 @@
                             </paper-input>
                          </template>
                     </vaadin-grid-column>
-                    <vaadin-grid-column width="25%" resizable>
+                    <vaadin-grid-column width="20%" resizable>
                         <template class="header">Raison</template>
                         <template>
                             <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
@@ -89,10 +105,10 @@
                             </paper-dropdown-menu>
                         </template>
                     </vaadin-grid-column>
-                    <vaadin-grid-column width="5%">
-                        <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility"></paper-icon-button></template>
+                    <vaadin-grid-column width="10%">
+                        <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility" disabled></paper-icon-button></template>
                         <template>
-                            <paper-checkbox id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
+                            <paper-checkbox align="center" id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
                         </template>
                     </vaadin-grid-column>
                     <vaadin-grid-column width="15%" resizable>
