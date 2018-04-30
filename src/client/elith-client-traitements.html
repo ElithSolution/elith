@@ -29,17 +29,17 @@
                 font-size: 20px;
                 display: flex;
                 flex-direction: column;
+                height :auto;
             }
 
             .bouton {
                 text-align: right;
             }
-
-
-
         </style>
+
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
         <fieldset>
 
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
@@ -63,6 +63,11 @@
 
 
                     </template>
+                    <vaadin-grid-column width="0%">
+                        <template>
+                            <paper-checkbox hidden id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled></paper-checkbox>
+                        </template>
+                    </vaadin-grid-column>
                     <vaadin-grid-column width="15%" resizable>
                         <template class="header">Date visite</template>
                         <template>
@@ -71,7 +76,7 @@
                             </paper-input>
                          </template>
                     </vaadin-grid-column>
-                    <vaadin-grid-column width="20%" resizable>
+                    <vaadin-grid-column width="30%" resizable>
                         <template class="header">Raison</template>
                         <template>
                             <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
@@ -105,16 +110,16 @@
                             </paper-dropdown-menu>
                         </template>
                     </vaadin-grid-column>
-                    <vaadin-grid-column width="10%">
+                  <!--  <vaadin-grid-column width="10%">
                         <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility" disabled></paper-icon-button></template>
                         <template>
                             <paper-checkbox align="center" id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
                         </template>
-                    </vaadin-grid-column>
+                    </vaadin-grid-column>-->
                     <vaadin-grid-column width="15%" resizable>
-                        <template>
+                        <template >
                             <div style="text-align: right;">
-                                <paper-icon-button id="edit-button" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
+                                <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
                                 <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
                                 <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                 <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
@@ -135,25 +140,35 @@
 
         static get properties () {
           return {
-            traitements:{
+            traitements: {
               type: Object,
               observer: '_traitementsChanged',
             },
             editing: {
-              type : Object,
+              type: Object,
+              observer: '_editingChanged',
             },
-            traitement : Object,
-            nbElt:Number,
+            traitement: Object,
+            nbElt: Number,
+            idItem: Number,
           }
         }
+
 
         ready() {
           super.ready();
           this.editing = null;
         }
 
-
-
+        _editingChanged(){
+          if(this.editing != null){
+            this.idItem = this.editing.id ;
+          }else{
+            if(this.idItem != null){
+              this.$.grid.querySelector('#papercheck-' + this.idItem).checked = false ;
+            }
+          }
+        }
 
         _traitementsChanged(){
           if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
@@ -169,7 +184,6 @@
             let check = this.$.grid.querySelector('#papercheck-' + item.id);
             if(check != null){
               this.$.grid.querySelector('#papercheck-' + item.id).checked = true ;
-              this.$.grid.querySelector('#papercheck-' + item.id).disabled = true ;
             }
           }
           return item === editing;
@@ -209,8 +223,9 @@
             case 'forfait' : return 3;
             default : return -1;
           }
-
       }
+
+
 
       }
 

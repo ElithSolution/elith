@@ -2,6 +2,7 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-data.html">
+<link rel="import" href="elith-icons.html">
 
 <dom-module id="elith-logout">
   <template>
@@ -25,7 +26,7 @@
     <elith-data key="clientsListed" data="{{clients}}"></elith-data>
 
     <template is="dom-if" if="{{!link}}">
-      <paper-button raised on-tap="logout">Log Out</paper-button>
+      <paper-icon-button icon="elith-icons:user" raised on-tap="logout"> </paper-icon-button>
     </template>
 
     <template is="dom-if" if="{{link}}">
