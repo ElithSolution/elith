@@ -15,6 +15,7 @@
       a {
         color: #fff;
         display: inline-block;
+        text-align: center;
         font-size: 13px;
       }
       paper-button{
@@ -30,7 +31,7 @@
     </template>
 
     <template is="dom-if" if="{{link}}">
-      <a on-tap="logout" href>Log Out</a>
+      <a on-tap="logout" href>Deconnexion</a>
     </template>
   </template>
 
@@ -46,7 +47,8 @@
           storedUser: Object,
           link:       {
             type:  Boolean,
-            value: false,
+            value:true,
+
           },
           clients:    {
             type: Object,

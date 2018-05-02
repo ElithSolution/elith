@@ -48,16 +48,27 @@
             }
 
 
-            .clientNameHeader{
+            .container{
+                width:100%;
+                color: var(--elith-base-color-dark);
+                background-color: var(--elith-primary-color-dark);
                 border-bottom: 2px solid;
                 margin-bottom: 40px;
+                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+                border-radius: 5px 5px 0 0
+
             }
-            .clientNameHeader h1{
-                display: inline;
-            }
-            .clientNameHeader paper-icon-button{
+            .clientNameHeader{
+                width:80%;
                 display: inline-flex;
             }
+
+            .bouton {
+                float:right;
+                text-align: right;
+                display: inline-flex;
+            }
+
         </style>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -94,11 +105,16 @@
         </dom-if>
         <dom-if if="{{!hasError}}">
             <template>
-                <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
-                    <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="elith-icons:check-circle" on-tap="updateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
-                    <paper-icon-button icon="elith-icons:delete" on-tap="deleteClient"></paper-icon-button>
+                <div class="container">
+                    <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                    </div>
+                    <div class="bouton">
+                        <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                        <paper-icon-button icon="elith-icons:check-circle" on-tap="updateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                        <paper-icon-button icon="elith-icons:delete" on-tap="deleteClient"></paper-icon-button>
+                    </div>
                 </div>
+
 
                 <iron-form id="modifClient">
                     <form is="iron-form" id="updateClient" method="post">

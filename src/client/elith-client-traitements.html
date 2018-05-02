@@ -24,12 +24,17 @@
 
             }
 
-            .details {
-                box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14);
-                font-size: 20px;
-                display: flex;
-                flex-direction: column;
-                height :auto;
+
+            .details paper-textarea, paper-input, paper-dropdown-menu, paper-tab{
+                --paper-input-container-input-color: var(--elith-body-text-color);
+                --paper-input-container-underline: { display: none; height: 0;};
+                --paper-input-container-underline-disabled: {display: none;};
+            }
+
+            .details paper-textarea, paper-input, paper-dropdown-menu, paper-tab[disabled]{
+                --paper-input-container-input-color: var(--elith-disabled-text-color);
+                --paper-input-container-disabled: {opacity: 1;};
+                --paper-input-container-underline: { display: none;};
             }
 
             .bouton {
