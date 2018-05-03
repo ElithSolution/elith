@@ -68,6 +68,18 @@
       --primary-text-color: #000000;
 
 
+      /****         PINK         ****/
+    /*  --secondary-color: #37474f;
+      --secondary-less-light-color : #546269;
+      --secondary-light-color: #62727b;
+      --secondary-more-light-color: #6F828C;
+      --secondary-background-color: #eceff1;
+      --secondary-dark-color: #102027;
+      --primary-color: #e91e63;
+      --primary-light-color: #ff6090;
+      --primary-dark-color: #b0003a;
+      --secondary-text-color: #ffffff;
+      --primary-text-color: #000000;*/
 
 
       /* Components */
@@ -92,17 +104,17 @@
        As we use mostly the paper elements from the Polymer team,
        which use paper-styles, we must change some of their CSS variables.
        */
-      --primary-text-color: var(--elith-body-text-color, #212121);
+      --primary-text-color: var(--elith-body-text-color);
       --primary-background-color: var(--elith-background-color);
-      --secondary-text-color: var(--elith-body-text-color, #737373);
-      --disabled-text-color: #9b9b9b;
-      --divider-color: var(--elith-border-color, #dbdbdb);
-      --error-color: var(--elith-error-color, #dd2c00);
-      --primary-color: var(--elith-primary-color, #3f51b5);
-      --accent-color: var(--elith-primary-color-dark, #ff4081);
+      --secondary-text-color: var(--elith-primary-color-dark);
+      --disabled-text-color: var(--elith-disabled-text-color);
+      --divider-color: var(--elith-border-color);
+      --error-color: var(--elith-error-color);
+      --primary-color: var(--elith-primary-color);
+      --accent-color: var(--elith-primary-color-dark);
 
       /* Use by paper-toolbar */
-      --dark-theme-text-color: var(--elith-base-color, #ffffff);
+      --dark-theme-text-color: var(--elith-base-color);
 
       color: var(--elith-body-text-color);
       background-color: var(--primary-background-color);

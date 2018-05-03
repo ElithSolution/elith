@@ -35,7 +35,11 @@
     </dom-if>
     <dom-if if="[[isDeleted]]">
       <template>
-        <span> Client supprimé !</span>
+        <div class="alerte">
+          <iron-icon icon="elith-icons:report"></iron-icon>
+          Le client a été supprimé !
+        </div>
+
       </template>
     </dom-if>
 

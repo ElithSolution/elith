@@ -24,7 +24,6 @@
 
             }
 
-
             .details paper-textarea, paper-input, paper-dropdown-menu, paper-tab{
                 --paper-input-container-input-color: var(--elith-body-text-color);
                 --paper-input-container-underline: { display: none; height: 0;};
@@ -48,90 +47,91 @@
         <fieldset>
 
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
-            <div id="nbRes" align="right"> [[nbElt]] résultats.</div>
+            <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
+            <div id="nbRes" align="right" hidden$="[[!aTraitement]]"> [[nbElt]] résultats.</div>
                 <vaadin-grid active-item="{{activeItem}}"
-                             id="grid"
-                             items="[[traitements]]"
-                             column-reordering-allowed>
+                                 id="grid"
+                                 items="[[traitements]]"
+                                 column-reordering-allowed
+                                 hidden$="[[!aTraitement]]">
 
-                    <template class="row-details">
-
-                        <div class="details">
-                            <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                            <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                            <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                            <div class="bouton">
-                                <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
-                                <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
-                            </div>
-                        </div>
-
-
-                    </template>
-                    <vaadin-grid-column width="0%">
-                        <template>
-                            <paper-checkbox hidden id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled></paper-checkbox>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="15%" resizable>
-                        <template class="header">Date visite</template>
-                        <template>
-                            <paper-input id="date-[[item.id]]"  value="{{item.dateVisiteString}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate
-                                         pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-](19|20)\d{2}$" error-message="Utiliser le format jj-mm-aaaa">
-                            </paper-input>
-                         </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="30%" resizable>
-                        <template class="header">Raison</template>
-                        <template>
-                            <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="10%" resizable>
-                        <template class="header">Thérapeute</template>
-                        <template>
-                            <paper-input id="therapeute-[[item.id]]"  value="{{item.nomTherapeute}}" disabled></paper-input>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="15%" resizable>
-                        <template class="header">Paiement</template>
-                        <template>
-                            <paper-input type="number" max="9999" id="prix-[[item.id]]"  value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
-                                <div slot="prefix">$</div>
-                            </paper-input>
-                        </template>
-                    </vaadin-grid-column>
-                    <vaadin-grid-column width="15%" resizable>
-                        <template class="header">Mode de paiement</template>
-                        <template>
-                            <paper-dropdown-menu id="modePaiement-[[item.id]]"  value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
-                                <paper-tabs slot="dropdown-content"
-                                            selected="[[_isModePaiement(item.modePaiement)]]">
-                                    <paper-tab>espèces</paper-tab>
-                                    <paper-tab>chèque</paper-tab>
-                                    <paper-tab>bon cadeau</paper-tab>
-                                    <paper-tab>forfait</paper-tab>
-                                </paper-tabs>
-                            </paper-dropdown-menu>
-                        </template>
-                    </vaadin-grid-column>
-                  <!--  <vaadin-grid-column width="10%">
-                        <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility" disabled></paper-icon-button></template>
-                        <template>
-                            <paper-checkbox align="center" id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
-                        </template>
-                    </vaadin-grid-column>-->
-                    <vaadin-grid-column width="15%" resizable>
-                        <template >
-                            <div style="text-align: right;">
-                                <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
-                                <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
-                                <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
-                                <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                        <template class="row-details">
+                            <div class="details">
+                                <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                                <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                                <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                                <div class="bouton">
+                                    <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                                </div>
                             </div>
                         </template>
-                    </vaadin-grid-column>
-                </vaadin-grid>
+                        <vaadin-grid-column width="0%">
+                            <template>
+                                <paper-checkbox hidden id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled></paper-checkbox>
+                            </template>
+                        </vaadin-grid-column>
+                        <vaadin-grid-column width="15%" resizable>
+                            <template class="header">Date visite</template>
+                            <template>
+                                <paper-input id="date-[[item.id]]"  value="{{item.dateVisiteString}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate
+                                             pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-](19|20)\d{2}$" error-message="Utiliser le format jj-mm-aaaa">
+                                </paper-input>
+                             </template>
+                        </vaadin-grid-column>
+                        <vaadin-grid-column width="30%" resizable>
+                            <template class="header">Raison</template>
+                            <template>
+                                <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
+                            </template>
+                        </vaadin-grid-column>
+                        <vaadin-grid-column width="10%" resizable>
+                            <template class="header">Thérapeute</template>
+                            <template>
+                                <paper-input id="therapeute-[[item.id]]"  value="{{item.nomTherapeute}}" disabled></paper-input>
+                            </template>
+                        </vaadin-grid-column>
+                        <vaadin-grid-column width="15%" resizable>
+                            <template class="header">Paiement</template>
+                            <template>
+                                <paper-input type="number" max="9999" id="prix-[[item.id]]"  value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
+                                    <div slot="prefix">$</div>
+                                </paper-input>
+                            </template>
+                        </vaadin-grid-column>
+                        <vaadin-grid-column width="15%" resizable>
+                            <template class="header">Mode de paiement</template>
+                            <template>
+                                <paper-dropdown-menu id="modePaiement-[[item.id]]"  value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
+                                    <paper-tabs slot="dropdown-content"
+                                                selected="[[_isModePaiement(item.modePaiement)]]">
+                                        <paper-tab>espèces</paper-tab>
+                                        <paper-tab>chèque</paper-tab>
+                                        <paper-tab>bon cadeau</paper-tab>
+                                        <paper-tab>forfait</paper-tab>
+                                    </paper-tabs>
+                                </paper-dropdown-menu>
+                            </template>
+                        </vaadin-grid-column>
+                      <!--  <vaadin-grid-column width="10%">
+                            <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility" disabled></paper-icon-button></template>
+                            <template>
+                                <paper-checkbox align="center" id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
+                            </template>
+                        </vaadin-grid-column>-->
+                        <vaadin-grid-column width="15%" resizable>
+                            <template >
+                                <div style="text-align: right;">
+                                    <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
+                                    <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                                </div>
+                            </template>
+                        </vaadin-grid-column>
+                    </vaadin-grid>
+
+
         </fieldset>
 
 
@@ -156,6 +156,7 @@
             traitement: Object,
             nbElt: Number,
             idItem: Number,
+            aTraitement : Boolean,
           }
         }
 
@@ -178,10 +179,14 @@
         _traitementsChanged(){
           if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
             this.nbElt = this.traitements.length;
+            this.aTraitement = this._hasResult();
             this.$.grid.clearCache();
           }
         }
 
+        _hasResult(){
+          return (this.nbElt !== 0);
+        }
 
         _isEditing(editing, item) {
           // en édition, il faut ouvrir le détail sinon les modifications ne sont pas conservées
@@ -229,9 +234,6 @@
             default : return -1;
           }
       }
-
-
-
       }
 
 

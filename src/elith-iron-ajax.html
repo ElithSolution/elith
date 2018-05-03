@@ -32,7 +32,7 @@
                                icon="elith-icons:[[methode]]">
 
             </paper-icon-button>
-            <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm" on-dismiss="dismiss">
+            <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm">
                 Êtes-vous sûr de vouloir supprimer ?
             </paper-alert-dialog>
 
@@ -58,6 +58,11 @@
               type: Boolean,
               notify: true,
             },
+            path : {
+              type: Object,
+              notify: true,
+            },
+
           }
         }
 
@@ -97,19 +102,21 @@
           this.$.dialog.open();
         }
 
-        dismiss(){
-          // mettre à null l'élément sélectionné
-          this.element = null ;
-        }
 
         confirm(){
-          let index = this.elements.indexOf(this.element);
-          this.deleteElement(this.element.id);
+          if(this.element !== null){
+            this.deleteElement(this.element.id);
+              // si c'est dans un tableau :
+              if(this.elements != null){
+                let index = this.elements.indexOf(this.element);
+                this.elements.splice(index, 1);
+                // POUR QUE ÇA NOTIFIE LE CHANGEMENT
+                this.elements = this.elements.slice();
+              }else{
+                this.path = '/client/deleted' ;
+              }
+          }
 
-          // si c'est dans un tableau :
-          this.elements.splice(index, 1);
-          // POUR QUE ÇA NOTIFIE LE CHANGEMENT
-          this.elements = this.elements.slice();
         }
 
         deleteElement(idElement){
@@ -118,6 +125,8 @@
           this.$.ajax.generateRequest();
         }
         /**************************************************************************************************************/
+
+
 
         handleResponse(event) {
           let response;
