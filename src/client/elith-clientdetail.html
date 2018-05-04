@@ -1,21 +1,16 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
-<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
-<link rel="import" href="../styles/elith-styles.html">
-<link rel="import" href="../elith-icons.html">
 
 <link rel="import" href="elith-client-traitements.html">
 <link rel="import" href="elith-client-form.html">
+<link rel="import" href="../elith-icons.html">
 <link rel="import" href="../elith-error.html">
 <link rel="import" href="../elith-iron-ajax.html">
+<link rel="import" href="../styles/elith-styles.html">
 
 
 
@@ -24,18 +19,8 @@
         <style include="elith-styles">
             :host {
                 display: block;
-                padding: 10px;
+                padding: 20px;
             }
-
-            .details {
-                padding: 10px;
-                margin: 10px;
-                justify-content: space-around;
-                align-items: center;
-                box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
-                display: block;
-            }
-
             .flex-horizontal-with-ratios {
                 @apply --layout-horizontal;
             }
@@ -47,38 +32,15 @@
             .flex2child {
                 @apply --layout-flex-2;
             }
-
-
-
-
-
         </style>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
         <app-location route="{{route}}"></app-location>
-        <iron-ajax
-                id="updateClientAjax"
-                method="put"
-                content-type="application/json;charset=utf-8"
-                handle-as="text/json"
-                on-response="handleUpdateResponse"
-                on-error="handleUpdateError">
-        </iron-ajax>
+
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
-        <dom-if if="{{hasError}}">
-            <template>
-                <elith-error code="{{codeError}}"></elith-error>
-            </template>
-        </dom-if>
 
-        <dom-if if="{{isDeleted}}">
-            <template>
-                <span> Le client a été supprimé !</span>
-            </template>
-
-        </dom-if>
         <dom-if if="{{!hasError}}">
             <template>
                 <div class="container">
@@ -86,11 +48,10 @@
                     </div>
                     <div class="bouton">
                         <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                        <paper-icon-button icon="elith-icons:check-circle" on-tap="updateClient" hidden$="[[!modeEdition]]"></paper-icon-button>
+                        <elith-iron-ajax hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}" ></elith-iron-ajax>
                         <elith-iron-ajax element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
                     </div>
                 </div>
-
 
                 <iron-form id="modifClient">
                     <form is="iron-form" id="updateClient" method="post">
@@ -104,13 +65,6 @@
             </template>
 
         </dom-if>
-
-
-
-
-
-
-
     </template>
 
     <script>
@@ -132,23 +86,14 @@
               notify: true,
               observer: '_resultatChanged',
             },
-            client: {
-              type: Object,
-            },
-            traitements:{
-              type: Object,
-            },
-            isDeleted: {
-              type: Boolean,
-            },
-            modeEdition:{
-              type: Object,
-            },
+            client: Object,
+            traitements: Object,
+            modeEdition: Object,
             hasError: {
               type: Boolean,
               value : false,
             },
-
+            codeErreur : Object,
           }
         }
 
@@ -160,9 +105,9 @@
         }
 
         _resultatChanged () {
-          if(this.resultat != null){
-            this.isDeleted = false;
-            this.hasError = false ;
+          if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
+            this.codeErreur = this.resultat.errorResponse.code;
+            this.hasError = Elith.Utils.hasError(this.codeErreur);
             let item = this.resultat.items;
             if(typeof(item) !== 'undefined'){
               this.client = item["0"].client;
@@ -175,43 +120,13 @@
         }
 
         _onActiveItemChanged(e) {
-             this.$.grid.expandedItems = [e.detail.value];
+          this.$.grid.expandedItems = [e.detail.value];
         }
 
         activeModeEdition () {
           this.modeEdition = true ;
         }
-
-        updateClient () {
-          this.$.updateClientAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.updateClientAjax.url = Elith.PATH.ELITH_CLIENT;
-          this.$.updateClientAjax.body = this.client;
-          this.$.updateClientAjax.generateRequest();
-        }
-
-
-        handleUpdateResponse(event) {
-          let response;
-          try{
-            response = JSON.parse(event.detail.response)
-            this.resultat = response;
-            this.codeError = this.resultat.errorResponse.code;
-          }catch (e){
-            this.codeError = 999;
-          }
-          this.modeEdition = false;
-          this.hasError = Elith.Utils.hasError(this.codeError);
-        }
-
-        handleUpdateError(event){
-          let response = JSON.parse(event.detail.request.xhr.response);
-          this.codeError = response.errorResponse.code;
-          this.hasError = Elith.Utils.hasError(this.codeError);
-        }
-
     }
-
-
 
       window.customElements.define(ElithClientdetail.is, ElithClientdetail)
     </script>

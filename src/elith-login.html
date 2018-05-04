@@ -11,6 +11,7 @@
 <link rel="import" href="elith-logout.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-constantes.html">
+<link rel="import" href="elith-iron-ajax.html">
 
 <dom-module id="elith-login">
   <template>
@@ -46,11 +47,18 @@
           <paper-input label="Login" id="login" type="text" value="{{formData.login}}" required></paper-input>
           <paper-input label="Mot de passe" id="motPasse" type="password" value="{{formData.motPasse}}"></paper-input>
 
+
           <div class="wrapper-btns ">
             <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin"></iron-a11y-keys>
             <paper-button id="submit" raised class="primary" on-tap="postLogin">Log In</paper-button>
+
+            <paper-button raised class="primary">
+              <elith-iron-ajax hidden module="authentication" methode="post">Connexion</elith-iron-ajax>Connexion
+            </paper-button>
+
           </div>
         </form>
+
       </div>
 
       <div id="authenticated" hidden$="[[!storedUser.loggedin]]">

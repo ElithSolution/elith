@@ -3,7 +3,6 @@
 <link rel="import" href="../../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../../bower_components/paper-input/paper-textarea.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
-<link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-icons.html">
 
@@ -15,15 +14,12 @@
             :host {
                 display: block;
             }
-
-
         </style>
 
         <fieldset id="0" collapsed="true">
             <legend on-tap="toogleFieldset">Renseignements personnels</legend>
             <div>
                 <vaadin-form-layout>
-
                     <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]" auto-validate required></paper-input>
                     <paper-input label="Prénom" value="{{client.prenom}}" disabled$="[[!edition]]" auto-validate required></paper-input>
                     <paper-input label="Naissance" value="{{client.dateNaissanceString}}" disabled$="[[!edition]]" auto-validate
@@ -32,10 +28,8 @@
                     <paper-textarea label="Adresse" value="{{client.adresse}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-input label="Ville" value="{{client.ville}}" disabled$="[[!edition]]"></paper-input>
                     <br>
-
                     <paper-input label="Téléphone" value="{{client.telephone}}" disabled$="[[!edition]]"></paper-input>
                     <paper-input label="Courriel" value="{{client.email}}" disabled$="[[!edition]]" auto-validate type="email"></paper-input>
-
                     <br>
                     <paper-input label="Enfant(s)" value="{{client.enfants}}" disabled$="[[!edition]]" auto-validate pattern="[0-9]*" error-message="Veuillez saisir un chiffre"></paper-input>
                     <br>
@@ -56,11 +50,10 @@
             <paper-textarea label="Constipation" value="{{client.constipation}}" disabled$="[[!edition]]"></paper-textarea>
             <br>
             <paper-textarea label="Allergies" value="{{client.allergies}}" disabled$="[[!edition]]"></paper-textarea>
-            <paper-textarea label="Opérations" value="{{client.operations}}" disabled$="[[!edition]]"></paper-textarea>
+            <paper-textarea label="Opérations" value="{{client.histoOperations}}" disabled$="[[!edition]]"></paper-textarea>
             <br>
             <paper-textarea label="Autre" value="{{client.autre}}" disabled$="[[!edition]]"></paper-textarea>
             <br>
-
             <paper-toggle-button checked="{{client.cardiaque}}" disabled="[[!edition]]">Cardiaque</paper-toggle-button>
             <paper-toggle-button checked="{{client.asthme}}" disabled="[[!edition]]">Asthme</paper-toggle-button>
             <paper-toggle-button checked="{{client.hypoglycemie}}" disabled="[[!edition]]">Hypoglycémie</paper-toggle-button>

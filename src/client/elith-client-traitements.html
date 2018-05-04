@@ -60,7 +60,7 @@
                                 <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
-                                <div class="bouton">
+                                <div class="boutonCouleur">
                                     <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                                 </div>

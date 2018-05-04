@@ -22,13 +22,19 @@
 
     hasError: function(code){
         switch (parseInt(code)){
-        case 200 || 201 : return false;
-        default : return true;
+          case 200:
+          case 201 : return false;
+          case 401 :
+          case 403 :
+          case 404 :
+          case 204 : return true;
+        default : return false;
       }
     },
 
     getModule: function(module){
       switch(module){
+        case 'authentication' : return window.Elith.PATH.ELITH_AUTHENTICATE;
         case 'client' : return window.Elith.PATH.ELITH_CLIENT;
         case 'clients' : return window.Elith.PATH.ELITH_CLIENTS;
         case 'traitement' : return window.Elith.PATH.ELITH_TRAITEMENT ;

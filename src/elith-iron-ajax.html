@@ -1,7 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
-
+<link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
 
 
 <dom-module id="elith-iron-ajax">
@@ -30,8 +30,8 @@
                                disabled="[[hidden]]"
                                on-tap="_onAction"
                                icon="elith-icons:[[methode]]">
-
             </paper-icon-button>
+
             <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm">
                 Êtes-vous sûr de vouloir supprimer ?
             </paper-alert-dialog>
@@ -49,7 +49,10 @@
               type : Object,
               notify: true,
             },
-            element : Object,
+            element : {
+              type: Object,
+              notify: true,
+            },
             module: String,
             hidden: Object,
             methode : String,
@@ -62,8 +65,24 @@
               type: Object,
               notify: true,
             },
-
+            erreur:{
+              type:Object,
+              notify: true,
+            },
+            initcall :{
+              type : Object,
+              observer : '_initCallAjaxChanged',
+            },
+            response: {
+              type:Object,
+              notify: true,
+            },
           }
+        }
+
+
+        _initCallAjaxChanged(initcall){
+          if(initcall !== 0) this.callAjax(initcall);
         }
 
         _onAction(e) {
@@ -79,6 +98,14 @@
           console.log('default');
         }
         /**************************************************************************************************************/
+        callAjax (idElement) {
+          if (typeof(this.storedUser) !== 'undefined'){
+            this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+            this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
+            this.$.ajax.generateRequest();
+          }
+        }
+        /**************************************************************************************************************/
         _update(e){
           this.updateElement();
         }
@@ -88,7 +115,6 @@
           this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
           this.$.ajax.body = this.element;
           this.$.ajax.generateRequest();
-
           this.focus = null ;
         }
         /**************************************************************************************************************/
@@ -101,7 +127,6 @@
           Polymer.dom(body).appendChild(this.$.dialog);
           this.$.dialog.open();
         }
-
 
         confirm(){
           if(this.element !== null){
@@ -116,7 +141,6 @@
                 this.path = '/client/deleted' ;
               }
           }
-
         }
 
         deleteElement(idElement){
@@ -125,21 +149,16 @@
           this.$.ajax.generateRequest();
         }
         /**************************************************************************************************************/
-
-
-
         handleResponse(event) {
-          let response;
           try{
-            response = JSON.parse(event.detail.response)
-            //this.resultat = response;
-            //this.codeError = this.resultat.errorResponse.code;
+            this.response = JSON.parse(event.detail.response)
+            this.element = this.response.items["0"][this.module];
+            this.erreur = this.response.errorResponse.code
           }catch (e){
             console.log('erreur', e);
-            //this.codeError = 999;
+            this.codeError = 999;
           }
-          console.log('ok', response);
-          return response ;
+          return this.response ;
         }
 
         handleError (event) {
@@ -152,7 +171,6 @@
             console.log('erreur', e);
             //this.codeError = 999;
           }
-
           return response;
         }
 
