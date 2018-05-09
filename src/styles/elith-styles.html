@@ -4,14 +4,33 @@
 <dom-module id="elith-styles">
   <template>
     <style include="elith-color elith-typography">
-      paper-input,paper-textarea{
+
+      paper-input, paper-textarea, paper-dropdown-menu, paper-tab{
         --paper-input-container-input-color: var(--elith-body-text-color);
-        --paper-input-container-disabled:{
-          color: var(--elith-disabled-text-color);
-        };
-        --paper-input-container-underline-disabled: {
-          display: none;
-        };
+        --paper-input-container-underline-disabled: {display: none;};
+      }
+
+      paper-input, paper-textarea, paper-dropdown-menu, paper-tab[disabled] {
+        --paper-input-container-input-color: var(--elith-disabled-text-color);
+        --paper-input-container-disabled: {opacity: 1;};
+      }
+
+
+
+      :host paper-icon-button:hover {
+        color: var(--elith-primary-color);
+      }
+
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: var(--elith-primary-color);
+      }
+
+      paper-tab.iron-selected {
+        color: var(--elith-primary-color);
+      }
+      paper-tab {
+        --paper-tab-ink: var(--elith-primary-color-light);
       }
 
       paper-icon-item:first-child {
@@ -29,12 +48,72 @@
       }
 
       paper-dialog {
-        background: #FAFAFA;
         color: var(--elith-base-color);
         width: 100%;
         height: 100%;
         max-width: 600px;
         max-height: 600px;
+      }
+
+      .container{
+        width:100%;
+        color: var(--elith-base-color-dark);
+        background-color: var(--elith-primary-color-dark);
+        border-bottom: 2px solid;
+        margin-bottom: 40px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+        border-radius: 5px 5px 0 0
+
+      }
+      .clientNameHeader{
+        width:80%;
+        display: inline-flex;
+        margin-left:40px;
+        padding-top: 5px;
+        color:var(--elith-header-text-color);
+      }
+
+      .bouton {
+        float:right;
+        text-align: right;
+        display: inline-flex;
+        padding: 5px;
+        color: var(--elith-white);
+      }
+
+      .boutonCouleur {
+        text-align: right;
+        padding: 5px;
+      }
+
+
+
+      .alerte{
+        display: flex;
+        padding: 15px;
+        margin: 24px;
+        color: var(--elith-primary-color-dark);
+        background-color: var(--elith-white);
+        border-left: 20px solid var(--elith-primary-color);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      .alerte[hidden]{
+        display: none;
+      }
+
+      .alerte iron-icon{
+        color: var(--elith-primary-color);
+        margin-right: 10px;
+      }
+
+      .details {
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+        font-size: 20px;
+        display: flex;
+        flex-direction: column;
+        height :auto;
+
       }
 
       .card-form, .card {
@@ -46,8 +125,8 @@
       }
 
       .card-form{
-        margin: 30px 0;
-        padding: 40px 15px;
+        margin: 10px 0;
+        padding: 10px 15px;
       }
 
       .card {
@@ -55,12 +134,28 @@
       }
 
       fieldset{
-        border: none;
+        border:none;
+        border-radius: 5px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
       fieldset legend{
         font-size: 1.5rem;
+        color: var(--elith-secondary-color-light);
+        border-bottom: none;
       }
+
+      fieldset.collapse legend{
+        font-size: 1.5rem;
+        border-bottom: 1px dashed;
+        color: var(--elith-primary-color-dark);
+      }
+
+      fieldset.card-form legend{
+        color: var(--elith-secondary-color-light);
+        border-bottom: none;
+      }
+
 
       @media (max-width: 600px) {
         paper-dialog {

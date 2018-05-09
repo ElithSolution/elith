@@ -5,7 +5,9 @@
     html {
       /* Base colors (background-color) */
       --elith-base-color: var( --secondary-color);
+      --elith-base-color-less-light: var( --secondary-less-light-color);
       --elith-base-color-light: var( --secondary-light-color);
+      --elith-base-color-more-light: var( --secondary-more-light-color);
       --elith-base-color-dark: var( --secondary-dark-color);
       --elith-background-color: var(--secondary-background-color);
       --elith-white: #ffffff;
@@ -13,11 +15,12 @@
       /* Text colors */
       --elith-body-text-color: var(--primary-text-color);
       --elith-menu-text-color: var(--secondary-text-color);
-      --elith-disabled-text-color: #b1b0b2;
+      --elith-disabled-text-color:var(--secondary-light-color);
       --elith-header-text-color: var(--secondary-text-color);
 
       /* Primary colors */
       --elith-primary-color: var(--primary-color);
+      --elith-primary-color-light: var(--primary-light-color);
       --elith-primary-color-dark: var(--primary-dark-color);
 
       /* Secondary colors */
@@ -37,18 +40,46 @@
 
 
 
-      /* THEME AJUSTABLE */
-      --secondary-color: #37474f;
+      /****    THEME AJUSTABLE   ****/
+      /****         LIME         ****/
+      /*--secondary-color: #37474f;
+      --secondary-less-light-color : #546269;
       --secondary-light-color: #62727b;
+      --secondary-more-light-color: #6F828C;
       --secondary-background-color: #F5F5F6;
       --secondary-dark-color: #102027;
       --primary-color: #ccdb38;
       --primary-light-color: #ffff6d;
       --primary-dark-color: #98aa00;
       --secondary-text-color: #ffffff;
+      --primary-text-color: #000000;*/
+
+      /****         AMBRE        ****/
+      --secondary-color: #37474f;
+      --secondary-less-light-color : #546269;
+      --secondary-light-color: #62727b;
+      --secondary-more-light-color: #6F828C;
+      --secondary-background-color: #eceff1;
+      --secondary-dark-color: #102027;
+      --primary-color: #ff8f00;
+      --primary-light-color: #ffc046;
+      --primary-dark-color: #c56000;
+      --secondary-text-color: #ffffff;
       --primary-text-color: #000000;
 
 
+      /****         PINK         ****/
+    /*  --secondary-color: #37474f;
+      --secondary-less-light-color : #546269;
+      --secondary-light-color: #62727b;
+      --secondary-more-light-color: #6F828C;
+      --secondary-background-color: #eceff1;
+      --secondary-dark-color: #102027;
+      --primary-color: #e91e63;
+      --primary-light-color: #ff6090;
+      --primary-dark-color: #b0003a;
+      --secondary-text-color: #ffffff;
+      --primary-text-color: #000000;*/
 
 
       /* Components */
@@ -65,6 +96,7 @@
       --paper-item-focused:var(--elith-primary-color);
 
 
+
     }
 
     body {
@@ -72,17 +104,17 @@
        As we use mostly the paper elements from the Polymer team,
        which use paper-styles, we must change some of their CSS variables.
        */
-      --primary-text-color: var(--elith-body-text-color, #212121);
+      --primary-text-color: var(--elith-body-text-color);
       --primary-background-color: var(--elith-background-color);
-      --secondary-text-color: var(--elith-body-text-color, #737373);
-      --disabled-text-color: #9b9b9b;
-      --divider-color: var(--elith-border-color, #dbdbdb);
-      --error-color: var(--elith-error-color, #dd2c00);
-      --primary-color: var(--elith-primary-color, #3f51b5);
-      --accent-color: var(--elith-primary-color-dark, #ff4081);
+      --secondary-text-color: var(--elith-primary-color-dark);
+      --disabled-text-color: var(--elith-disabled-text-color);
+      --divider-color: var(--elith-border-color);
+      --error-color: var(--elith-error-color);
+      --primary-color: var(--elith-primary-color);
+      --accent-color: var(--elith-primary-color-dark);
 
       /* Use by paper-toolbar */
-      --dark-theme-text-color: var(--elith-base-color, #ffffff);
+      --dark-theme-text-color: var(--elith-base-color);
 
       color: var(--elith-body-text-color);
       background-color: var(--primary-background-color);
@@ -106,7 +138,7 @@
 
       @media screen and (max-width: 640px) {
         h5, h6 {
-          color: var(--elith-base-color-medium-dark);
+          color: var(--elith-base-color-dark);
         }
       }
     </style>

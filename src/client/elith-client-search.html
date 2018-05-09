@@ -24,9 +24,7 @@
 
       }
 
-      vaadin-combo-box-item:hover {
-        background-color: #0b97c4 !important;
-      }
+
     </style>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -42,12 +40,14 @@
             on-response="handleClientsResponse"
             on-error="handleClientsError">
     </iron-ajax>
+
+
+
     <vaadin-combo-box-light  id="clientSearch"
                              items="{{clients}}"
                              item-value-path="client.id"
                              item-label-path="client.nomComplet"
                              style="display: block; width: 100%;">
-
 
 
       <paper-input label="Nom de la personne" value=[[search]]>
@@ -56,15 +56,20 @@
                   paper-item:hover {
                       background: var(--elith-primary-color) !important;
                       font-weight: bold;
+                      margin-top: -10px;
+                      margin-bottom: -10px;
+                      margin-left: -10px;
+                      margin-right: -10px;
                   }
-
               </style>
+
               <paper-item>
                 <paper-item-body two-line>
                   <div>[[item.client.prenom]] [[item.client.nom]]</div>
-                  <div secondary>[[formatDate(item.client.dateNaissance)]]</div>
+                  <div secondary>[[item.client.dateNaissanceString]]</div>
                 </paper-item-body>
               </paper-item>
+
         </template>
         <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
       </paper-input>
@@ -166,10 +171,6 @@
         if (this.error.code && this.error.code == 401) {
           this.storedUser = null
         }
-      }
-
-      formatDate(date){
-        return Elith.Utils.formatDate(date);
       }
     }
 

@@ -5,36 +5,21 @@
 
 
 <dom-module id="elith-error">
-
-
-
-
-    <dom-module id="elith-client-form">
-        <template>
-            <style include="elith-styles">
-                div.card {
-                    background-color:var(--elith-warning-color);
-                    font-weight: bold;
-                }
-            </style>
-            <dom-if if="{{!success}}">
-                <template>
-                    <div class="card">
-                        <span><iron-icon class="grayIcon" icon="elith-icons:warning" slot="item-icon"></iron-icon>[[message]]</span>
-                    </div>
-                </template>
-            </dom-if>
-
-        </template>
-    </dom-module>
-
-
-
+    <template>
+        <style include="elith-styles"></style>
+        <dom-if if="{{!success}}">
+            <template>
+                <div class="alerte">
+                    <iron-icon icon="elith-icons:warning"></iron-icon>
+                    [[message]]
+                </div>
+            </template>
+        </dom-if>
+    </template>
 
     <script>
       class ElithError extends Polymer.Element {
         static get is () { return 'elith-error' }
-
 
         static get properties () {
           return {
@@ -57,12 +42,14 @@
               this.message = 'OK';
               this.success = true;
             } break;
-            case 204 : this.message = 'Aucun contenu'; break;
-            default : this.message = 'à définir...';
+            case 204 : this.message = 'Aucun contenu !'; break;
+            case 401 : this.message = 'Vous devez vous authentifier !'; break;
+            case 403 : this.message = 'Accès refusé !'; break;
+            case 404 : this.message = 'Page non trouvée'; break;
+            case 999 : this.message = 'Erreur JSON'; break;
+            default : this.message = 'Une erreur est survenue !';
           }
-
         }
-
       }
 
       window.customElements.define(ElithError.is, ElithError)

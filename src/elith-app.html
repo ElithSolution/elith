@@ -12,6 +12,7 @@
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-icons.html">
 
@@ -57,37 +58,60 @@
         width: 100%;
       }
 
+      .drawer-list paper-item{
+        border-bottom: 1px solid #546269;
+        padding: 0;
+      }
+
+      .drawer-list paper-item:hover{
+        color: var(--elith-primary-color-dark);
+        background-color: var(--elith-base-color-less-light);
+        border-left: 4px solid var(--elith-primary-color-dark);
+      }
+
       .drawer-list a {
         display: block;
         text-decoration: none;
         color: var(--elith-menu-text-color);
         line-height: 40px;
+        width: 100%;
+        margin-left: 1em;
       }
-
       .drawer-list a:hover {
-        color: var(--elith-primary-color-dark);
-      }
+        color: var(--elith-primary-color);
 
+
+      }
 
       .drawer-list iron-icon {
         display: inline-block;
       }
 
-      .drawer-list a.iron-selected {
-        color: var(--elith-body-text-color);
-        font-weight: var(--elith-font-weight-bold);
-      }
+
 
       app-drawer-layout:not([narrow]) [drawer-toggle] {
         display: none;
       }
 
       .menu-principal {
-        margin-left: 10px;
         margin-top: 40px
       }
 
+      div.login {
+        width:100%;
+        text-align: right;
+      }
 
+
+      paper-listbox{
+        background-color: var(--elith-base-color);
+      }
+      paper-listbox paper-item{
+        color: var(--elith-header-text-color);
+        padding-left: 40px;
+        padding-right: 40px;
+
+      }
 
     </style>
 
@@ -119,13 +143,19 @@
 
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
              <div class="menu-principal">
-              <a name="elith-accueil" href="[[rootPath]]accueil">
-                <paper-icon-button icon="home"></paper-icon-button>
-                Accueil
-              </a>
-              <a name="elith-client" href="[[rootPath]]client/">
-                <paper-icon-button icon="elith-icons:client"></paper-icon-button>
-                Clients</a>
+               <paper-item >
+                 <a name="elith-accueil" href="[[rootPath]]accueil">
+                   <paper-icon-button icon="home"></paper-icon-button>
+                   Accueil
+                 </a>
+               </paper-item>
+               <paper-item>
+                 <a name="elith-client" href="[[rootPath]]client/">
+                   <paper-icon-button icon="elith-icons:client"></paper-icon-button>
+                   Clients</a>
+               </paper-item>
+
+
               <a name="elith-produit" href="[[rootPath]]produit/">
                 <paper-icon-button icon="card-giftcard"></paper-icon-button>
                 Produits</a>
@@ -141,13 +171,20 @@
       <app-header-layout has-scrolling-region>
 
         <app-header slot="header" condenses reveals effects="waterfall">
-          <app-toolbar>
+          <app-toolbar >
             <paper-icon-button icon="my-icons:menu" drawer-toggle></paper-icon-button>
 
-            <div hidden$="[[!storedUser.loggedin]]">
-              <span>LOGIN : [[storedUser.name]] !</span>
-              <paper-icon-button icon="account-circle"></paper-icon-button>
-              <elith-logout stored-user="{{storedUser}}"></elith-logout>
+            <div class="login" hidden$="[[!storedUser.loggedin]]" >
+              <paper-menu-button
+                      horizontal-align="right"
+                      no-animations>
+                <paper-icon-button icon="elith-icons:user" slot="dropdown-trigger"></paper-icon-button>
+                <paper-listbox slot="dropdown-content">
+                  <paper-item disabled>[[storedUser.name]]</paper-item>
+                  <paper-item>Mon profil</paper-item>
+                  <paper-item><elith-logout stored-user="{{storedUser}}">Déconnexion</elith-logout></paper-item>
+                </paper-listbox>
+              </paper-menu-button>
             </div>
           </app-toolbar>
         </app-header>

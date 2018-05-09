@@ -23,13 +23,17 @@
     "iron-ajax": "PolymerElements/iron-ajax#^2.1.2",
     "brum-global-variable": "SieBrum/brum-global-variable#^1.0.6",
     "paper-search": "Collaborne/paper-search#^2.0.9",
-    "vaadin-grid": "vaadin/vaadin-grid#^4.1.7",
+    "vaadin-grid": "vaadin/vaadin-grid#^5.0.0-beta7",
     "json.date-extensions": "^1.2.2",
     "vaadin-combo-box": "vaadin/vaadin-combo-box#^3.0.4",
     "iron-icons": "^2.1.0",
     "paper-toggle-button": "PolymerElements/paper-toggle-button#^2.1.0",
     "iron-form": "v2.2.1",
-    "vaadin-form-layout": "v1.0.4"
+    "vaadin-form-layout": "v1.0.4",
+    "vaadin-text-field": "^2.0.0",
+    "paper-dropdown-input": "Juravenator/paper-dropdown-input#^2.5.2",
+    "paper-tabs": "PolymerElements/paper-tabs#^2.1.1",
+    "paper-alert-dialog": "Collaborne/paper-alert-dialog#^2.0.1"
   },
   "resolutions": {
     "polymer": "^2.0.0"

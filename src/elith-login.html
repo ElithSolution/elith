@@ -11,6 +11,7 @@
 <link rel="import" href="elith-logout.html">
 <link rel="import" href="elith-data.html">
 <link rel="import" href="elith-constantes.html">
+<link rel="import" href="elith-iron-ajax.html">
 
 <dom-module id="elith-login">
   <template>
@@ -26,7 +27,7 @@
     <iron-ajax
       id="registerLoginAjax"
       method="post"
-      content-type="application/json"
+      content-type="application/json;charset=utf-8"
       handle-as="text/json"
       on-response="handleLoginResponse"
       on-error="handleUserError">
@@ -46,11 +47,18 @@
           <paper-input label="Login" id="login" type="text" value="{{formData.login}}" required></paper-input>
           <paper-input label="Mot de passe" id="motPasse" type="password" value="{{formData.motPasse}}"></paper-input>
 
+
           <div class="wrapper-btns ">
             <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin"></iron-a11y-keys>
             <paper-button id="submit" raised class="primary" on-tap="postLogin">Log In</paper-button>
+
+            <paper-button raised class="primary">
+              <elith-iron-ajax hidden module="authentication" methode="post">Connexion</elith-iron-ajax>Connexion
+            </paper-button>
+
           </div>
         </form>
+
       </div>
 
       <div id="authenticated" hidden$="[[!storedUser.loggedin]]">
@@ -82,32 +90,25 @@
 
       ready () {
         super.ready()
-        this.target = this.$.form
-      }
-
-      _setReqBody () {
-        this.$.registerLoginAjax.body = this.formData
+        this.target = this.$.form;
       }
 
       postLogin () {
-        this.$.registerLoginAjax.url = Elith.PATH.ELITH_AUTHENTICATE
-        this._setReqBody()
-        this.$.registerLoginAjax.generateRequest()
+        this.$.registerLoginAjax.url = Elith.PATH.ELITH_AUTHENTICATE;
+        this.$.registerLoginAjax.body = this.formData;
+        this.$.registerLoginAjax.generateRequest();
       }
 
       handleLoginResponse (event) {
-        let response = JSON.parse(event.detail.response)
-
+        let response = JSON.parse(event.detail.response);
         if (response.accessToken) {
-          this.error = ''
+          this.error = '';
           this.storedUser = {
             name:        this.formData.login,
             accessToken: response.accessToken,
             loggedin:    true,
-          }
-
-          // redirect to Secret Quotes
-          this.set('route.path', '/accueil')
+          };
+          this.set('route.path', '/accueil');
         }
 
         // reset form data
@@ -116,7 +117,7 @@
       }
 
       handleUserError (event) {
-        this.error = event.detail.request.xhr.response
+        this.error = event.detail.request.xhr.response;
       }
     }
 

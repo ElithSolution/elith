@@ -1,5 +1,4 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
@@ -7,46 +6,30 @@
 <link rel="import" href="elith-clientdetail.html">
 <link rel="import" href="../elith-error.html">
 
-<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
-<script>
-  // use date parser for all JSON.parse() requests
-  // make sure to call before any JSON conversions
-  JSON.useDateParser()
-</script>
 
 <dom-module id="elith-client-id">
   <template>
     <style include="elith-styles">
       :host {
         display: block;
-        padding: 10px;
       }
     </style>
     <iron-localstorage name="user-storage" value="{{storedUser}}" on-iron-localstorage-load="initStoredUser"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-    <iron-ajax id="getClientByIdAjax"
-               method="get"
-               content-type="application/json"
-               handle-as="JSON"
-               on-response="handleDetailResponse"
-               on-error="handleDetailError">
-    </iron-ajax>
+    <elith-iron-ajax hidden disabled module="client" methode="get" initcall="[[initcall]]" response="{{resultat}}"></elith-iron-ajax>
 
     <dom-if if="{{hasError}}">
       <template>
         <elith-error code="{{codeError}}"></elith-error>
       </template>
     </dom-if>
-    <dom-if if="{{!hasError}}">
 
+    <dom-if if="{{!hasError}}">
       <template>
         <elith-clientdetail resultat="{{resultat}}"></elith-clientdetail>
       </template>
     </dom-if>
-
-
-
 
   </template>
 
@@ -61,6 +44,7 @@
           storedUser: Object,
           resultat:   {
             type:  Object,
+            observer : '_resultatChanged',
           },
           idclient:{
             type: Number,
@@ -71,14 +55,26 @@
             type: Boolean,
             value : false,
           },
+          initcall:{
+            type: Object,
+            value : 0,
+          },
 
         }
       }
 
 
+      _resultatChanged(){
+        console.log('resultat', this.resultat);
+        if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
+          this.codeError = this.resultat.errorResponse.code;
+          this.hasError = Elith.Utils.hasError(this.codeError);
+        }
+      }
+
       initStoredUser(){
         if (typeof(this.storedUser) !== 'undefined' && this.storedUser.loggedin) {
-          this.callAjax();
+          this.initcall = this.idclient ;
         }
       }
 
@@ -86,52 +82,6 @@
         this.initStoredUser();
       }
 
-
-      callAjax () {
-        if (typeof(this.storedUser) !== 'undefined'){
-            this.$.getClientByIdAjax.url = `${Elith.PATH.ELITH_CLIENT}/${this.idclient}`;
-            this.$.getClientByIdAjax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken
-            this.$.getClientByIdAjax.generateRequest();
-
-        }
-      }
-
-      compareToken () {
-        let lastToken = 'Bearer ' + this.storedUser.accessToken;
-        let usedToken = this.$.getClientByIdAjax.headers['Authorization'];
-        if (lastToken !== usedToken) {
-          this.initStoredUser()
-        }
-      }
-
-      handleDetailResponse (event) {
-        this.hasError = false ;
-        let response;
-        this.compareToken()
-        try{
-          response = JSON.parse(event.detail.response)
-        }catch (e){
-          this.error = e;
-        }
-        this.resultat = response;
-        this.codeError = this.resultat.errorResponse.code;
-        if(this.codeError != 200){
-          this.hasError = true ;
-        }
-      }
-
-      handleDetailError (event) {
-        this.hasError = true ;
-        this.compareToken();
-
-        let response = JSON.parse(event.detail.request.xhr.response);
-        this.codeError = response.errorResponse.code;
-        if(this.codeError == 200){
-          this.hasError = false ;
-        }
-
-
-      }
     }
 
     window.customElements.define(ElithClientid.is, ElithClientid)
