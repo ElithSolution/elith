@@ -1,7 +1,6 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
-<link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
@@ -9,21 +8,14 @@
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-utils.html">
 
-<script src="../../bower_components/json.date-extensions/json.date-extensions.js"></script>
-<script>
-  // use date parser for all JSON.parse() requests
-  // make sure to call before any JSON conversions
-  JSON.useDateParser();
-</script>
+
 <dom-module id="elith-client-search">
   <template>
     <style include="elith-styles">
       :host {
         display: block;
         padding: 10px;
-
       }
-
 
     </style>
 
@@ -86,10 +78,6 @@
         return 'elith-client-search'
       }
 
-      constructor () {
-        super();
-        this.delayTimer = function () {}
-      }
 
       static get properties () {
         return {

@@ -65,7 +65,6 @@
 
 
       _resultatChanged(){
-        console.log('resultat', this.resultat);
         if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
           this.codeError = this.resultat.errorResponse.code;
           this.hasError = Elith.Utils.hasError(this.codeError);

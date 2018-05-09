@@ -2,7 +2,7 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
-
+<link rel="import" href="elith-constantes.html">
 
 <dom-module id="elith-iron-ajax">
     <template>
@@ -16,14 +16,19 @@
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-            <iron-ajax id="ajax"
-                   method="[[methode]]"
-                   content-type="application/json;charset=utf-8"
-                   handle-as="JSON"
-                   on-response="handleResponse"
-                   on-error="handleError">
-            </iron-ajax>
+        <iron-ajax id="ajax"
+               method="[[methode]]"
+               content-type="application/json;charset=utf-8"
+               handle-as="JSON"
+               on-response="handleResponse"
+               on-error="handleError">
+        </iron-ajax>
 
+        <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm">
+            Êtes-vous sûr de vouloir supprimer ?
+        </paper-alert-dialog>
+
+        <template is="dom-if" if="{{!link}}">
             <paper-icon-button id="[[id]]"
                                focus-target="[[focus]]"
                                hidden="[[hidden]]"
@@ -31,10 +36,13 @@
                                on-tap="_onAction"
                                icon="elith-icons:[[methode]]">
             </paper-icon-button>
+        </template>
 
-            <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm">
-                Êtes-vous sûr de vouloir supprimer ?
-            </paper-alert-dialog>
+        <template is="dom-if" if="{{link}}">
+            <a href on-tap="_onAction" >[[message]]</a>
+        </template>
+
+
 
     </template>
 
@@ -77,17 +85,31 @@
               type:Object,
               notify: true,
             },
+            link:{
+              type: Object,
+              value:false,
+            },
+            message: Object,
           }
         }
 
 
         _initCallAjaxChanged(initcall){
-          if(initcall !== 0) this.callAjax(initcall);
+          if(initcall !== null){
+            // si c'est pour l'authentification
+            if(initcall === "true") {
+              this._post();
+              // si on a un id
+            }else{
+              if(initcall !== 0) this.callAjax(initcall);
+            }
+          }
         }
 
         _onAction(e) {
           switch (this.methode) {
             case 'delete': this._delete(e); break;
+            case 'post': this._post(e); break;
             case 'put' : this._update(e); break ;
             default : this._default(e);
           }
@@ -95,26 +117,36 @@
 
         /**************************************************************************************************************/
         _default(e){
-          console.log('default');
+          this.codeError = 999;
         }
         /**************************************************************************************************************/
         callAjax (idElement) {
-          if (typeof(this.storedUser) !== 'undefined'){
-            this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-            this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
-            this.$.ajax.generateRequest();
+          // pas besoin de vérifier le token dans le cas de l'authentification
+          if(this.module === 'authentication'){
+            this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
+            this.$.ajax.body = this.element ;
+          // validation du token
+          }else{
+            if (typeof(this.storedUser) !== 'undefined'){
+              this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+              if(idElement !== null && typeof(idElement) !== 'undefined'){
+                this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
+              }else{
+                this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
+                this.$.ajax.body = this.element;
+              }
+            }
           }
+          this.$.ajax.generateRequest();
+
+        }
+        /**************************************************************************************************************/
+        _post(e){
+          this.callAjax();
         }
         /**************************************************************************************************************/
         _update(e){
-          this.updateElement();
-        }
-
-        updateElement () {
-          this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
-          this.$.ajax.body = this.element;
-          this.$.ajax.generateRequest();
+          this.callAjax();
           this.focus = null ;
         }
         /**************************************************************************************************************/
@@ -130,7 +162,7 @@
 
         confirm(){
           if(this.element !== null){
-            this.deleteElement(this.element.id);
+            this.callAjax(this.element.id);
               // si c'est dans un tableau :
               if(this.elements != null){
                 let index = this.elements.indexOf(this.element);
@@ -138,42 +170,45 @@
                 // POUR QUE ÇA NOTIFIE LE CHANGEMENT
                 this.elements = this.elements.slice();
               }else{
-                this.path = '/client/deleted' ;
+                this.path = `${this.module}/deleted` ;
               }
           }
-        }
-
-        deleteElement(idElement){
-          this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
-          this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
-          this.$.ajax.generateRequest();
         }
         /**************************************************************************************************************/
         handleResponse(event) {
           try{
-            this.response = JSON.parse(event.detail.response)
-            this.element = this.response.items["0"][this.module];
-            this.erreur = this.response.errorResponse.code
+            this.response = JSON.parse(event.detail.response);
+            // traitement à part pour l'authentification
+            if(this.module === 'authentication'){
+              if (this.response.accessToken) {
+                this.error = '';
+                this.storedUser = {
+                  name:        this.element.login,
+                  accessToken: this.response.accessToken,
+                  loggedin:    true,
+                };
+                this.element = {};
+              }
+            }else{
+              this.element = this.response.items["0"][this.module];
+              this.erreur = this.response.errorResponse.code
+            }
           }catch (e){
-            console.log('erreur', e);
             this.codeError = 999;
           }
           return this.response ;
         }
 
         handleError (event) {
-          let erreur = event.detail.request.xhr.response;
-          console.log('handelerreur', erreur);
-          let response ;
+          console.log('handleError');
           try{
-            response = JSON.parse(event.detail.request.xhr.response);
+            this.response = JSON.parse(event.detail.request.xhr.response);
           }catch (e){
             console.log('erreur', e);
             //this.codeError = 999;
           }
-          return response;
+          return this.response;
         }
-
       }
 
       window.customElements.define(ElithIronAjax.is, ElithIronAjax)
