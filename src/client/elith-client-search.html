@@ -1,12 +1,12 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
-<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-utils.html">
+<link rel="import" href="../elith-iron-ajax.html">
 
 
 <dom-module id="elith-client-search">
@@ -21,27 +21,15 @@
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-
     <app-location route="{{route}}"></app-location>
 
-    <iron-ajax
-            id="getClientsAjax"
-            method="get"
-            content-type="application/json"
-            handle-as="JSON"
-            on-response="handleClientsResponse"
-            on-error="handleClientsError">
-    </iron-ajax>
-
-
+    <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
 
     <vaadin-combo-box-light  id="clientSearch"
                              items="{{clients}}"
                              item-value-path="client.id"
                              item-label-path="client.nomComplet"
                              style="display: block; width: 100%;">
-
-
       <paper-input label="Nom de la personne" value=[[search]]>
           <template>
               <style is="custom-style">
@@ -79,21 +67,19 @@
       }
 
 
+
       static get properties () {
         return {
           storedUser: {
             type:   Object,
-            notify: true,
             observer: '_onStoredUserChanged',
           },
           routeData:  Object,
           route:      Object,
           clients:    Object,
-          error:      String,
           search:     {
             type:     String,
             value:    '',
-            observer: '_searchChanged'
           },
           nbRes: Number,
           idclient: Number,
@@ -101,22 +87,47 @@
             type : Boolean,
             notify: true,
             observer: '_updateChanged'
-          }
+          },
+          initcall:{
+            type: Object,
+          },
+          resultat: {
+            type: Object,
+            notify: true,
+            observer: '_resultatChanged',
+          },
+        }
+      }
+
+
+      _resultatChanged () {
+        if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
+          this.codeErreur = this.resultat.errorResponse.code;
+          this.hasError = Elith.Utils.hasError(this.codeErreur); // todo : n'est pas défini
+          this.clients = this.resultat.items;
+          this.nbRes = this.resultat.items.length;
+        }else{
+          this.clients = null ;
         }
       }
 
 
       _onStoredUserChanged(){
         if (this.storedUser !== null && typeof(this.storedUser) !== 'undefined') {
-          let lastToken = 'Bearer ' + this.storedUser.accessToken;
-          let usedToken = this.$.getClientsAjax.headers['Authorization'];
-          if (lastToken !== usedToken) {
-            this.update = true;
-            this._searchChanged();
-
+          // si initcall n'est pas null, on vérifie si on a déjà fait un appel
+          if (this.initcall !== null && typeof(this.initcall) !== 'undefined') {
+            // si initcall a déjà la valeur du storedUser, on a déjà fait un appel
+            if(this.initcall.name !== this.storedUser.name){
+              this.initcall =  this.storedUser;
+                          }
+          // on fait l'appel après un initcall à null
+          }else{
+            this.initcall =  this.storedUser;
           }
+        // pas de storedUser, on veut pas aller chercher la liste
+        }else{
+          this.initcall = null ;
         }
-
       }
 
       ready(){
@@ -131,42 +142,12 @@
 
       _updateChanged() {
         if(this.update){
-          this._searchChanged();
-        }
-      }
-      _searchChanged () {
-        let head = this.$.getClientsAjax;
-        if (typeof(this.storedUser) !== 'undefined') {
-          let token = this.storedUser.accessToken;
-          let searchField = this.search;
-          loadData(head, token, searchField);
-        }
-      }
-
-      handleClientsResponse (event) {
-        let response = JSON.parse(event.detail.response);
-        this.nbRes = response.items.length;
-        this.clients = response.items;
-        this.error = null;
-      }
-
-      handleClientsError (event) {
-        try{
-          this.error = JSON.parse(event.detail.request.xhr.response)
-        }catch(e){
-          this.error = e;
-        }
-        if (this.error.code && this.error.code == 401) {
-          this.storedUser = null
+          this.$.clientSearch.value = ''; // pour vider le champ de recherche
+          this.initcall = 'true'; // pour forcer un rafraichissement de la liste des clients
         }
       }
     }
 
-    function loadData (clientAjax, token, searchField) {
-      clientAjax.headers['Authorization'] = `Bearer ${token}`
-      clientAjax.url = `${Elith.PATH.ELITH_CLIENTS}?search=${searchField}`
-      clientAjax.generateRequest()
-    }
 
     window.customElements.define(ElithClientsearch.is, ElithClientsearch)
   </script>

@@ -15,29 +15,41 @@
         margin:0 auto;
         witdh: 500px;
       }
+      }
     </style>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-      <div class="card">
 
-          <h1>Log In</h1>
-          <h2>Veuillez entrer votre login et mot de passe ! </h2>
 
-          <form is="iron-form" id="form" method="post">
-            <paper-input label="Login" id="login" type="text" value="{{formData.login}}" required></paper-input>
-            <paper-input label="Mot de passe" id="motPasse" type="password" value="{{formData.motPasse}}"></paper-input>
+      <div class="authentification">
 
-            <div class="wrapper-btns ">
-              <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin">
-                <elith-iron-ajax hidden disabled module="authentication" methode="post" initcall="[[initcall]]" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
-              </iron-a11y-keys>
-              <paper-button raised class="primary">
-                <elith-iron-ajax module="authentication" methode="post" link="true" message="Connexion" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
-              </paper-button>
-            </div>
-          </form>
+          <div class="divLogo">
+              <app-toolbar>
+                  <paper-icon-button src="../images/logo.png" class="logo">Logo</paper-icon-button>
+              </app-toolbar>
+          </div>
+          <div class="divForm">
+              <div class="container">
+                  <div class="clientNameHeader"><h1>Authentification </h1></div>
+              </div>
+
+              <form is="iron-form" id="form" method="post">
+                  <paper-input label="Login" id="login" type="text" value="{{formData.login}}" required></paper-input>
+                  <paper-input label="Mot de passe" id="motPasse" type="password" value="{{formData.motPasse}}"></paper-input>
+
+                  <div class="wrapper-btns" align="center">
+                      <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin">
+                          <elith-iron-ajax hidden disabled module="authentication" methode="post" initcall="[[initcall]]" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
+                      </iron-a11y-keys>
+                      <paper-button raised class="primary">
+                          <elith-iron-ajax module="authentication" methode="post" link="true" message="Connexion" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
+                      </paper-button>
+                  </div>
+              </form>
+          </div>
+
 
       </div>
 
@@ -97,7 +109,8 @@
       }
 
       postLogin(){
-        this.initcall = "true";
+        this.initcall = 'true';
+
       }
 
     }

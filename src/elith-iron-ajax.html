@@ -2,6 +2,8 @@
 <link rel="import" href="../bower_components/iron-ajax/iron-ajax.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="elith-constantes.html">
 
 <dom-module id="elith-iron-ajax">
@@ -53,6 +55,7 @@
 
         static get properties () {
           return {
+            storedUser : Object,
             elements : {
               type : Object,
               notify: true,
@@ -77,8 +80,10 @@
               type:Object,
               notify: true,
             },
+            // sert à initier les appels lorsqu'il n'y a pas de bouton
             initcall :{
               type : Object,
+              notify: true,
               observer : '_initCallAjaxChanged',
             },
             response: {
@@ -95,62 +100,67 @@
 
 
         _initCallAjaxChanged(initcall){
-          if(initcall !== null){
-            // si c'est pour l'authentification
-            if(initcall === "true") {
-              this._post();
-              // si on a un id
+          if(initcall !== null && typeof(initcall) !== 'undefined'){
+            // soit c'est pour l'authentification (pas encore de storedUser) ou pour forcer un nouvel appel
+            if(initcall === "true"){
+              this.callAjax();
+              this.initcall = null ;
+            // soit il y a le storedUser dans le initcall
+            } else if(initcall.accessToken != null && typeof(initcall.accessToken) !== 'undefined'){
+              this.storedUser = initcall ;
+              this.callAjax();
+            // soit il y a un id
             }else{
               if(initcall !== 0) this.callAjax(initcall);
             }
           }
+
         }
 
-        _onAction(e) {
+        _onAction() {
           switch (this.methode) {
-            case 'delete': this._delete(e); break;
-            case 'post': this._post(e); break;
-            case 'put' : this._update(e); break ;
-            default : this._default(e);
+            case 'delete': this._delete(); break;
+            case 'post': this._post(); break;
+            case 'put' : this._update(); break ;
+            default : this._default();
           }
         }
 
         /**************************************************************************************************************/
-        _default(e){
+        _default(){
           this.codeError = 999;
         }
         /**************************************************************************************************************/
         callAjax (idElement) {
           // pas besoin de vérifier le token dans le cas de l'authentification
+          let url = `${Elith.Utils.getModule(this.module)}`;
           if(this.module === 'authentication'){
-            this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
             this.$.ajax.body = this.element ;
           // validation du token
           }else{
-            if (typeof(this.storedUser) !== 'undefined'){
+            if (this.storedUser !== null && typeof(this.storedUser) !== 'undefined'){
               this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
               if(idElement !== null && typeof(idElement) !== 'undefined'){
-                this.$.ajax.url = `${Elith.Utils.getModule(this.module)}/${idElement}`;
+                url = url.concat(`/${idElement}`);
               }else{
-                this.$.ajax.url = `${Elith.Utils.getModule(this.module)}`;
                 this.$.ajax.body = this.element;
               }
             }
           }
+          this.$.ajax.url = url;
           this.$.ajax.generateRequest();
-
         }
         /**************************************************************************************************************/
-        _post(e){
+        _post(){
           this.callAjax();
         }
         /**************************************************************************************************************/
-        _update(e){
+        _update(){
           this.callAjax();
           this.focus = null ;
         }
         /**************************************************************************************************************/
-        _delete(e){
+        _delete(){
           this._modal();
         }
 
@@ -189,23 +199,22 @@
                 };
                 this.element = {};
               }
+             // pour les autres modules
             }else{
               this.element = this.response.items["0"][this.module];
               this.erreur = this.response.errorResponse.code
             }
           }catch (e){
-            this.codeError = 999;
+            this.erreur = 999;
           }
           return this.response ;
         }
 
         handleError (event) {
-          console.log('handleError');
           try{
             this.response = JSON.parse(event.detail.request.xhr.response);
           }catch (e){
-            console.log('erreur', e);
-            //this.codeError = 999;
+            this.erreur = 999;
           }
           return this.response;
         }
