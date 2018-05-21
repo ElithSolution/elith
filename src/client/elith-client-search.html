@@ -17,6 +17,13 @@
         padding: 10px;
       }
 
+      .divContainer{
+        width:100%;
+        display:inline-flex;
+        margin-bottom: 40px;
+        background-color: #fff;
+      }
+
     </style>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -25,22 +32,28 @@
 
     <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
 
-    <vaadin-combo-box-light  id="clientSearch"
-                             items="{{clients}}"
-                             item-value-path="client.id"
-                             item-label-path="client.nomComplet"
-                             style="display: block; width: 100%;">
-      <paper-input label="Nom de la personne" value=[[search]]>
-          <template>
+    <div hidden$="{{!hasError}}">
+      <elith-error code="{{erreur}}"></elith-error>
+    </div>
+
+    <div class="divContainer" >
+      <div class="divSearch">
+        <vaadin-combo-box-light  id="clientSearch"
+                                 items="{{clients}}"
+                                 item-value-path="client.id"
+                                 item-label-path="client.nomComplet"
+                                 style="display: block; width: 100%;">
+          <paper-input label="Nom de la personne" value=[[search]]>
+            <template>
               <style is="custom-style">
-                  paper-item:hover {
-                      background: var(--elith-primary-color) !important;
-                      font-weight: bold;
-                      margin-top: -10px;
-                      margin-bottom: -10px;
-                      margin-left: -10px;
-                      margin-right: -10px;
-                  }
+                paper-item:hover {
+                  background: var(--elith-primary-color) !important;
+                  font-weight: bold;
+                  margin-top: -10px;
+                  margin-bottom: -10px;
+                  margin-left: -10px;
+                  margin-right: -10px;
+                }
               </style>
 
               <paper-item>
@@ -50,23 +63,33 @@
                 </paper-item-body>
               </paper-item>
 
-        </template>
-        <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
-      </paper-input>
-    </vaadin-combo-box-light>
-    <div>
-      [[nbRes]] résultats.
+            </template>
+            <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+          </paper-input>
+        </vaadin-combo-box-light>
+
+        <div>
+          [[nbRes]] résultats.
+        </div>
+      </div>
+      <div align="right">
+        <paper-button raised class="primary">
+          <a href="client/add"> Ajouter un client </a>
+        </paper-button>
+      </div>
     </div>
+
+
+
 
   </template>
 
+
   <script>
-    class ElithClientsearch extends Polymer.Element {
+     class ElithClientsearch extends Polymer.Element {
       static get is () {
         return 'elith-client-search'
       }
-
-
 
       static get properties () {
         return {
@@ -96,16 +119,30 @@
             notify: true,
             observer: '_resultatChanged',
           },
+          erreur:{
+            type: Object,
+          }
         }
       }
 
 
+
+
       _resultatChanged () {
+        let hasError ;
         if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
-          this.codeErreur = this.resultat.errorResponse.code;
-          this.hasError = Elith.Utils.hasError(this.codeErreur); // todo : n'est pas défini
-          this.clients = this.resultat.items;
-          this.nbRes = this.resultat.items.length;
+          //this.codeErreur = this.resultat.errorResponse.code;
+          this.erreur = this.resultat.code;
+          // todo : à généraliser
+          if(this.erreur == '401'){
+            this.storedUser = null;
+          }
+          hasError = Elith.Utils.hasError(this.erreur); // todo : n'est pas défini
+          if(!hasError){
+            this.clients = this.resultat.items;
+            this.nbRes = this.resultat.items.length;
+          }
+
         }else{
           this.clients = null ;
         }

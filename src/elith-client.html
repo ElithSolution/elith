@@ -24,9 +24,8 @@
     >
     </app-route>
 
-    <div class="card">
-      <elith-client-search update="{{update}}"></elith-client-search>
-    </div>
+
+    <elith-client-search update="{{update}}"></elith-client-search>
 
     <dom-if if="[[affichagePermis(isIdPage,update)]]">
       <template>
@@ -44,14 +43,6 @@
     </dom-if>
 
 
-    <dom-if if="[[isAddPage]]">
-      <template>
-        <div class="card">
-          <div class="circle"></div>
-          Ajout !
-        </div>
-      </template>
-    </dom-if>
 
 
 

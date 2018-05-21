@@ -213,7 +213,9 @@
         handleError (event) {
           try{
             this.response = JSON.parse(event.detail.request.xhr.response);
+            console.log(this.response);
           }catch (e){
+            console.log('erreur', e);
             this.erreur = 999;
           }
           return this.response;
