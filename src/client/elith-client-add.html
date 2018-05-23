@@ -1,0 +1,134 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/iron-form/iron-form.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+
+<link rel="import" href="elith-client-traitements.html">
+<link rel="import" href="elith-client-form.html">
+<link rel="import" href="../elith-icons.html">
+<link rel="import" href="../elith-error.html">
+<link rel="import" href="../elith-iron-ajax.html">
+<link rel="import" href="../styles/elith-styles.html">
+
+
+
+<dom-module id="elith-client-add">
+    <template>
+        <style include="elith-styles">
+            :host {
+                display: block;
+                padding: 20px;
+            }
+            .flex-horizontal-with-ratios {
+                @apply --layout-horizontal;
+            }
+
+            .flexchild {
+                @apply --layout-flex;
+            }
+
+            .flex2child {
+                @apply --layout-flex-2;
+            }
+        </style>
+
+        <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+        <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <app-location route="{{route}}"></app-location>
+
+        <!------------------------------------------------------------------------------------------------>
+        <!------------------------------------------------------------------------------------------------>
+
+        <dom-if if="{{!hasError}}">
+            <template>
+                <div class="container">
+                    <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                    </div>
+                    <div class="bouton">
+                        <elith-iron-ajax element="[[client]]" module="client" methode="put" response="{{resultat}}" ></elith-iron-ajax>
+                    </div>
+                </div>
+
+                <iron-form id="ajoutClient">
+                    <form is="iron-form" id="addClient" method="post">
+                        <elith-client-form client="{{client}}" edition="{{modeEdition}}"></elith-client-form>
+                    </form>
+                </iron-form>
+                <!------------------------------------------------------------------------------------------------>
+                <!--------------------        Affichage des traitements de la personne        -------------------->
+                <!------------------------------------------------------------------------------------------------>
+                <elith-client-traitements traitements="{{traitements}}"></elith-client-traitements>
+            </template>
+
+        </dom-if>
+    </template>
+
+    <script>
+      class ElithClientadd extends Polymer.Element {
+        static get is () {
+          return 'elith-client-add'
+        }
+
+        static get properties () {
+          return {
+            route: {
+              path: {
+                type: Object,
+                observer: '_pathChanged',
+              }
+            },
+            resultat: {
+              type: Object,
+              notify: true,
+              observer: '_resultatChanged',
+            },
+            client: Object,
+            traitements: {
+              type: Object,
+            },
+            modeEdition: {
+              type : Object,
+              value: true,
+              notify : true,
+            },
+            hasError: {
+              type: Boolean,
+              value : false,
+            },
+            codeErreur : Object,
+          }
+        }
+
+
+        _pathChanged(path){
+          if(path !== null && typeof(path) !== 'undefined'){
+            this.set('route.path', path);
+          }
+        }
+
+        _resultatChanged () {
+          if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
+            this.codeErreur = this.resultat.errorResponse.code;
+            this.hasError = Elith.Utils.hasError(this.codeErreur);
+            let item = this.resultat.items;
+            if(typeof(item) !== 'undefined'){
+              this.client = item["0"].client;
+              this.traitements = this.client.traitements;
+              this.modeEdition = false;
+            }
+          }else{
+            this.traitements = null ;
+          }
+        }
+
+        _onActiveItemChanged(e) {
+          this.$.grid.expandedItems = [e.detail.value];
+        }
+
+      }
+
+      window.customElements.define(ElithClientadd.is, ElithClientadd)
+    </script>
+</dom-module>

@@ -19,10 +19,12 @@
 
       .divContainer{
         width:100%;
-        display:inline-flex;
+        display:flex;
+        justify-content: space-around;
         margin-bottom: 40px;
-        background-color: #fff;
       }
+
+
 
     </style>
 
@@ -68,17 +70,17 @@
           </paper-input>
         </vaadin-combo-box-light>
 
-        <div>
+        <div class="divBouton">
           [[nbRes]] résultats.
+          <paper-button raised class="primary" on-tap="addClient" >
+            Ajouter
+          </paper-button>
         </div>
       </div>
-      <div align="right">
-        <paper-button raised class="primary">
-          <a href="client/add"> Ajouter un client </a>
-        </paper-button>
+      <div class="divSearch">
+       Recherche par téléphone
       </div>
     </div>
-
 
 
 
@@ -127,6 +129,10 @@
 
 
 
+      addClient(){
+        let path = '/client/add';
+        this.set('route.path', path);
+      }
 
       _resultatChanged () {
         let hasError ;

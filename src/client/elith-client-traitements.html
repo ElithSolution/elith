@@ -45,10 +45,9 @@
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
         <fieldset>
-
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
-            <div id="nbRes" align="right" hidden$="[[!aTraitement]]"> [[nbElt]] résultat(s).</div>
+            <div class="divBouton" hidden$="[[!aTraitement]]">[[nbElt]] résultat(s).</div>
                 <vaadin-grid active-item="{{activeItem}}"
                                  id="grid"
                                  items="[[traitements]]"
@@ -156,7 +155,10 @@
             traitement: Object,
             nbElt: Number,
             idItem: Number,
-            aTraitement : Boolean,
+            aTraitement : {
+              type: Boolean,
+              value : false,
+            },
           }
         }
 
@@ -212,14 +214,7 @@
 
         //todo
         _add(e) {
-          if (this.$.firstname.value !== '' && this.$.lastname.value !== '') {
-            this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
 
-            this.$.firstname.value = '';
-            this.$.lastname.value = '';
-          } else {
-            alert('First Name and Last Name required');
-          }
         }
 
 

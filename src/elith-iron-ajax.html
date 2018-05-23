@@ -41,7 +41,9 @@
         </template>
 
         <template is="dom-if" if="{{link}}">
-            <a href on-tap="_onAction" >[[message]]</a>
+            <paper-button raised class="primary" on-tap="_onAction">
+                [[message]]
+            </paper-button>
         </template>
 
 

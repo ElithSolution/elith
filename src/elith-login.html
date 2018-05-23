@@ -48,9 +48,9 @@
                       <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="postLogin">
                           <elith-iron-ajax hidden disabled module="authentication" methode="post" initcall="[[initcall]]" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
                       </iron-a11y-keys>
-                      <paper-button raised class="primary">
-                          <elith-iron-ajax module="authentication" methode="post" link="true" message="Connexion" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
-                      </paper-button>
+
+                      <elith-iron-ajax module="authentication" methode="post" link="true" message="Connexion" element="{{formData}}" response="{{reponse}}" ></elith-iron-ajax>
+
                   </div>
               </form>
           </div>
