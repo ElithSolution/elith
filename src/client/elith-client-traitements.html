@@ -39,6 +39,7 @@
             .bouton {
                 text-align: right;
             }
+
         </style>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -47,7 +48,12 @@
         <fieldset>
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
-            <div class="divBouton" hidden$="[[!aTraitement]]">[[nbElt]] résultat(s).</div>
+            <div class="divBouton" hidden$="[[!aTraitement]]">
+                [[nbElt]] résultat(s).
+                <paper-button raised class="ajout" on-tap="addTraitement" >
+                    Ajouter
+                </paper-button>
+            </div>
                 <vaadin-grid active-item="{{activeItem}}"
                                  id="grid"
                                  items="[[traitements]]"
@@ -129,7 +135,6 @@
                             </template>
                         </vaadin-grid-column>
                     </vaadin-grid>
-
 
         </fieldset>
 

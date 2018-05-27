@@ -15,7 +15,15 @@
         margin:0 auto;
         witdh: 500px;
       }
-      }
+
+       .divIcon{
+           width:5%;
+           color:var(--elith-white);
+           display:inline-flex;
+           justify-content: center;
+           align-items:center;
+       }
+
     </style>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -32,11 +40,11 @@
           </div>
           <div class="divForm">
               <div class="container">
+                  <div class="divIcon">
+                      <iron-icon icon="elith-icons20:lock"></iron-icon>
+                  </div>
                   <div class="clientNameHeader">
-                      <h1>
-                          <iron-icon icon="elith-icons:lock"></iron-icon>
-                          Authentification
-                      </h1>
+                      <h1>Authentification</h1>
                   </div>
               </div>
 
