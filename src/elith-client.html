@@ -36,7 +36,7 @@
     </dom-if>
     <dom-if if="[[isAddPage]]">
       <template>
-        <elith-client-add></elith-client-add>
+        <elith-client-add added="{{added}}" client="{{client}}"></elith-client-add>
       </template>
     </dom-if>
     <dom-if if="[[isDeleted]]">
@@ -74,9 +74,21 @@
           isAddPage: Boolean,
           update : Boolean,
           isDeleted:Boolean,
+          added:{
+            observer : '_addedChanged',
+          },
+          client: Object,
         }
       }
 
+
+      _addedChanged(){
+        if(this.added){
+          this.update = true ;
+          this.added = false ;
+        }
+
+      }
 
       _routeDataChanged(){
         this.isIdPage = false;
@@ -84,7 +96,8 @@
         this.update = false;
         this.isDeleted=false;
         if (this.routeData.param === 'add') {
-          this.isAddPage = true
+          this.isAddPage = true;
+          this.client = {};
         } else if (this.routeData.param === '') {
           this.update = true ;
           if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){

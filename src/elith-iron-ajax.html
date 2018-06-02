@@ -155,7 +155,7 @@
         /**************************************************************************************************************/
         _post(){
           this.callAjax();
-        }
+         }
         /**************************************************************************************************************/
         _update(){
           this.callAjax();
@@ -204,6 +204,7 @@
              // pour les autres modules
             }else{
               this.element = this.response.items["0"][this.module];
+              this.path = `${this.module}/${this.element.id}`;
               this.erreur = this.response.errorResponse.code
             }
           }catch (e){
@@ -215,7 +216,6 @@
         handleError (event) {
           try{
             this.response = JSON.parse(event.detail.request.xhr.response);
-            console.log(this.response);
           }catch (e){
             console.log('erreur', e);
             this.erreur = 999;

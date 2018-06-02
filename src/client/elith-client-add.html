@@ -47,13 +47,13 @@
                     <div class="clientNameHeader"><h1></h1>
                     </div>
                     <div class="bouton">
-                        <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{resultat}}" ></elith-iron-ajax>
+                        <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{client}}" hidden="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
                     </div>
                 </div>
 
                 <iron-form id="ajoutClient">
                     <form is="iron-form" id="addClient" method="post">
-                        <elith-client-form client="{{client}}" edition="{{modeEdition}}"></elith-client-form>
+                        <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
                     </form>
                 </iron-form>
                 <!------------------------------------------------------------------------------------------------>
@@ -79,12 +79,10 @@
                 observer: '_pathChanged',
               }
             },
-            resultat: {
-              type: Object,
-              notify: true,
-              observer: '_resultatChanged',
+            client: {
+              type : Object,
+              observer: '_clientChanged',
             },
-            client: Object,
             traitements: {
               type: Object,
             },
@@ -93,14 +91,29 @@
               value: true,
               notify : true,
             },
+            isInvalide: {
+              type : Object,
+              notify : true,
+            },
             hasError: {
               type: Boolean,
               value : false,
             },
             codeErreur : Object,
+            added: {
+              type : Object,
+              notify : true,
+              value: false,
+            },
           }
         }
 
+
+        _clientChanged(){
+          if(this.client !== null && typeof(this.client.items) !== 'undefined'){
+            this.added = true ;
+          }
+        }
 
         _pathChanged(path){
           if(path !== null && typeof(path) !== 'undefined'){
@@ -108,20 +121,6 @@
           }
         }
 
-        _resultatChanged () {
-          if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
-            this.codeErreur = this.resultat.errorResponse.code;
-            this.hasError = Elith.Utils.hasError(this.codeErreur);
-            let item = this.resultat.items;
-            if(typeof(item) !== 'undefined'){
-              this.client = item["0"].client;
-              this.traitements = this.client.traitements;
-              this.modeEdition = false;
-            }
-          }else{
-            this.traitements = null ;
-          }
-        }
 
         _onActiveItemChanged(e) {
           this.$.grid.expandedItems = [e.detail.value];

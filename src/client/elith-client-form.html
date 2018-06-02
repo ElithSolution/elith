@@ -22,7 +22,7 @@
                 <vaadin-form-layout>
                     <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]" auto-validate invalid="{{nomInvalide}}" required ></paper-input>
                     <paper-input label="Prénom" value="{{client.prenom}}" disabled$="[[!edition]]" auto-validate invalid="{{prenomInvalide}}" required></paper-input>
-                    <paper-input label="Naissance" value="{{client.dateNaissanceString}}" disabled$="[[!edition]]" auto-validate invalid="{{dateInvalide}}"
+                    <paper-input label="Naissance" value="{{client.dateNaissanceString}}" disabled$="[[!edition]]" auto-validate invalid="{{dateInvalide}}" required
                                  pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-](19|20)\d{2}$" error-message="Utiliser le format jj-mm-aaaa"></paper-input>
                     <br>
                     <paper-textarea label="Adresse" value="{{client.adresse}}" disabled$="[[!edition]]"></paper-textarea>
@@ -103,15 +103,18 @@
               observer: 'editionChanged'
             },
             nomInvalide: {
+              value : true,
               observer: 'invalideChanged'
             },
             prenomInvalide: {
+              value : true,
               observer: 'invalideChanged'
             },
             enfantInvalide: {
               observer: 'invalideChanged'
             },
             dateInvalide: {
+              value : true,
               observer: 'invalideChanged'
             },
             emailInvalide: {
@@ -126,7 +129,7 @@
 
 
         invalideChanged(){
-          this.invalide = this.nomInvalide || this.prenomInvalide || this.enfantInvalide || this.dateInvalide || this.emailInvalide;
+           this.invalide = this.nomInvalide || this.prenomInvalide || this.enfantInvalide || this.dateInvalide || this.emailInvalide;
         }
 
         clientChanged(){
