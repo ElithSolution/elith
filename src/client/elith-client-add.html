@@ -1,11 +1,10 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
-<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 
-<link rel="import" href="elith-client-traitements.html">
 <link rel="import" href="elith-client-form.html">
 <link rel="import" href="../elith-icons.html">
 <link rel="import" href="../elith-error.html">
@@ -40,29 +39,22 @@
 
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
-
-        <dom-if if="{{!hasError}}">
-            <template>
-                <div class="container">
-                    <div class="clientNameHeader"><h1></h1>
-                    </div>
-                    <div class="bouton">
-                        <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{client}}" hidden="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
-                    </div>
+            <div class="container">
+                <div class="clientNameHeader"><h1>Création du dossier</h1>
                 </div>
+                <div class="bouton">
+                    <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{client}}" hidden="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
+                    <paper-icon-button on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                </div>
+            </div>
 
-                <iron-form id="ajoutClient">
-                    <form is="iron-form" id="addClient" method="post">
-                        <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
-                    </form>
-                </iron-form>
-                <!------------------------------------------------------------------------------------------------>
-                <!--------------------        Affichage des traitements de la personne        -------------------->
-                <!------------------------------------------------------------------------------------------------>
-                <elith-client-traitements traitements="{{traitements}}"></elith-client-traitements>
-            </template>
+            <iron-form id="ajoutClient">
+                <form is="iron-form" id="addClient" method="post">
+                    <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
+                </form>
+            </iron-form>
 
-        </dom-if>
+
     </template>
 
     <script>
@@ -83,9 +75,6 @@
               type : Object,
               observer: '_clientChanged',
             },
-            traitements: {
-              type: Object,
-            },
             modeEdition: {
               type : Object,
               value: true,
@@ -95,11 +84,6 @@
               type : Object,
               notify : true,
             },
-            hasError: {
-              type: Boolean,
-              value : false,
-            },
-            codeErreur : Object,
             added: {
               type : Object,
               notify : true,
@@ -122,8 +106,8 @@
         }
 
 
-        _onActiveItemChanged(e) {
-          this.$.grid.expandedItems = [e.detail.value];
+        _cancel(e) {
+          this.client = {};
         }
 
       }

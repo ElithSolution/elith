@@ -26,6 +26,10 @@
                on-error="handleError">
         </iron-ajax>
 
+        <paper-alert-dialog  modal id="dialogErreur" title="Avertissement" confirm-button="OK">
+            Ce dossier client existe déjà, vous allez être redirigé sur la page de la personne.
+        </paper-alert-dialog>
+
         <paper-alert-dialog  modal id="dialog" title="Confirmation" dismiss-button="Annuler" confirm-button="OK"  on-confirm="confirm">
             Êtes-vous sûr de vouloir supprimer ?
         </paper-alert-dialog>
@@ -186,6 +190,12 @@
               }
           }
         }
+
+        _modalErreur(){
+          var body = document.querySelector('body');
+          Polymer.dom(body).appendChild(this.$.dialogErreur);
+          this.$.dialogErreur.open();
+        }
         /**************************************************************************************************************/
         handleResponse(event) {
           try{
@@ -206,6 +216,12 @@
               this.element = this.response.items["0"][this.module];
               this.path = `${this.module}/${this.element.id}`;
               this.erreur = this.response.errorResponse.code
+
+              // todo : code spécifique pour les doublons des dossiers clients, à revoir ultérieurement
+              if(this.erreur === 405){
+                this._modalErreur();
+              }
+
             }
           }catch (e){
             this.erreur = 999;

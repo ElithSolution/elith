@@ -61,7 +61,9 @@
 
                   </div>
               </form>
-              <elith-error code="{{codeErreur}}"></elith-error>
+              <div hidden$="[[!hasError]">
+                  <elith-error code="{{codeErreur}}"></elith-error>
+              </div>
           </div>
 
 
