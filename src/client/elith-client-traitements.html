@@ -164,6 +164,7 @@
               type: Boolean,
               value : false,
             },
+            itemAvantEdition : Object,
           }
         }
 
@@ -176,6 +177,9 @@
         _editingChanged(){
           if(this.editing != null){
             this.idItem = this.editing.id ;
+            // copie des données avant modification
+            this.itemAvantEdition = JSON.parse(JSON.stringify(this.editing));
+
           }else{
             if(this.idItem != null){
               this.$.grid.querySelector('#papercheck-' + this.idItem).checked = false ;
@@ -184,6 +188,7 @@
         }
 
         _traitementsChanged(){
+          console.log('traitement changed', this.traitements)
           if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
             this.nbElt = this.traitements.length;
             this.aTraitement = this._hasResult();
@@ -213,12 +218,56 @@
         }
 
         _cancel(e) {
-          this.editing = null;
-          this.$.grid.clearCache();
+          console.log('id :', e.model.item.id)
+          // annulation d'un ajout
+          if(e.model.item.id === 0){
+            this.traitements.shift();
+          // annulation d'une modif
+          }else{
+            this.traitements[e.model.index] = this.itemAvantEdition;
+            this.editing = null;
+          }
+          this.$.grid.clearCache(); // ne semble pas fonctionner
+
+
+        }
+
+        addTraitement(){
+          this.traitements.unshift({archive:false,
+                                    commentaires: '',
+                                    conseils:'',
+                                    dateVisite:'',
+                                    dateVisiteString:Elith.Utils.formatDate(new Date()),
+                                    domicile:false,
+                                    fraisKm:0,
+                                    id:0,
+                                    idClient: 0,
+                                    idClinique :0,
+                                    km : 0,
+                                    login : 0,
+                                    modePaiement: 'espèces',
+                                    nomTherapeute : '',
+                                    prix : 0,
+                                    raison : '',
+                                    tps : 0,
+                                    traitement : '',
+                                    tvq : 0
+          });
+          this.editing = this.traitements[0];
+          this._traitementsChanged();
+
         }
 
         //todo
         _add(e) {
+
+          console.log('add');
+          this.traitements.unshift({item: {}});
+            this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
+            this.$.grid.clearCache();
+
+            this.$.firstname.value = '';
+            this.$.lastname.value = '';
 
         }
 

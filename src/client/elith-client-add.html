@@ -44,6 +44,7 @@
                 </div>
                 <div class="bouton">
                     <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{client}}" hidden="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
+                    <paper-icon-button icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
                     <paper-icon-button on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                 </div>
             </div>
