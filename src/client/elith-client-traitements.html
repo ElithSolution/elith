@@ -50,7 +50,7 @@
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
             <div class="divBouton" hidden$="[[!aTraitement]]">
                 [[nbElt]] résultat(s).
-                <paper-button raised class="ajout" on-tap="addTraitement" >
+                <paper-button raised class="ajout" on-tap="addTraitement" disabled="[[editing]]" >
                     Ajouter
                 </paper-button>
             </div>
@@ -66,7 +66,8 @@
                                 <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <div class="boutonCouleur">
-                                    <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isNewItem(item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                                 </div>
                             </div>
@@ -188,7 +189,6 @@
         }
 
         _traitementsChanged(){
-          console.log('traitement changed', this.traitements)
           if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
             this.nbElt = this.traitements.length;
             this.aTraitement = this._hasResult();
@@ -200,6 +200,14 @@
           return (this.nbElt !== 0);
         }
 
+        _isEditingAndNew(editing, item){
+          let idItem = -1 ;
+          if(item != null && typeof(item) != 'undefined' ){
+            idItem = item.id ;
+          }
+          return (idItem != 0 && this._isEditing(editing, item));
+        }
+
         _isEditing(editing, item) {
           // en édition, il faut ouvrir le détail sinon les modifications ne sont pas conservées
           if(item != null && item === editing){
@@ -209,6 +217,14 @@
             }
           }
           return item === editing;
+        }
+
+        _isNewItem(item){
+          let idItem = -1 ;
+          if(item != null && typeof(item) !== 'undefined'){
+            idItem = item.id ;
+          }
+          return idItem === 0 ;
         }
 
         _edit(e) {
@@ -225,8 +241,8 @@
           // annulation d'une modif
           }else{
             this.traitements[e.model.index] = this.itemAvantEdition;
-            this.editing = null;
           }
+          this.editing = null;
           this.$.grid.clearCache(); // ne semble pas fonctionner
 
 
@@ -255,19 +271,6 @@
           });
           this.editing = this.traitements[0];
           this._traitementsChanged();
-
-        }
-
-        //todo
-        _add(e) {
-
-          console.log('add');
-          this.traitements.unshift({item: {}});
-            this.items.unshift({name: {first: this.$.firstname.value, last: this.$.lastname.value}});
-            this.$.grid.clearCache();
-
-            this.$.firstname.value = '';
-            this.$.lastname.value = '';
 
         }
 
