@@ -67,12 +67,14 @@
         border-bottom: 2px solid;
         margin-bottom: 40px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        border-radius: 5px 5px 0 0
+        border-radius: 3px 3px 0 0
       }
 
 
       .authentification{
-        width:60%;
+        width:40%;
+        margin-left: 20%;
+        margin-top : 5%;
       }
 
       .divSearch{
@@ -85,6 +87,7 @@
         justify-content: space-between;
         align-items:flex-end;
         margin-bottom: 5px;
+
       }
 
       .divBouton[hidden]{
@@ -97,6 +100,14 @@
         padding: 0;
         color: var(--elith-header-text-color);
         background-color: var(--elith-base-color);
+      }
+
+      .divContainer{
+        width:100%;
+        display:flex;
+        justify-content: space-around;
+        margin-bottom: 40px;
+        flex-wrap: wrap;
       }
 
       .clientNameHeader{
@@ -129,7 +140,7 @@
         margin: 24px;
         color: var(--elith-primary-color-dark);
         background-color: var(--elith-white);
-        border-left: 20px solid var(--elith-primary-color);
+        border-left: 10px solid var(--elith-primary-color);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
@@ -153,7 +164,7 @@
 
       .card-form, .card, .authentification, .divSearch{
         color: #757575;
-        border-radius: 5px;
+        border-radius: 2px;
         background-color: #fff;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
@@ -173,20 +184,29 @@
 
 
 
-      fieldset{
+
+
+      fieldset.large{
+        width:100%;
         border:none;
-        border-radius: 5px;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+      }
+
+      fieldset{
+
+        border:none;
+        border-left: 5px solid var(--elith-primary-color);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
 
       fieldset legend{
-        font-size: 1.5rem;
-        color: var(--elith-secondary-color-light);
+        font-size: 1 rem;
+        color: var(--elith-base-color-dark);
         border-bottom: none;
       }
 
       fieldset.collapse legend{
-        font-size: 1.5rem;
+        font-size: 1 rem;
         border-bottom: 1px dashed;
         color: var(--elith-primary-color-dark);
       }

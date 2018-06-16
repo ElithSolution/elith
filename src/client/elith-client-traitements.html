@@ -45,7 +45,7 @@
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-        <fieldset>
+        <fieldset class="large">
             <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
             <div class="divBouton" hidden$="[[!aTraitement]]">
@@ -54,7 +54,8 @@
                     Ajouter
                 </paper-button>
             </div>
-                <vaadin-grid active-item="{{activeItem}}"
+                <vaadin-grid theme="row-stripes"
+                                 active-item="{{activeItem}}"
                                  id="grid"
                                  items="[[traitements]]"
                                  column-reordering-allowed
@@ -130,8 +131,11 @@
                                 <div style="text-align: right;">
                                     <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
                                     <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden="[[!_isEditing(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isNewItem(item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+
+
                                 </div>
                             </template>
                         </vaadin-grid-column>

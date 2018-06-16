@@ -42,9 +42,9 @@
         <!------------------------------------------------------------------------------------------------>
 
         <dom-if if="{{!hasError}}">
-            <template>
-                <div class="container">
-                    <div class="clientNameHeader"><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+            <template >
+                <div class="container" >
+                    <div class="clientNameHeader" ><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     </div>
                     <div class="bouton">
                         <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>

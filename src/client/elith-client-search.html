@@ -14,15 +14,10 @@
     <style include="elith-styles">
       :host {
         display: block;
-        padding: 10px;
+        padding: 5px;
       }
 
-      .divContainer{
-        width:100%;
-        display:flex;
-        justify-content: space-around;
-        margin-bottom: 40px;
-      }
+
 
 
 
@@ -39,8 +34,8 @@
       <elith-error code="{{erreur}}"></elith-error>
     </div>
 
-    <div class="divContainer" >
-      <div class="divSearch">
+    <div class="divContainer">
+      <div class="divSearch" >
         <vaadin-combo-box-light  id="clientSearch"
                                  items="{{clients}}"
                                  item-value-path="client.id"
