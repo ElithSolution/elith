@@ -70,6 +70,10 @@
               type: Object,
               notify: true,
             },
+            itemid:{
+              type: Object,
+              notify: true,
+            },
             module: String,
             hidden: Object,
             methode : String,
@@ -159,6 +163,7 @@
         /**************************************************************************************************************/
         _post(){
           this.callAjax();
+          this.focus = null ;
          }
         /**************************************************************************************************************/
         _update(){
@@ -178,10 +183,16 @@
 
         confirm(){
           if(this.element !== null){
+            console.log(this.element.id);
             this.callAjax(this.element.id);
               // si c'est dans un tableau :
               if(this.elements != null){
                 let index = this.elements.indexOf(this.element);
+                if(index === -1){
+                  // on trouve l'index en se fiant à l'id
+                  index = this.trouverIndex(this.elements, this.element);
+                }
+
                 this.elements.splice(index, 1);
                 // POUR QUE ÇA NOTIFIE LE CHANGEMENT
                 this.elements = this.elements.slice();
@@ -196,6 +207,18 @@
           Polymer.dom(body).appendChild(this.$.dialogErreur);
           this.$.dialogErreur.open();
         }
+        /**************************************************************************************************************/
+
+        trouverIndex(elements, element){
+          if(element !== null){
+            let i;
+            for (i = 0; i < elements.length; i++) {
+              if(element.id === elements[i].id) return i ;
+            }
+          }
+
+        }
+
         /**************************************************************************************************************/
         handleResponse(event) {
           try{
@@ -214,6 +237,7 @@
              // pour les autres modules
             }else{
               this.element = this.response.items["0"][this.module];
+              this.itemid = this.element.id;
               this.path = `${this.module}/${this.element.id}`;
               this.erreur = this.response.errorResponse.code
 

@@ -67,9 +67,11 @@
                                 <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <div class="boutonCouleur">
-                                    <elith-iron-ajax hidden="[[!_isNewItem(item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <!-- boutons du bas -->
+                                    <elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
                                     <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+
                                 </div>
                             </div>
                         </template>
@@ -89,7 +91,7 @@
                         <vaadin-grid-column width="30%" resizable>
                             <template class="header">Raison</template>
                             <template>
-                                <paper-input id="raison-[[item.id]]"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
+                                <paper-input id="raison-{{item.id}}"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
                             </template>
                         </vaadin-grid-column>
                         <vaadin-grid-column width="10%" resizable>
@@ -120,21 +122,16 @@
                                 </paper-dropdown-menu>
                             </template>
                         </vaadin-grid-column>
-                      <!--  <vaadin-grid-column width="10%">
-                            <template class="header" align="center"> <paper-icon-button icon="elith-icons:visibility" disabled></paper-icon-button></template>
-                            <template>
-                                <paper-checkbox align="center" id="papercheck-[[item.id]]" checked="{{detailsOpened}}" disabled="[[_isEditing(editing, item)]]"></paper-checkbox>
-                            </template>
-                        </vaadin-grid-column>-->
                         <vaadin-grid-column width="15%" resizable>
-                            <template >
+                            <template>
                                 <div style="text-align: right;">
+                                    <!-- boutons du haut-->
                                     <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
                                     <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden="[[!_isNewItem(item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
-                                    <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
 
+                                    <!--<elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>-->
+                                    <!--<elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>-->
+                                    <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
 
                                 </div>
                             </template>
@@ -170,14 +167,32 @@
               type: Boolean,
               value : false,
             },
+            itemid: {
+              type: Object,
+              observer: '_itemChanged',
+              value : 0,
+            },
             itemAvantEdition : Object,
           }
+
+
         }
 
 
         ready() {
           super.ready();
           this.editing = null;
+        }
+
+        _itemChanged(){
+          if(this.traitements !== null && typeof(this.traitements) !== 'undefined'){
+            if(this.itemid !== 0){
+              this.traitements[0].id = this.itemid ;
+              this.$.grid.querySelector('#raison-0').id = 'raison-' + this.itemid;
+              this.$.grid.querySelector('#papercheck-0').id = 'papercheck-' + this.itemid;
+            }
+
+          }
         }
 
         _editingChanged(){
@@ -207,10 +222,10 @@
 
         _isEditingAndNew(editing, item){
           let idItem = -1 ;
-          if(item != null && typeof(item) != 'undefined' ){
+          if(item !== null && typeof(item) !== 'undefined' ){
             idItem = item.id ;
           }
-          return (idItem != 0 && this._isEditing(editing, item));
+          return (idItem !== 0 && this._isEditing(editing, item));
         }
 
         _isEditing(editing, item) {
@@ -224,25 +239,27 @@
           return item === editing;
         }
 
-        _isNewItem(item){
-          let idItem = -1 ;
+        _isNewItem(item, itemid){
+          let newItem = -1 ;
           if(item != null && typeof(item) !== 'undefined'){
-            idItem = item.id ;
+            if(item.id === 0){
+              return itemid === 0 ;
+            }
           }
-          return idItem === 0 ;
+          return newItem === 0 ;
         }
 
         _edit(e) {
           var item = e.model.item;
           this.editing = item;
-          this.$.grid.querySelector('#raison-' + e.model.item.id).focus();
+          this.$.grid.querySelector('#raison-' + item.id).focus();
         }
 
         _cancel(e) {
-          console.log('id :', e.model.item.id)
           // annulation d'un ajout
           if(e.model.item.id === 0){
             this.traitements.shift();
+            this.nbElt = this.traitements.length;
           // annulation d'une modif
           }else{
             this.traitements[e.model.index] = this.itemAvantEdition;
@@ -254,6 +271,7 @@
         }
 
         addTraitement(){
+          this.itemid = 0 ;
           this.traitements.unshift({archive:false,
                                     commentaires: '',
                                     conseils:'',
