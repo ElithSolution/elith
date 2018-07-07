@@ -14,12 +14,14 @@
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
 <link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="elith-icons.html">
 
 <link rel="import" href="styles/elith-styles.html">
 
 <link rel="import" href="elith-login.html">
 <link rel="import" href="elith-logout.html">
+<link rel="import" href="client/elith-client-quick-search.html">
 <link rel="lazy-import" href="elith-accueil.html">
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
@@ -97,13 +99,24 @@
         display: none;
       }
 
-      .menu-principal {
-        margin-top: 40px
-      }
-
       div.login {
         width:100%;
         text-align: right;
+      }
+
+      div.search {
+        width:100%;
+        height:40px;
+        text-align: left;
+        border-radius: 5px 5px 5px 5px;
+        margin-right: 180px;
+        background-color: var(--elith-base-color-less-light);
+        min-width: 320px;
+        max-width: 400px;
+        display: inline-flex;
+        align-items:flex-end;
+        overflow: hidden;
+
       }
 
 
@@ -118,73 +131,81 @@
 
       }
 
+
+      .main-header {
+        box-shadow: 0px 5px 6px -3px rgba(0, 0, 0, 0.4);
+      }
+
+      .main-header paper-icon-button.menu-button{
+        height: 120px;
+        width: 120px;
+        margin: 1em;
+      }
+
+
+      paper-tabs {
+        --paper-tabs-selection-bar-color: #fff;
+        height: 100%;
+        position: absolute;
+        left: 100px;
+        min-width: 40%;
+      }
+      paper-tab {
+        --paper-tab-ink: #aaa;
+        text-transform: uppercase;
+      }
+      [hidden] {
+        display: none !important;
+      }
+
+
+
     </style>
 
     <app-location
-      route="{{route}}"
-      url-space-regex="^[[rootPath]]">
+            route="{{route}}"
+            url-space-regex="^[[rootPath]]">
     </app-location>
     <app-route
-      route="{{route}}"
-      pattern="[[rootPath]]:page"
-      data="{{routeData}}"
-      tail="{{subRoute}}">
+            route="{{route}}"
+            pattern="[[rootPath]]:page"
+            data="{{routeData}}"
+            tail="{{subRoute}}">
     </app-route>
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
 
-    <app-drawer-layout fullbleed narrow="{{narrow}}">
+    <app-drawer-layout force-narrow>
+
+      <app-drawer id="drawer" slot="drawer">
+
+        <app-toolbar></app-toolbar>
 
 
-      <!-- Drawer content -->
-      <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]" hidden$="[[!storedUser.loggedin]]">
-        <app-header-layout has-scrolling-region>
-
-          <app-header style="height: 96px;"  slot="header" fixed effects="waterfall" >
-            <app-toolbar >
-              <slot name="logo">
-                <paper-icon-button src="../images/logo.png" class="logo">Logo</paper-icon-button>
-              </slot>
-            </app-toolbar>
-          </app-header>
-
-          <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation" hidden$="[[!storedUser.loggedin]]" >
-             <div class="menu-principal">
-               <paper-item >
-                 <a name="elith-accueil" href="[[rootPath]]accueil">
-                   <paper-icon-button icon="home"></paper-icon-button>
-                   Accueil
-                 </a>
-               </paper-item>
-               <paper-item>
-                 <a name="elith-client" href="[[rootPath]]client/">
-                   <paper-icon-button icon="elith-icons:client"></paper-icon-button>
-                   Clients</a>
-               </paper-item>
-              <a name="elith-produit" href="[[rootPath]]produit/">
-                <paper-icon-button icon="card-giftcard"></paper-icon-button>
-                Produits</a>
-              <a name="elith-horaire" href="[[rootPath]]horaire/">
-                <paper-icon-button icon="date-range"></paper-icon-button>
-                Horaire</a>
-             </div>
-          </iron-selector>
-        </app-header-layout>
+        <!-- Nav on mobile: side nav menu -->
+        <paper-listbox selected="[[page]]" attr-for-selected="name">
+          <template is="dom-repeat" items="{{items}}">
+            <paper-item name$="{{item}}">
+              <a name="elith-accueil" href="[[rootPath]]{{item}}"> <paper-icon-button icon="elith-icons:{{item}}"></paper-icon-button>{{item}}</a></paper-item>
+          </template>
+        </paper-listbox>
       </app-drawer>
 
-      <!-- Main content -->
-      <app-header-layout has-scrolling-region>
-        <app-header style="height: 96px;"  slot="header" condenses reveals effects="waterfall">
-          <app-toolbar style="height: 64px;" class="toolbar" hidden$="[[!storedUser.loggedin]]">
-            <paper-icon-button icon="elith-icons:menu" drawer-toggle></paper-icon-button>
+      <app-header-layout>
+        <app-header class="main-header" slot="header">
+          <app-toolbar>
+            <paper-icon-button class="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
 
-            <div class="login" hidden$="[[!storedUser.loggedin]]">
-              <paper-menu-button
-                      horizontal-align="right"
-                      no-animations>
-                <paper-icon-button icon="elith-icons20:user" slot="dropdown-trigger"></paper-icon-button>
+            <div class="login"></div>
+            <div class="search">
+              <elith-client-quick-search update="{{update}}"></elith-client-quick-search>
+            </div>
+            <!--section compte utilisateur-->
+            <div class="bubbleLogin" hidden$="[[!storedUser.loggedin]]">
+              <paper-menu-button dynamic-align no-animations>
+                <paper-icon-button class="large" icon="elith-icons:user" slot="dropdown-trigger"></paper-icon-button>
                 <paper-listbox slot="dropdown-content">
                   <paper-item disabled>[[storedUser.name]]</paper-item>
                   <paper-item>Mon profil</paper-item>
@@ -192,14 +213,28 @@
                 </paper-listbox>
               </paper-menu-button>
             </div>
+
+
+
+
           </app-toolbar>
+
+          <app-toolbar class="tabs-bar" hidden$="{{!wideLayout}}">
+            <!-- Nav on desktop: tabs -->
+            <paper-tabs selected="[[page]]" attr-for-selected="name" hidden$="[[!storedUser.loggedin]]">
+              <template is="dom-repeat" items="{{items}}">
+                <paper-tab name$="{{item}}"><a name="elith-accueil" href="[[rootPath]]{{item}}">{{item}}</a></paper-tab>
+              </template>
+            </paper-tabs>
+          </app-toolbar>
+
         </app-header>
 
         <iron-pages
-          selected="[[page]]"
-          attr-for-selected="name"
-          fallback-selection="view404"
-          role="main">
+                selected="[[page]]"
+                attr-for-selected="name"
+                fallback-selection="view404"
+                role="main">
           <elith-login name="login"></elith-login>
           <elith-accueil name="accueil"></elith-accueil>
           <elith-client name="client" route="[[subRoute]]"></elith-client>
@@ -207,9 +242,11 @@
           <elith-horaire name="horaire"></elith-horaire>
           <elith-view404 name="view404"></elith-view404>
         </iron-pages>
-      </app-header-layout>
-    </app-drawer-layout>
 
+      </app-header-layout>
+
+    </app-drawer-layout>
+    <iron-media-query query="min-width: 800px" query-matches="{{wideLayout}}"></iron-media-query>
 
   </template>
 
@@ -239,6 +276,28 @@
             type : Boolean,
             value : false,
           },
+          update : Boolean, //todo : propager l'update
+
+
+
+          wideLayout: {
+            type: Boolean,
+            value: false,
+            observer: 'onLayoutChange',
+          },
+          items: {
+            type: Array,
+            value: function() {
+              return ['accueil', 'client', 'produit', 'horaire', 'finances'];
+            }
+          }
+        }
+      }
+
+      onLayoutChange(wide) {
+        var drawer = this.$.drawer;
+        if (wide && drawer.opened) {
+          drawer.opened = false;
         }
       }
 

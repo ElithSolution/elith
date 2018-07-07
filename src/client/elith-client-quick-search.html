@@ -2,6 +2,7 @@
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
 <link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+<link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../styles/elith-styles.html">
@@ -9,23 +10,29 @@
 <link rel="import" href="../elith-iron-ajax.html">
 
 
-<dom-module id="elith-client-search">
+<dom-module id="elith-client-quick-search">
   <template>
     <style include="elith-styles">
-      :host {
-        display: block;
-        padding: 5px;
-      }
 
-      paper-button {
-        background-color: var(--elith-primary-color-dark);
-        border-radius: 0 0 0 0;
-        color: var(--elith-white);
-        width: 150px;
-        margin-bottom: 15px;
-        margin-left: 20px;
 
-      }
+    vaadin-combo-box-light {
+
+      padding-left: 10px;
+      min-width: 340px;
+      display: block;
+    }
+
+     paper-icon-button[disabled]{
+       color: var(--elith-white);
+     }
+
+    paper-input{
+      --paper-input-container-input-color: var(--elith-white);
+      --paper-input-container: { padding: 0;};
+      --paper-input-container-underline: { display: none; height: 0;};
+      --paper-input-container-underline-focus: { display: none; };
+      --paper-input-container-color: #f1f1f1;
+    }
 
 
 
@@ -38,70 +45,48 @@
     <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
 
 
-    <div hidden$="{{!hasError}}">
-      <elith-error code="{{erreur}}"></elith-error>
-    </div>
 
-    <div class="container" >
-      <div class="divContainer">
-        <div class="divSearch" >
-          <vaadin-combo-box-light  id="clientSearch"
-                                   items="{{clients}}"
-                                   item-value-path="client.id"
-                                   item-label-path="client.nomComplet"
-                                   style="display: block; width: 100%;">
-            <paper-input label="Nom de la personne" value=[[search]]>
-              <template>
-                <style is="custom-style">
-                  paper-item:hover {
-                    background: var(--elith-primary-color) !important;
-                    font-weight: bold;
-                    margin-top: -10px;
-                    margin-bottom: -10px;
-                    margin-left: -10px;
-                    margin-right: -10px;
-                  }
-                </style>
 
-                <paper-item>
-                  <paper-item-body two-line>
-                    <div>[[item.client.prenom]] [[item.client.nom]]</div>
-                    <div secondary>[[item.client.dateNaissanceString]]</div>
-                  </paper-item-body>
-                </paper-item>
+        <vaadin-combo-box-light  id="clientSearch"
+                                 items="{{clients}}"
+                                 item-value-path="client.id"
+                                 item-label-path="client.nomComplet"
+                                 >
 
-              </template>
-              <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
-            </paper-input>
-          </vaadin-combo-box-light>
+          <paper-input  no-label-float label="Nom de la personne" value=[[search]]>
+            <template>
+              <style is="custom-style">
+                paper-item:hover {
+                  background: var(--elith-primary-color) !important;
+                  font-weight: bold;
+                  margin-top: -10px;
+                  margin-bottom: -10px;
+                  margin-left: -10px;
+                  margin-right: -10px;
+                }
+              </style>
 
-          <div class="divBouton">
-            [[nbRes]] résultats.
-            </div>
-        </div>
-        <div class="divSearch">
-         <span style="font-style: italic;"> Recherche par téléphone<span>
-        </div>
-      </div>
+              <paper-item>
+                <paper-item-body two-line>
+                  <div>[[item.client.prenom]] [[item.client.nom]]</div>
+                  <div secondary>[[item.client.dateNaissanceString]]</div>
+                </paper-item-body>
+              </paper-item>
 
-      <paper-button raised on-tap="addClient" >
-        Ajouter
-      </paper-button>
-
-    </div>
-    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" >
-      AJOUTER
-    </paper-button>
-
+            </template>
+            <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+            <paper-icon-button slot="prefix" icon="elith-icons:search" disabled></paper-icon-button>
+          </paper-input>
+        </vaadin-combo-box-light>
 
 
   </template>
 
 
   <script>
-     class ElithClientsearch extends Polymer.Element {
+     class ElithClientQuicksearch extends Polymer.Element {
       static get is () {
-        return 'elith-client-search'
+        return 'elith-client-quick-search'
       }
 
       static get properties () {
@@ -203,6 +188,6 @@
     }
 
 
-    window.customElements.define(ElithClientsearch.is, ElithClientsearch)
+    window.customElements.define(ElithClientQuicksearch.is, ElithClientQuicksearch)
   </script>
 </dom-module>

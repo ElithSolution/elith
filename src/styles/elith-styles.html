@@ -13,6 +13,7 @@
       paper-input, paper-textarea, paper-dropdown-menu, paper-tab[disabled] {
         --paper-input-container-input-color: var(--elith-disabled-text-color);
         --paper-input-container-disabled: {opacity: 1;};
+
       }
 
 
@@ -55,21 +56,100 @@
         max-height: 600px;
       }
 
+      paper-icon-button.large{
+        height: 60px;
+        width: 60px;
+        margin: 1em;
+      }
+
       paper-button.ajout {
         background-color: var(--elith-white);
       }
 
 
       .container{
-        width:100%;
+        width:800px;
+        margin: 0 auto;
         color: var(--elith-base-color-dark);
-        background-color: var(--elith-primary-color-dark);
-        border-bottom: 2px solid;
         margin-bottom: 40px;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        border-radius: 3px 3px 0 0
+        border-radius: 3px 3px 0 0;
+        background-color: var(--elith-white);
+
       }
 
+      .container::after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: 150px;
+        top: 50px;
+        width: 2px;
+        height: 100%;
+        background: hsla(0,0%,100%,.1);
+        background: rgba(0,0,0,.05);
+        z-index: 1;
+      }
+
+      .login:after {
+        content: "";
+        display: block;
+        position: absolute;
+        right: 150px;
+        width: 2px;
+        height: 250px;
+        background: hsla(0,0%,100%,.1);
+        z-index: 1;
+      }
+
+
+
+      .bubbleLogin, .bubble1, .bubble2, .bubbleBig {
+        position: absolute;
+        background-color: #ccc;
+        border: 3px solid #fff;
+        width: 50px;
+        height: 50px;
+        right:125px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        border-radius: 50%;
+        z-index: 10;
+        text-decoration: none;
+        color: #fff;
+        -webkit-transition: all .3s ease-in-out;
+        transition: all .3s ease-in-out;
+      }
+
+      .bubble1{
+        top: 365px;
+      }
+
+      .bubble2{
+        top: 420px;
+      }
+
+      .bubbleLogin {
+        right:120px;
+        top: 15px;
+        width: 60px;
+        height: 60px;
+      }
+
+      .bubbleBig {
+        left:80px;
+        top: 200px;
+        width: 90px;
+        height: 90px;
+        background-color: var(--elith-primary-color);
+      }
 
       .authentification{
         width:40%;
@@ -111,12 +191,17 @@
       }
 
       .clientNameHeader{
-        width:60%;
+        width:100%;
+        height : 100px;
         display: inline-flex;
-        margin-left:40px;
-        padding-top: 5px;
         color:var(--elith-header-text-color);
+        background-color: var(--elith-primary-color-dark);
 
+      }
+
+      .clientNameHeader h1 {
+        margin-left: 40px;
+        padding-top: 25px;
       }
 
       .bouton {

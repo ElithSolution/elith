@@ -26,7 +26,14 @@
     </app-route>
 
 
-    <elith-client-search update="{{update}}"></elith-client-search>
+    <dom-if if="[[!affichagePermis(isIdPage,update)]]">
+      <template>
+        <elith-client-search update="{{update}}"></elith-client-search>
+      </template>
+    </dom-if>
+
+
+
 
 
     <dom-if if="[[affichagePermis(isIdPage,update)]]">
@@ -72,10 +79,13 @@
           idClient: Number,
           isIdPage: Boolean,
           isAddPage: Boolean,
-          update : Boolean,
-          isDeleted:Boolean,
+          update : {
+            type: Boolean,
+            notify: true,
+          },
+          isDeleted: Boolean,
           added:{
-            observer : '_addedChanged',
+            observer: '_addedChanged',
           },
           client: Object,
         }

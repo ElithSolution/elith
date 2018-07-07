@@ -44,25 +44,33 @@
         <dom-if if="{{!hasError}}">
             <template >
                 <div class="container" >
-                    <div class="clientNameHeader" ><h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                    <div class="clientNameHeader" >
+                        <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     </div>
                     <div class="bouton">
-                        <paper-icon-button icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+
                         <elith-iron-ajax hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}" hidden="[[invalide]]"></elith-iron-ajax>
-                        <paper-icon-button icon="elith-icons:put"  hidden$="[[!invalide]]" disabled="[[invalide]]"></paper-icon-button>
-                        <elith-iron-ajax element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
+                        <paper-icon-button icon="elith-icons:put" hidden$="[[!invalide]]" disabled="[[invalide]]"></paper-icon-button>
+
                     </div>
+
+                    <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                    <elith-iron-ajax class="bubble2" element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
+
+                    <iron-form id="modifClient">
+                        <form is="iron-form" id="updateClient" method="post">
+                            <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}"></elith-client-form>
+                        </form>
+                    </iron-form>
+                    <!------------------------------------------------------------------------------------------------>
+                    <!--------------------        Affichage des traitements de la personne        -------------------->
+                    <!------------------------------------------------------------------------------------------------>
+                    <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
+
+
                 </div>
 
-                <iron-form id="modifClient">
-                    <form is="iron-form" id="updateClient" method="post">
-                        <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}"></elith-client-form>
-                    </form>
-                </iron-form>
-                <!------------------------------------------------------------------------------------------------>
-                <!--------------------        Affichage des traitements de la personne        -------------------->
-                <!------------------------------------------------------------------------------------------------>
-                <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
+
             </template>
 
         </dom-if>
