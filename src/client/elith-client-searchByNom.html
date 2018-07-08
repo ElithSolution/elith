@@ -1,0 +1,194 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/app-route/app-location.html">
+<link rel="import" href="../../bower_components/vaadin-combo-box/vaadin-combo-box-light.html">
+<link rel="import" href="../../bower_components/paper-search/paper-search-panel.html">
+<link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
+<link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../styles/elith-styles.html">
+<link rel="import" href="../elith-utils.html">
+<link rel="import" href="../elith-iron-ajax.html">
+
+
+<dom-module id="elith-client-searchbynom">
+  <template>
+    <style include="elith-styles">
+      :host {
+        display: block;
+        padding: 5px;
+      }
+
+      vaadin-combo-box-light {
+        padding-left: 10px;
+        min-width: 340px;
+        display: block;
+      }
+
+      paper-icon-button[disabled]{
+        color: var(--elith-white);
+      }
+
+      paper-input{
+        --paper-input-container-input-color: var(--elith-white);
+        --paper-input-container: { padding: 0;};
+        --paper-input-container-underline: { display: none; height: 0;};
+        --paper-input-container-underline-focus: { display: none; };
+        --paper-input-container-color: #f1f1f1;
+      }
+
+    </style>
+
+    <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
+    <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+    <app-location route="{{route}}"></app-location>
+
+    <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
+
+
+
+
+          <vaadin-combo-box-light  id="clientSearch"
+                                   items="{{clients}}"
+                                   item-value-path="client.id"
+                                   item-label-path="client.nomComplet"
+                                   style="display: block; width: 100%;">
+            <paper-input label="Nom de la personne" value=[[search]]>
+              <template>
+                <style is="custom-style">
+                  paper-item:hover {
+                    background: var(--elith-primary-color) !important;
+                    font-weight: bold;
+                    margin-top: -10px;
+                    margin-bottom: -10px;
+                    margin-left: -10px;
+                    margin-right: -10px;
+                  }
+                </style>
+
+                <paper-item>
+                  <paper-item-body two-line>
+                    <div>[[item.client.prenom]] [[item.client.nom]]</div>
+                    <div secondary>[[item.client.dateNaissanceString]]</div>
+                  </paper-item-body>
+                </paper-item>
+
+              </template>
+              <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+              <paper-icon-button slot="prefix" icon="elith-icons:search" disabled></paper-icon-button>
+            </paper-input>
+          </vaadin-combo-box-light>
+
+    <div class="divBouton" hidden$="{{noresult}}">
+      [[nbRes]] résultats.
+    </div>
+  </template>
+
+
+  <script>
+     class ElithClientsearchbynom extends Polymer.Element {
+      static get is () {
+        return 'elith-client-searchbynom'
+      }
+
+      static get properties () {
+        return {
+          storedUser: {
+            type:   Object,
+            observer: '_onStoredUserChanged',
+          },
+          routeData:  Object,
+          route:      Object,
+          clients:    Object,
+          search:     {
+            type:     String,
+            value:    '',
+          },
+          nbRes: Number,
+          idclient: Number,
+          update:{
+            type : Boolean,
+            notify: true,
+            observer: '_updateChanged'
+          },
+          initcall:{
+            type: Object,
+          },
+          resultat: {
+            type: Object,
+            notify: true,
+            observer: '_resultatChanged',
+          },
+          erreur:{
+            type: Object,
+          },
+          noresult: Boolean,
+        }
+      }
+
+
+
+      addClient(){
+        let path = '/client/add';
+        this.set('route.path', path);
+      }
+
+      _resultatChanged () {
+        let hasError ;
+        if(this.resultat != null && typeof(this.resultat) !== 'undefined'){
+          //this.codeErreur = this.resultat.errorResponse.code;
+          this.erreur = this.resultat.code;
+          // todo : à généraliser
+          if(this.erreur == '401'){
+            this.storedUser = null;
+          }
+          hasError = Elith.Utils.hasError(this.erreur); // todo : n'est pas défini
+          if(!hasError){
+            this.clients = this.resultat.items;
+            this.nbRes = this.resultat.items.length;
+          }
+
+        }else{
+          this.clients = null ;
+        }
+      }
+
+
+      _onStoredUserChanged(){
+        if (this.storedUser !== null && typeof(this.storedUser) !== 'undefined') {
+          // si initcall n'est pas null, on vérifie si on a déjà fait un appel
+          if (this.initcall !== null && typeof(this.initcall) !== 'undefined') {
+            // si initcall a déjà la valeur du storedUser, on a déjà fait un appel
+            if(this.initcall.name !== this.storedUser.name){
+              this.initcall =  this.storedUser;
+                          }
+          // on fait l'appel après un initcall à null
+          }else{
+            this.initcall =  this.storedUser;
+          }
+        // pas de storedUser, on veut pas aller chercher la liste
+        }else{
+          this.initcall = null ;
+        }
+      }
+
+      ready(){
+        super.ready();
+        let combobox = this.$.clientSearch;
+        combobox.addEventListener('value-changed', () => {
+          this.idclient = combobox.value;
+          let path = ['/client', this.idclient].join('/') ;
+          this.set('route.path', path);
+        });
+      }
+
+      _updateChanged() {
+        if(this.update){
+          this.$.clientSearch.value = ''; // pour vider le champ de recherche
+          this.initcall = 'true'; // pour forcer un rafraichissement de la liste des clients
+        }
+      }
+    }
+
+
+    window.customElements.define(ElithClientsearchbynom.is, ElithClientsearchbynom)
+  </script>
+</dom-module>
