@@ -13,13 +13,14 @@
         <style include="elith-styles">
             :host {
                 display: block;
+                padding-top: 10px;
+                padding-bottom: 10px;
             }
         </style>
 
 
         <div class="divContainer" >
-            <fieldset id="1" collapsed="true">
-                <legend on-tap="toogleFieldset">Renseignements personnels</legend>
+            <fieldset id="1" hidden$="[[_affichageSection(section, '1')]]">
                 <div>
                     <vaadin-form-layout>
                         <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]" auto-validate invalid="{{nomInvalide}}" required ></paper-input>
@@ -38,8 +39,7 @@
                 </div>
             </fieldset>
 
-            <fieldset id="2" collapsed="false">
-                <legend on-tap="toogleFieldset">Informations médicales</legend>
+            <fieldset id="2" hidden$="[[_affichageSection(section, '2')]]">
                 <div>
                 <vaadin-form-layout>
                     <paper-textarea label="Autres thérapies" value="{{client.autresTherapies}}" disabled$="[[!edition]]"></paper-textarea>
@@ -62,26 +62,26 @@
                 </div>
             </fieldset>
 
-        <fieldset id="3" collapsed="false">
-            <legend on-tap="toogleFieldset">Notes du thérapeute</legend>
+        <fieldset id="3" hidden$="[[_affichageSection(section, '3')]]">
             <div>
                 <vaadin-form-layout>
-
                     <paper-input label="Référé par" value="{{client.refere}}" disabled$="[[!edition]]"></paper-input>
-
-
                     <paper-textarea label="Historique de la douleur" value="{{client.histoDouleur}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="Constatations" value="{{client.constatations}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="Attention" value="{{client.attentions}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="À ne pas masser" value="{{client.pasMasser}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="Note" value="{{client.note}}" disabled$="[[!edition]]"></paper-textarea>
 
-
-
                 </vaadin-form-layout>
             </div>
         </fieldset>
 
+        <fieldset id="4" hidden$="[[_affichageSection(section, '4')]]">
+            <!------------------------------------------------------------------------------------------------>
+            <!--------------------        Affichage des traitements de la personne        -------------------->
+            <!------------------------------------------------------------------------------------------------>
+            <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
+        </fieldset>
         </div>
 
 </template>
@@ -121,83 +121,35 @@
             },
             invalide :{
               notify : true,
-            }
+            },
+            section : Object,
+            traitements : Object,
 
           }
         }
 
+
+        _affichageSection(section, id){
+          let res = true ;
+          switch (section) {
+            case 'RENSEIGNEMENTS':
+              if (id == '1') res = false; break ;
+            case 'INFO' :
+              if (id == '2') res = false; break ;
+            case 'NOTES' :
+              if (id == '3') res = false; break ;
+            case 'TRAITEMENTS' :
+              if (id == '4') res = false; break ;
+            default :
+              res = true;
+          }
+          return res ;
+        }
 
         invalideChanged(){
            this.invalide = this.nomInvalide || this.prenomInvalide || this.enfantInvalide || this.dateInvalide || this.emailInvalide;
         }
-
-        clientChanged(){
-          this.constructCollapsableFieldsets(this.edition);
-        }
-
-
-        constructCollapsableFieldsets(e){
-          let allFsets = Polymer.dom(this.root).querySelectorAll('fieldset');
-          let fset = null;
-          for (let i=0; i<allFsets.length; i++){
-            fset = allFsets[i];
-            if(fset.attributes['collapsed'] != null)
-              this.classeCollapse(fset, fset.attributes['collapsed'].value, e);
-          }
-        }
-
-        appliquerStyle(div, field){
-          if(div.className !== 'divContainer'){
-            if (div.style.display != 'none'){
-              div.style.display = 'none';
-              if(!this.edition) field.classList.add('collapse');
-              field.attributes['collapsed'].value = true ;
-            }else{
-              div.style.display = '';
-              field.classList.remove('collapse');
-              field.attributes['collapsed'].value = false ;
-            }
-          }
-
-        }
-
-        toogleFieldset(args){
-          let fields = Polymer.dom(this.root).querySelectorAll('fieldset');
-          let divs = Polymer.dom(this.root).querySelectorAll('div');
-          let i = args.path[1].id;
-          this.appliquerStyle(divs[i], fields[i-1]);
-        }
-
-        classeCollapse(fset, collapsed, modeEdition){
-          //main content:
-          let divContent = fset.getElementsByTagName('div')[0];
-          if (divContent == null)
-            return;
-             if (collapsed == 'true'){
-               divContent.style.display = 'none';
-               fset.attributes['collapsed'].value = true ;
-               if(!modeEdition) fset.classList.add('collapse');
-             }else{
-               divContent.style.display = '';
-               fset.attributes['collapsed'].value = false ;
-               if(!modeEdition) fset.classList.remove('collapse');
-             }
-        }
-
-        editionChanged(modeEdition){
-          let fieldsets = Polymer.dom(this.root).querySelectorAll('fieldset');
-          for (let i=0; i<fieldsets.length; i++) {
-            // en mode édition on ouvre tout
-            if(modeEdition){
-              fieldsets[i].classList.remove('collapse');
-              fieldsets[i].classList.add('card-form');
-              fieldsets[i].attributes['collapsed'].value = false ;
-            }else{
-              fieldsets[i].classList.remove('card-form');
-            }
-            this.classeCollapse(fieldsets[i], fieldsets[i].attributes['collapsed'].value, modeEdition);
-          }
-        }
+          
 
       }
 

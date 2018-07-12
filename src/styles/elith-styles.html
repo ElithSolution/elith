@@ -5,6 +5,10 @@
   <template>
     <style include="elith-color elith-typography">
 
+      [hidden] {
+        display: none !important;
+      }
+
       paper-input, paper-textarea, paper-dropdown-menu, paper-tab{
         --paper-input-container-input-color: var(--elith-body-text-color);
         --paper-input-container-underline-disabled: {display: none;};
@@ -15,7 +19,6 @@
         --paper-input-container-disabled: {opacity: 1;};
 
       }
-
 
 
       :host paper-icon-button:hover {
@@ -34,6 +37,10 @@
         --paper-tab-ink: var(--elith-primary-color-light);
       }
 
+      paper-tab a:hover {
+        text-decoration: none;
+      }
+
       paper-icon-item:first-child {
         margin-top: 40px
       }
@@ -48,13 +55,6 @@
         margin-top: 25px;
       }
 
-      paper-dialog {
-        color: var(--elith-base-color);
-        width: 100%;
-        height: 100%;
-        max-width: 600px;
-        max-height: 600px;
-      }
 
       paper-icon-button.large{
         height: 60px;
@@ -70,11 +70,12 @@
       .container{
         width:800px;
         margin: 0 auto;
-        color: var(--elith-base-color-dark);
         margin-bottom: 40px;
+        color: var(--elith-base-color-dark);
+        background-color: var(--elith-white);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
         border-radius: 3px 3px 0 0;
-        background-color: var(--elith-white);
+
 
       }
 
@@ -91,20 +92,9 @@
         z-index: 1;
       }
 
-      .login:after {
-        content: "";
-        display: block;
-        position: absolute;
-        right: 150px;
-        width: 2px;
-        height: 250px;
-        background: hsla(0,0%,100%,.1);
-        z-index: 1;
-      }
+      /**********************************               BOUTONS BUBBLE            *************************************/
 
-
-
-      .bubbleLogin, .bubble1, .bubble2, .bubbleBig {
+      .bubbleLogin, .bubble1, .bubble2, .bubble3, .bubbleBig {
         position: absolute;
         background-color: #ccc;
         border: 3px solid #fff;
@@ -129,11 +119,13 @@
       }
 
       .bubble1{
-        top: 365px;
+        top: 280px;
       }
 
       .bubble2{
-        top: 420px;
+        top: 330px;
+      }
+      .bubble3 {
       }
 
       .bubbleLogin {
@@ -150,6 +142,8 @@
         height: 90px;
         background-color: var(--elith-primary-color);
       }
+
+      /****************************************************************************************************************/
 
       .authentification{
         width:40%;
@@ -190,19 +184,33 @@
         flex-wrap: wrap;
       }
 
+
+      /**********************************               CLIENT                    *************************************/
       .clientNameHeader{
-        width:100%;
-        height : 100px;
-        display: inline-flex;
+        height : 70px;
+        display: flex;
         color:var(--elith-header-text-color);
         background-color: var(--elith-primary-color-dark);
 
       }
 
+      .clientSousMenu{
+        height : 40px;
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        background: #E8E8EB;
+        font-family: monospace;
+        font-size: .9em;
+
+      }
+
       .clientNameHeader h1 {
         margin-left: 40px;
-        padding-top: 25px;
+        padding-top: 15px;
       }
+
+      /****************************************************************************************************************/
 
       .bouton {
         float:right;

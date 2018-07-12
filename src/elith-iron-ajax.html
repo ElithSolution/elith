@@ -9,18 +9,8 @@
 <dom-module id="elith-iron-ajax">
     <template>
         <style include="elith-styles">
-            :host{
-                margin:0 auto;
-                witdh: 500px;
-            }
-
-            paper-icon-button{
-                height: 50px;
-                width: 50px;
-
-            }
-
         </style>
+
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
@@ -40,15 +30,16 @@
             Êtes-vous sûr de vouloir supprimer ?
         </paper-alert-dialog>
 
-        <template is="dom-if" if="{{!link}}">
-            <paper-icon-button id="[[id]]"
-                               focus-target="[[focus]]"
-                               hidden="[[hidden]]"
-                               disabled="[[hidden]]"
-                               on-tap="_onAction"
-                               icon="elith-icons:[[methode]]">
-            </paper-icon-button>
-        </template>
+
+        <paper-icon-button id="[[id]]"
+                           focus-target="[[focus]]"
+                           hidden="[[isHidden(hidden, link)]]"
+                           disabled="[[hidden]]"
+                           on-tap="_onAction"
+                           icon="elith-icons:[[methode]]">
+
+        </paper-icon-button>
+
 
         <template is="dom-if" if="{{link}}">
             <paper-button raised class="primary" on-tap="_onAction">
@@ -82,9 +73,11 @@
             },
             module: String,
             hidden: Object,
-            classe: Object,
+            id: {
+              type : String,
+              observer : '_classChanged',
+            },
             methode : String,
-            id: String,
             focus: {
               type: Boolean,
               notify: true,
@@ -115,6 +108,22 @@
           }
         }
 
+
+        _classChanged(e){
+            let bouton = Polymer.dom(this.root).querySelectorAll('paper-icon-button');
+            bouton[0].classList.add('bubble'+e);
+        }
+
+        isHidden(hidden, link){
+          let res = false ;
+          if (link) return true ;
+
+          if(hidden !== null && typeof(hidden) !== 'undefined' ){
+            res = (hidden || !link);
+          }
+
+          return res;
+        }
 
         _initCallAjaxChanged(initcall){
           if(initcall !== null && typeof(initcall) !== 'undefined'){

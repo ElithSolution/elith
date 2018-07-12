@@ -45,8 +45,6 @@
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
-        <fieldset class="large">
-            <legend><iron-icon class="grayIcon" icon="supervisor-account" slot="item-icon"></iron-icon> Traitements</legend>
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
             <div class="divBouton" hidden$="[[!aTraitement]]">
                 [[nbElt]] résultat(s).
@@ -137,8 +135,6 @@
                             </template>
                         </vaadin-grid-column>
                     </vaadin-grid>
-
-        </fieldset>
 
 
     </template>

@@ -1,6 +1,7 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
 <link rel="import" href="../../bower_components/app-route/app-location.html">
 <link rel="import" href="../../bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/iron-form/iron-form.html">
 <link rel="import" href="../../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../../bower_components/brum-global-variable/brum-global-variable.html">
@@ -21,17 +22,16 @@
                 display: block;
                 padding: 20px;
             }
-            .flex-horizontal-with-ratios {
-                @apply --layout-horizontal;
+
+            paper-tabs {
+                height: 30px;
+            }
+            paper-tab {
+                --paper-tab-ink: #fff;
+                text-transform: uppercase;
             }
 
-            .flexchild {
-                @apply --layout-flex;
-            }
 
-            .flex2child {
-                @apply --layout-flex-2;
-            }
         </style>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -47,27 +47,26 @@
                     <div class="clientNameHeader" >
                         <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     </div>
-                    <div class="bouton">
 
-                        <elith-iron-ajax hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}" hidden="[[invalide]]"></elith-iron-ajax>
-                        <paper-icon-button icon="elith-icons:put" hidden$="[[!invalide]]" disabled="[[invalide]]"></paper-icon-button>
-
-                    </div>
-
+                    <elith-iron-ajax id="1" hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
                     <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <elith-iron-ajax class="bubble2" element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
+                    <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
+
+
+                    <div class="clientSousMenu">
+                        <paper-tabs selected="{{selected}}" on-iron-select="_onTabSelected">
+                            <template is="dom-repeat" items="{{items}}">
+                                <paper-tab name$="{{item.id}}">[[item.name]]</paper-tab>
+                            </template>
+
+                        </paper-tabs>
+                    </div>
 
                     <iron-form id="modifClient">
                         <form is="iron-form" id="updateClient" method="post">
-                            <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}"></elith-client-form>
+                            <elith-client-form section=[[section]] client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}" traitements="{{traitements}}"></elith-client-form>
                         </form>
                     </iron-form>
-                    <!------------------------------------------------------------------------------------------------>
-                    <!--------------------        Affichage des traitements de la personne        -------------------->
-                    <!------------------------------------------------------------------------------------------------>
-                    <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
-
-
                 </div>
 
 
@@ -105,11 +104,29 @@
             codeErreur : Object,
             invalide: {
               value : false,
-            }
+            },
+            items: {
+              type: Array,
+              value: function() {
+                return [
+                  {id: 'RENSEIGNEMENTS', name :'renseignements personnels'},
+                  {id: 'INFO', name : 'informations médicales'},
+                  {id: 'NOTES', name:'notes du thérapeute'},
+                  {id: 'TRAITEMENTS', name: 'traitements'}
+                  ];
+              }
+            },
+            section: Object,
+
           }
         }
 
 
+        _onTabSelected(e) {
+          var selectedIndex = e.srcElement.selected;
+          var item = this.items[selectedIndex];
+          this.section = item.id;
+        }
 
         _pathChanged(path){
           if(path !== null && typeof(path) !== 'undefined'){
