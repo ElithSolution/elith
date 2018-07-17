@@ -36,9 +36,7 @@
                 --paper-input-container-underline: { display: none;};
             }
 
-            .bouton {
-                text-align: right;
-            }
+
 
         </style>
 
@@ -48,9 +46,7 @@
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
             <div class="divBouton" hidden$="[[!aTraitement]]">
                 [[nbElt]] résultat(s).
-                <paper-button raised class="ajout" on-tap="addTraitement" disabled="[[editing]]" >
-                    Ajouter
-                </paper-button>
+
             </div>
                 <vaadin-grid theme="row-stripes"
                                  active-item="{{activeItem}}"
@@ -67,7 +63,7 @@
                                 <div class="boutonCouleur">
                                     <!-- boutons du bas -->
                                     <elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
 
                                 </div>
@@ -136,7 +132,9 @@
                         </vaadin-grid-column>
                     </vaadin-grid>
 
-
+        <paper-button raised on-tap="addTraitement" disabled="[[editing]]" >
+            Ajouter
+        </paper-button>
     </template>
 
     <script>

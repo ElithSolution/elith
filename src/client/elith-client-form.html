@@ -94,13 +94,8 @@
 
         static get properties () {
           return {
-            client: {
-              type: Object,
-              observer: 'clientChanged'
-            },
-            edition: {
-              observer: 'editionChanged'
-            },
+            client:Object,
+            edition: Object,
             nomInvalide: {
               value : true,
               observer: 'invalideChanged'
@@ -149,7 +144,7 @@
         invalideChanged(){
            this.invalide = this.nomInvalide || this.prenomInvalide || this.enfantInvalide || this.dateInvalide || this.emailInvalide;
         }
-          
+
 
       }
 

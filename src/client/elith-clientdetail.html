@@ -50,7 +50,7 @@
 
                     <elith-iron-ajax id="1" hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
                     <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
-                    <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}"></elith-iron-ajax>
+                    <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
 
 
                     <div class="clientSousMenu">
@@ -116,11 +116,21 @@
                   ];
               }
             },
-            section: Object,
+            section: {
+              type : Object,
+              observer : '_isTraitement',
+            },
+            isTraitement: {
+              type: Boolean,
+              value : false,
+            },
 
           }
         }
 
+        _isTraitement(){
+          this.isTraitement = (this.section === 'TRAITEMENTS');
+        }
 
         _onTabSelected(e) {
           var selectedIndex = e.srcElement.selected;
