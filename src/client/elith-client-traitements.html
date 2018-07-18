@@ -8,6 +8,7 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-alert-dialog/paper-alert-dialog.html">
+<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
@@ -36,6 +37,10 @@
                 --paper-input-container-underline: { display: none;};
             }
 
+            .test {
+                display : flex ;
+
+            }
 
 
         </style>
@@ -60,10 +65,36 @@
                                 <paper-textarea label="Traitement" id="traitement-[[item.id]]" value="{{item.traitement}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
+                                <div class="test">
+                                    <paper-input label="Prix" type="number" max="9999" id="prix-[[item.id]]"  width="20%" value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
+                                        <div slot="prefix">$</div>
+                                    </paper-input>
+                                    <paper-dropdown-menu id="modePaiement-[[item.id]]" label="Mode de paiement" value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
+                                        <paper-tabs slot="dropdown-content"
+                                                    selected="[[_isModePaiement(item.modePaiement)]]">
+                                            <paper-tab>espèces</paper-tab>
+                                            <paper-tab>chèque</paper-tab>
+                                            <paper-tab>bon cadeau</paper-tab>
+                                            <paper-tab>forfait</paper-tab>
+                                        </paper-tabs>
+                                    </paper-dropdown-menu>
+                                    <paper-dropdown-menu id="tarif-[[item.id]]" label="Tarif appliqué" value="{{item.tarif}}" disabled$="[[!_isEditing(editing, item)]]">
+                                        <paper-tabs slot="dropdown-content"
+                                                    selected="[[_isTarif(item.tarif)]]">
+                                            <paper-tab>Plein tarif</paper-tab>
+                                            <paper-tab>Tarif réduit</paper-tab>
+                                            <paper-tab>Gratuit</paper-tab>
+                                            <paper-tab>Certificat cadeau réduit</paper-tab>
+                                            <paper-tab>Certificat cadeau gratuit</paper-tab>
+                                        </paper-tabs>
+                                    </paper-dropdown-menu>
+
+                                </div>
+
                                 <div class="boutonCouleur">
                                     <!-- boutons du bas -->
-                                    <elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden$="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
 
                                 </div>
@@ -82,40 +113,20 @@
                                 </paper-input>
                              </template>
                         </vaadin-grid-column>
-                        <vaadin-grid-column width="30%" resizable>
-                            <template class="header">Raison</template>
-                            <template>
-                                <paper-input id="raison-{{item.id}}"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
-                            </template>
-                        </vaadin-grid-column>
-                        <vaadin-grid-column width="10%" resizable>
+                        <vaadin-grid-column width="15%" resizable>
                             <template class="header">Thérapeute</template>
                             <template>
                                 <paper-input id="therapeute-[[item.id]]"  value="{{item.nomTherapeute}}" disabled></paper-input>
                             </template>
                         </vaadin-grid-column>
-                        <vaadin-grid-column width="15%" resizable>
-                            <template class="header">Paiement</template>
+                        <vaadin-grid-column width="55%" resizable>
+                            <template class="header">Raison</template>
                             <template>
-                                <paper-input type="number" max="9999" id="prix-[[item.id]]"  value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
-                                    <div slot="prefix">$</div>
-                                </paper-input>
+                                <paper-input id="raison-{{item.id}}"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
                             </template>
                         </vaadin-grid-column>
-                        <vaadin-grid-column width="15%" resizable>
-                            <template class="header">Mode de paiement</template>
-                            <template>
-                                <paper-dropdown-menu id="modePaiement-[[item.id]]"  value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
-                                    <paper-tabs slot="dropdown-content"
-                                                selected="[[_isModePaiement(item.modePaiement)]]">
-                                        <paper-tab>espèces</paper-tab>
-                                        <paper-tab>chèque</paper-tab>
-                                        <paper-tab>bon cadeau</paper-tab>
-                                        <paper-tab>forfait</paper-tab>
-                                    </paper-tabs>
-                                </paper-dropdown-menu>
-                            </template>
-                        </vaadin-grid-column>
+
+
                         <vaadin-grid-column width="15%" resizable>
                             <template>
                                 <div style="text-align: right;">
@@ -302,7 +313,19 @@
             case 'forfait' : return 3;
             default : return -1;
           }
-      }
+        }
+
+        _isTarif(tarif){
+          let n = 0 ;
+          switch (tarif){
+            case 'Plein tarif': return 0;
+            case 'Tarif réduit' : return 1;
+            case 'Gratuit' : return 2;
+            case 'Certificat cadeau réduit' : return 3;
+            case 'Certificat cadeau gratuit' : return 4;
+            default : return -1;
+          }
+        }
       }
 
 

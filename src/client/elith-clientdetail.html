@@ -48,8 +48,8 @@
                         <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
                     </div>
 
-                    <elith-iron-ajax id="1" hidden$="[[!modeEdition]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
-                    <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[modeEdition]]"></paper-icon-button>
+                    <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
+                    <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]"></paper-icon-button>
                     <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
 
 
@@ -96,7 +96,10 @@
             },
             client: Object,
             traitements: Object,
-            modeEdition: Object,
+            modeEdition: {
+              type : Object,
+              observer: '_onModeEditionChanged',
+            },
             hasError: {
               type: Boolean,
               value : false,
@@ -116,11 +119,16 @@
                   ];
               }
             },
-            section: {
-              type : Object,
-              observer : '_isTraitement',
-            },
+            section: Object,
             isTraitement: {
+              type: Boolean,
+              value : false,
+            },
+            masquerEdit: {
+              type: Boolean,
+              value : false,
+            },
+            masquerPut: {
               type: Boolean,
               value : false,
             },
@@ -128,14 +136,19 @@
           }
         }
 
-        _isTraitement(){
-          this.isTraitement = (this.section === 'TRAITEMENTS');
+
+        _onModeEditionChanged(){
+          this.masquerEdit = (this.isTraitement || this.modeEdition);
+          this.masquerPut = (this.isTraitement || !this.modeEdition);
         }
 
         _onTabSelected(e) {
           var selectedIndex = e.srcElement.selected;
           var item = this.items[selectedIndex];
           this.section = item.id;
+          this.isTraitement = (this.section === 'TRAITEMENTS');
+          this.masquerEdit = (this.isTraitement || this.modeEdition);
+          this.masquerPut = (this.isTraitement || !this.modeEdition);
         }
 
         _pathChanged(path){
@@ -159,12 +172,9 @@
           }
         }
 
-        _onActiveItemChanged(e) {
-          this.$.grid.expandedItems = [e.detail.value];
-        }
-
         activeModeEdition () {
           this.modeEdition = true ;
+
         }
 
     }
