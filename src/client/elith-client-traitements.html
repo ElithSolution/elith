@@ -8,7 +8,6 @@
 <link rel="import" href="../../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
 <link rel="import" href="../../bower_components/paper-alert-dialog/paper-alert-dialog.html">
-<link rel="import" href="../../bower_components/paper-toggle-button/paper-toggle-button.html">
 <link rel="import" href="../../bower_components/vaadin-grid/vaadin-grid.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-layout.html">
 <link rel="import" href="../../bower_components/vaadin-form-layout/vaadin-form-item.html">
@@ -47,6 +46,8 @@
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+
+
 
             <div class="alerte" hidden$="[[aTraitement]]"> Aucun traitement</div>
             <div class="divBouton" hidden$="[[!aTraitement]]">
@@ -96,7 +97,6 @@
                                     <elith-iron-ajax hidden$="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
                                     <elith-iron-ajax hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
-
                                 </div>
                             </div>
                         </template>
@@ -144,7 +144,7 @@
                     </vaadin-grid>
 
         <paper-button raised on-tap="addTraitement" disabled="[[editing]]" >
-            Ajouter
+            Nouveau traitement
         </paper-button>
     </template>
 
