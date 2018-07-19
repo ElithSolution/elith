@@ -29,7 +29,7 @@
     <div class="containerGlobal">
 
 
-    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" >
+    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
       NOUVEAU CLIENT
     </paper-button>
 
@@ -101,6 +101,7 @@
         let path = '/client/add';
         this.set('route.path', path);
         this.routeData.param = 'add';
+        this._routeDataChanged();
       }
 
       _addedChanged(){
