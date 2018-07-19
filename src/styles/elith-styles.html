@@ -63,6 +63,13 @@
       }
 
 
+      .containerGlobal{
+        width:1000px;
+        margin: 0 auto;
+        display : flex;
+
+      }
+
       .container{
         width:800px;
         margin: 0 auto;
@@ -74,24 +81,11 @@
 
       }
 
-      .container::after {
-        content: "";
-        display: block;
-        position: absolute;
-        right: 150px;
-        top: 50px;
-        width: 2px;
-        height: 100%;
-        background: hsla(0,0%,100%,.1);
-        background: rgba(0,0,0,.05);
-        z-index: 1;
-
-      }
 
       /**********************************               BOUTONS BUBBLE            *************************************/
 
-      .bubbleLogin, .bubble1, .bubble2, .bubble3, .bubbleBig {
-        position: absolute;
+      .bubbleLogin, .bubble1, .bubble2, .bubbleBig {
+        position : relative;
         background-color: #ccc;
         border: 3px solid #fff;
         width: 50px;
@@ -114,18 +108,18 @@
         transition: all .3s ease-in-out;
       }
 
-
       .bubble1{
-        top: 280px;
+        top: 0;
+        left:570px;
       }
 
       .bubble2{
-        top: 330px;
-      }
-      .bubble3 {
+        top: 60px;
+        left:520px;
       }
 
       .bubbleLogin {
+        position : absolute;
         right:120px;
         top: 15px;
         width: 60px;
@@ -133,12 +127,25 @@
       }
 
       .bubbleBig {
-        left:80px;
-        top: 200px;
+        left:0;
+        top: 0;
         width: 90px;
         height: 90px;
         text-align: center;
         background-color: var(--elith-primary-color);
+      }
+
+      .bubble1::after{
+        content: "";
+        display: block;
+        position: absolute;
+        top: 50px;
+        width: 2px;
+        height: 682px;
+        background: hsla(0,0%,100%,.1);
+        background: rgba(0,0,0,.05);
+        z-index: 1;
+
       }
 
       /****************************************************************************************************************/
@@ -222,13 +229,10 @@
       .boutonCouleur {
         text-align: right;
         padding: 5px;
-
       }
 
 
-
       .alerte{
-
         width:800px;
         display: flex;
         padding: 15px;
@@ -289,39 +293,14 @@
         margin-top: 15px;
         margin-left: 20px;
         font-size: .8em;
-
       }
 
-
-
-      fieldset.large{
-        width:100%;
-        border:none;
-        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
 
       fieldset{
         width:95%;
         border:none;
         border-left: 5px solid var(--elith-primary-color-dark);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-      }
-
-      fieldset legend{
-        font-size: 1 rem;
-        color: var(--elith-base-color-dark);
-        border-bottom: none;
-      }
-
-      fieldset.collapse legend{
-        font-size: 1 rem;
-        border-bottom: 1px dashed;
-        color: var(--elith-primary-color-dark);
-      }
-
-      fieldset.card-form legend{
-        color: var(--elith-secondary-color-light);
-        border-bottom: none;
       }
 
 

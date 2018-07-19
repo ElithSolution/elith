@@ -26,6 +26,8 @@
     </app-route>
 
 
+    <div class="containerGlobal">
+
 
     <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" >
       NOUVEAU CLIENT
@@ -59,7 +61,7 @@
       </template>
     </dom-if>
 
-
+</div>
 
 
 
@@ -98,7 +100,7 @@
       addClient(){
         let path = '/client/add';
         this.set('route.path', path);
-        this.routeData.param == 'add'
+        this.routeData.param = 'add';
       }
 
       _addedChanged(){

@@ -43,31 +43,32 @@
 
         <dom-if if="{{!hasError}}">
             <template >
-                <div class="container" >
-                    <div class="clientNameHeader" >
-                        <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+
+
+                    <div class="container" >
+                        <div class="clientNameHeader" >
+                            <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+
+                            <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
+                            <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]"></paper-icon-button>
+                            <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
+
+                        </div>
+                        <div class="clientSousMenu">
+                            <paper-tabs selected="{{selected}}" on-iron-select="_onTabSelected">
+                                <template is="dom-repeat" items="{{items}}">
+                                    <paper-tab name$="{{item.id}}">[[item.name]]</paper-tab>
+                                </template>
+
+                            </paper-tabs>
+                        </div>
+
+                        <iron-form id="modifClient">
+                            <form is="iron-form" id="updateClient" method="post">
+                                <elith-client-form section=[[section]] client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}" traitements="{{traitements}}"></elith-client-form>
+                            </form>
+                        </iron-form>
                     </div>
-
-                    <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
-                    <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]"></paper-icon-button>
-                    <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
-
-
-                    <div class="clientSousMenu">
-                        <paper-tabs selected="{{selected}}" on-iron-select="_onTabSelected">
-                            <template is="dom-repeat" items="{{items}}">
-                                <paper-tab name$="{{item.id}}">[[item.name]]</paper-tab>
-                            </template>
-
-                        </paper-tabs>
-                    </div>
-
-                    <iron-form id="modifClient">
-                        <form is="iron-form" id="updateClient" method="post">
-                            <elith-client-form section=[[section]] client="{{client}}" edition="{{modeEdition}}" invalide="{{invalide}}" traitements="{{traitements}}"></elith-client-form>
-                        </form>
-                    </iron-form>
-                </div>
 
 
             </template>
@@ -143,6 +144,10 @@
         }
 
         _onTabSelected(e) {
+
+          console.log(Polymer.dom(this.root).querySelectorAll('div.container'));
+
+
           var selectedIndex = e.srcElement.selected;
           var item = this.items[selectedIndex];
           this.section = item.id;
