@@ -26,14 +26,12 @@
     </app-route>
 
 
-    <dom-if if="[[!affichagePermis(isIdPage,update)]]">
-      <template>
-        <elith-client-search update="{{update}}"></elith-client-search>
-      </template>
-    </dom-if>
+    <div class="containerGlobal">
 
 
-
+    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
+      NOUVEAU CLIENT
+    </paper-button>
 
 
     <dom-if if="[[affichagePermis(isIdPage,update)]]">
@@ -46,17 +44,24 @@
         <elith-client-add added="{{added}}" client="{{client}}"></elith-client-add>
       </template>
     </dom-if>
+
     <dom-if if="[[isDeleted]]">
       <template>
-        <div class="alerte">
-          <iron-icon icon="elith-icons:report"></iron-icon>
-          Le client a été supprimé !
+        <div class="container">
+          <div class="divContainer">
+            <div class="alerte">
+              <iron-icon icon="elith-icons:report"></iron-icon>
+              Le client a été supprimé !
+            </div>
+          </div>
+
         </div>
+
 
       </template>
     </dom-if>
 
-
+</div>
 
 
 
@@ -91,6 +96,13 @@
         }
       }
 
+
+      addClient(){
+        let path = '/client/add';
+        this.set('route.path', path);
+        this.routeData.param = 'add';
+        this._routeDataChanged();
+      }
 
       _addedChanged(){
         if(this.added){

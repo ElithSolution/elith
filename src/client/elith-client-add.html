@@ -29,20 +29,22 @@
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
             <div class="container">
-                <div class="clientNameHeader"><h1>Création du dossier</h1>
+                <div class="clientNameHeader">
+                    <h1>Création du dossier</h1>
+                    <elith-iron-ajax id="1" element="[[client]]" module="client" methode="post" response="{{client}}" hidden$="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
+                    <paper-icon-button class="bubble1" icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
+                    <paper-icon-button class="bubble2" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+
                 </div>
-                <div class="bouton">
-                    <elith-iron-ajax element="[[client]]" module="client" methode="post" response="{{client}}" hidden="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
-                    <paper-icon-button icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
-                    <paper-icon-button on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
-                </div>
-            </div>
+
 
             <iron-form id="ajoutClient">
                 <form is="iron-form" id="addClient" method="post">
                     <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
                 </form>
             </iron-form>
+
+            </div>
 
 
     </template>
@@ -94,7 +96,6 @@
             this.set('route.path', path);
           }
         }
-
 
         _cancel(e) {
           this.client = {};

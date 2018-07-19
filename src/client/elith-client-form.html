@@ -20,7 +20,7 @@
 
 
         <div class="divContainer" >
-            <fieldset id="1" hidden$="[[_affichageSection(section, '1')]]">
+            <fieldset id="1" hidden$="[[_cacherSection(section, '1')]]">
                 <div>
                     <vaadin-form-layout>
                         <paper-input label="Nom" value="{{client.nom}}" disabled$="[[!edition]]" auto-validate invalid="{{nomInvalide}}" required ></paper-input>
@@ -39,7 +39,7 @@
                 </div>
             </fieldset>
 
-            <fieldset id="2" hidden$="[[_affichageSection(section, '2')]]">
+            <fieldset id="2" hidden$="[[_cacherSection(section, '2')]]">
                 <div>
                 <vaadin-form-layout>
                     <paper-textarea label="Autres thérapies" value="{{client.autresTherapies}}" disabled$="[[!edition]]"></paper-textarea>
@@ -62,7 +62,7 @@
                 </div>
             </fieldset>
 
-        <fieldset id="3" hidden$="[[_affichageSection(section, '3')]]">
+        <fieldset id="3" hidden$="[[_cacherSection(section, '3')]]">
             <div>
                 <vaadin-form-layout>
                     <paper-input label="Référé par" value="{{client.refere}}" disabled$="[[!edition]]"></paper-input>
@@ -76,12 +76,17 @@
             </div>
         </fieldset>
 
-        <fieldset id="4" hidden$="[[_affichageSection(section, '4')]]">
-            <!------------------------------------------------------------------------------------------------>
-            <!--------------------        Affichage des traitements de la personne        -------------------->
-            <!------------------------------------------------------------------------------------------------>
-            <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
-        </fieldset>
+            <dom-if if="{{hasIdClient}}">
+                <template>
+                     <fieldset id="4" hidden$="[[_cacherSection(section, '4')]]">
+                    <!------------------------------------------------------------------------------------------------>
+                    <!--------------------        Affichage des traitements de la personne        -------------------->
+                    <!------------------------------------------------------------------------------------------------>
+                    <elith-client-traitements traitements="{{traitements}}" idclient="[[client.id]]"></elith-client-traitements>
+                    </fieldset>
+                </template>
+            </dom-if>
+
         </div>
 
 </template>
@@ -94,7 +99,10 @@
 
         static get properties () {
           return {
-            client:Object,
+            client: {
+              type : Object,
+              observer: '_clientChanged',
+            },
             edition: Object,
             nomInvalide: {
               value : true,
@@ -119,12 +127,15 @@
             },
             section : Object,
             traitements : Object,
-
+            hasIdClient: {
+              type : Boolean,
+              value : false,
+            },
           }
         }
 
 
-        _affichageSection(section, id){
+        _cacherSection(section, id){
           let res = true ;
           switch (section) {
             case 'RENSEIGNEMENTS':
@@ -145,6 +156,14 @@
            this.invalide = this.nomInvalide || this.prenomInvalide || this.enfantInvalide || this.dateInvalide || this.emailInvalide;
         }
 
+        _clientChanged(){
+          this.hasIdClient = false ;
+          if(this.client != null && typeof(this.client) !== 'undefined'){
+            if(typeof(this.client.id) !== 'undefined'){
+              this.hasIdClient = true ;
+            }
+          }
+        }
 
       }
 
