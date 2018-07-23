@@ -16,6 +16,7 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
+    "bower-update": "^0.2.0",
     "hoek": "^5.0.3"
   }
 }

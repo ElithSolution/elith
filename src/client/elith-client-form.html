@@ -13,8 +13,7 @@
         <style include="elith-styles">
             :host {
                 display: block;
-                padding-top: 10px;
-                padding-bottom: 10px;
+                padding-top: 7px;
             }
         </style>
 
@@ -38,7 +37,6 @@
                     </vaadin-form-layout>
                 </div>
             </fieldset>
-
             <fieldset id="2" hidden$="[[_cacherSection(section, '2')]]">
                 <div>
                 <vaadin-form-layout>
@@ -71,7 +69,6 @@
                     <paper-textarea label="Attention" value="{{client.attentions}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="À ne pas masser" value="{{client.pasMasser}}" disabled$="[[!edition]]"></paper-textarea>
                     <paper-textarea label="Note" value="{{client.note}}" disabled$="[[!edition]]"></paper-textarea>
-
                 </vaadin-form-layout>
             </div>
         </fieldset>

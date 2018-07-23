@@ -83,7 +83,7 @@
         display: block;
         text-decoration: none;
         color: var(--elith-menu-text-color);
-        line-height: 40px;
+        line-height: 30px;
         width: 100%;
         margin-left: 1em;
       }
@@ -95,10 +95,6 @@
         display: inline-block;
       }
 
-
-
-
-
       .login {
         width:100%;
         text-align: right;
@@ -108,9 +104,9 @@
         content: "";
         display: block;
         position: absolute;
-        right: 150px;
+        right: 70px;
         width: 2px;
-        height: 250px;
+        height: 97px;
         background: hsla(0,0%,100%,.1);
         z-index: 1;
       }
@@ -120,8 +116,8 @@
         height:45px;
         text-align: left;
         border-radius: 5px 5px 5px 5px;
-        margin-right: 180px;
-        margin-top : 30px;
+        margin-right: 80px;
+        margin-top : 15px;
         background-color: var(--elith-base-color-less-light);
         min-width: 320px;
         max-width: 400px;
@@ -142,6 +138,8 @@
 
       paper-listbox{
         background-color: var(--elith-base-color);
+        top: 20px;
+        padding: 0px;
       }
       paper-listbox paper-item{
         background-color: var(--elith-base-color);
@@ -155,8 +153,8 @@
         --paper-tabs-selection-bar-color: #fff;
         height: 60%;
         position: absolute;
-        left: 100px;
         min-width: 40%;
+        margin-top: -5px;
         top: 20px;
       }
       paper-tab {
@@ -198,7 +196,8 @@
       </app-drawer>
 
       <app-header-layout>
-        <app-header class="main-header" slot="header">
+        <app-header class="main-header" slot="header" hidden$="[[!storedUser.loggedin]]">
+          <div class="containerGlobalHeader">
           <app-toolbar>
             <paper-icon-button class="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
 
@@ -212,7 +211,7 @@
                 <paper-icon-button class="large" icon="elith-icons:user" slot="dropdown-trigger"></paper-icon-button>
                 <paper-listbox slot="dropdown-content">
                   <paper-item disabled>[[storedUser.name]]</paper-item>
-                  <paper-item>Mon profil</paper-item>
+                  <paper-item>mon profil</paper-item>
                   <paper-item><elith-logout stored-user="{{storedUser}}">Déconnexion</elith-logout></paper-item>
                 </paper-listbox>
               </paper-menu-button>
@@ -227,7 +226,7 @@
               </template>
             </paper-tabs>
           </app-toolbar>
-
+          </div>
         </app-header>
 
         <iron-pages
@@ -299,6 +298,7 @@
         if (wide && drawer.opened) {
           drawer.opened = false;
         }
+        window.dispatchEvent(new Event('resize'));
       }
 
       static get observers () {
@@ -312,9 +312,17 @@
           this.page = 'accueil';
           this.set('route.path', '/accueil');
         }
+          window.dispatchEvent(new Event('resize'))
       }
 
       _routePageChanged (page) {
+
+
+        // MAUVAIS HACK !!! Fix bug d'affichage entre ajout et recherche
+        if( page === "client" ) {
+            setTimeout( function(){ window.dispatchEvent(new Event('resize'))}, 100);
+        }
+
         // If no page was found in the route data, page will be an empty string.
         if (this.storedUser === null) {
           this.page = 'accueil'

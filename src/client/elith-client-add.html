@@ -18,8 +18,9 @@
         <style include="elith-styles">
             :host {
                 display: block;
-                padding: 20px;
+                padding: 20px 20px 0 20px;
             }
+
         </style>
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
@@ -29,22 +30,24 @@
         <!------------------------------------------------------------------------------------------------>
         <!------------------------------------------------------------------------------------------------>
             <div class="container">
-                <div class="clientNameHeader">
-                    <h1>Création du dossier</h1>
+
+                <div class="clientBoutons">
                     <elith-iron-ajax id="1" element="[[client]]" module="client" methode="post" response="{{client}}" hidden$="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
                     <paper-icon-button class="bubble1" icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
                     <paper-icon-button class="bubble2" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
-
                 </div>
 
+                <div class="clientNameHeader">
+                    <h1>Création du dossier</h1>
+                </div>
 
-            <iron-form id="ajoutClient">
-                <form is="iron-form" id="addClient" method="post">
-                    <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
-                </form>
-            </iron-form>
-
+                <iron-form id="ajoutClient">
+                    <form is="iron-form" id="addClient" method="post">
+                        <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
+                    </form>
+                </iron-form>
             </div>
+            <div class="containerOptions">&nbsp;</div>
 
 
     </template>
@@ -84,7 +87,6 @@
           }
         }
 
-
         _clientChanged(){
           if(this.client !== null && typeof(this.client.items) !== 'undefined'){
             this.added = true ;
@@ -92,6 +94,7 @@
         }
 
         _pathChanged(path){
+          window.dispatchEvent(new Event('resize'));
           if(path !== null && typeof(path) !== 'undefined'){
             this.set('route.path', path);
           }

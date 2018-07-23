@@ -20,7 +20,6 @@
 
       }
 
-
       :host paper-icon-button:hover {
         color: var(--elith-primary-color);
       }
@@ -59,26 +58,42 @@
       paper-icon-button.large{
         height: 60px;
         width: 60px;
-        margin: 1em;
       }
 
 
       .containerGlobal{
-        width:1000px;
+        width:1085px;
         margin: 0 auto;
         display : flex;
+        overflow: hidden;
+      }
 
+      .containerGlobalHeader{
+        width:1100px;
+        margin: 0 auto;
+       /* overflow: hidden;*/
       }
 
       .container{
         width:800px;
+        float:left;
         margin: 0 auto;
-        margin-bottom: 40px;
+        margin-bottom: 2px;
         color: var(--elith-base-color-dark);
-        background-color: var(--elith-white);
+      /*  background-color: var(--elith-white);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-        border-radius: 3px 3px 0 0;
+        border-radius: 3px 3px 0 0;*/
 
+      }
+
+      .containerOptions{
+        width:85px;
+        float:left;
+        padding-bottom: 500em;
+        margin-bottom: -500em;
+        margin-top: 0px;
+        margin-left: 0px;
+        box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.14)
       }
 
 
@@ -110,20 +125,20 @@
 
       .bubble1{
         top: 0;
-        left:570px;
+        left:860px;
       }
 
       .bubble2{
-        top: 60px;
-        left:520px;
+        top: 10px;
+        left:860px;
       }
 
       .bubbleLogin {
-        position : absolute;
-        right:120px;
+        right:20px;
         top: 15px;
         width: 60px;
         height: 60px;
+        display: block;
       }
 
       .bubbleBig {
@@ -135,7 +150,7 @@
         background-color: var(--elith-primary-color);
       }
 
-      .bubble1::after{
+   /*   .bubble1::after{
         content: "";
         display: block;
         position: absolute;
@@ -146,14 +161,13 @@
         background: rgba(0,0,0,.05);
         z-index: 1;
 
-      }
+      }*/
 
       /****************************************************************************************************************/
 
       .authentification{
-        width:40%;
-        margin-left: 20%;
-        margin-top : 5%;
+        width: 400px;
+        margin: 5% auto;
       }
 
       .divSearch{
@@ -175,25 +189,27 @@
 
       .divLogo{
         width: 100%;
-        margin-bottom:40px;
+        margin-bottom:20px;
         padding: 0;
         color: var(--elith-header-text-color);
         background-color: var(--elith-base-color);
       }
 
       .divContainer{
-        width:100%;
-        display:flex;
+      /*  width:100%;*/
+     /*   display:flex;*/
         justify-content: space-around;
-        margin-bottom: 40px;
+        /*margin-bottom: 40px;*/
+      /*  background-color: #E8E8EB;*/
         flex-wrap: wrap;
-
+     /*   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);*/
       }
 
 
       /**********************************               CLIENT                    *************************************/
       .clientNameHeader{
         height : 70px;
+        width: 800px;
         display: flex;
         color:var(--elith-header-text-color);
         background-color: var(--elith-primary-color-dark);
@@ -202,6 +218,7 @@
 
       .clientSousMenu{
         height : 40px;
+        margin-top: 5px;
         align-items: center;
         flex-direction: row;
         justify-content: space-between;
@@ -214,6 +231,10 @@
       .clientNameHeader h1 {
         margin-left: 40px;
         padding-top: 15px;
+      }
+
+      .clientBoutons {
+        height: 0px;
       }
 
       /****************************************************************************************************************/
@@ -233,8 +254,7 @@
 
 
       .alerte{
-        width:800px;
-        display: flex;
+        /*display: flex;*/
         padding: 15px;
         margin: 24px;
         color: var(--elith-primary-color-dark);
@@ -270,6 +290,7 @@
         background-color: #fff;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
+
       .card-form, .card, .divForm, .divSearch{
         padding: 15px;
       }
@@ -295,10 +316,14 @@
         font-size: .8em;
       }
 
+      paper-menu-button {
+        padding: 0px;
+      }
 
       fieldset{
-        width:95%;
         border:none;
+        margin-bottom: 5px;
+        background-color: white;
         border-left: 5px solid var(--elith-primary-color-dark);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
       }
@@ -307,6 +332,41 @@
       @media (max-width: 600px) {
         paper-dialog {
           margin: 0;
+        }
+      }
+
+      @media (max-width: 800px) {
+        .login {
+          width: auto !important;
+        }
+        .main-header paper-icon-button.menu-button{
+          height: 60px !important;
+        }
+        .search {
+          margin-top: 0px !important;
+        }
+        .bubbleLogin {
+          top: 0px !important;
+          width: 40px !important;
+          height: 40px !important;
+          display: flex !important;
+        }
+        .clientBoutons {
+          height: 60px;
+        }
+        .bubble1 {
+          left: 0px;
+        }
+        .bubble2 {
+          top: -50px;
+          left: 60px;
+        }
+        .containerOptions {
+          display: none !important;
+        }
+        .containerGlobal {
+          display: block !important;
+          width: 850px !important;
         }
       }
     </style>
