@@ -5,6 +5,7 @@
 <link rel="import" href="client/elith-client-id.html">
 <link rel="import" href="client/elith-client-search.html">
 <link rel="import" href="client/elith-client-add.html">
+<link rel="import" href="client/elith-client-delete.html">
 <link rel="import" href="styles/elith-styles.html">
 
 <dom-module id="elith-client">
@@ -28,11 +29,13 @@
 
     <div class="containerGlobal">
 
-
-    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
-      NOUVEAU CLIENT
-    </paper-button>
-
+    <dom-if if="[[isEmptyRoute]]">
+      <template>
+        <paper-button class="bubbleBigEmptyPage" raised class="primary" on-tap="addClient">
+          NOUVEAU CLIENT
+        </paper-button>
+      </template>
+    </dom-if>
 
     <dom-if if="[[affichagePermis(isIdPage,update)]]">
       <template>
@@ -47,17 +50,7 @@
 
     <dom-if if="[[isDeleted]]">
       <template>
-        <div class="container">
-          <div class="divContainer">
-            <div class="alerte">
-              <iron-icon icon="elith-icons:report"></iron-icon>
-              Le client a été supprimé !
-            </div>
-          </div>
-
-        </div>
-
-
+        <elith-client-delete idclient="{{idClient}}"></elith-client-delete>
       </template>
     </dom-if>
 
@@ -89,6 +82,7 @@
             notify: true,
           },
           isDeleted: Boolean,
+          isEmptyRoute: Boolean,
           added:{
             observer: '_addedChanged',
           },
@@ -109,7 +103,6 @@
           this.update = true ;
           this.added = false ;
         }
-
       }
 
       _routeDataChanged(){
@@ -117,13 +110,16 @@
         this.isAddPage = false;
         this.update = false;
         this.isDeleted=false;
+        this.isEmptyRoute=false;
         if (this.routeData.param === 'add') {
           this.isAddPage = true;
           this.client = {};
-        } else if (this.routeData.param === '') {
+        } else if (this.routeData.param === '' || this.routeData.param === undefined ) {
           this.update = true ;
           if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
             this.isIdPage = true ;
+          } else {
+            this.isEmptyRoute = true;
           }
         } else if (this.routeData.param === 'deleted') {
           this.update = true ;

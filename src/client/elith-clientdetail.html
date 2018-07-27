@@ -44,9 +44,12 @@
         <dom-if if="{{!hasError}}">
             <template >
 
-
+                    <div class="containerBefore">&nbsp;</div>
                     <div class="container" >
                         <div class="clientBoutons">
+                            <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
+                                NOUVEAU CLIENT
+                            </paper-button>
                             <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
                             <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]"></paper-icon-button>
                             <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
@@ -136,6 +139,13 @@
             },
 
           }
+        }
+
+        addClient(){
+            let path = '/client/add';
+            this.set('route.path', path);
+            this.routeData.param = 'add';
+            this._routeDataChanged();
         }
 
 

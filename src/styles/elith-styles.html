@@ -96,16 +96,24 @@
         box-shadow: 5px 0 5px -5px rgba(0, 0, 0, 0.14)
       }
 
+      .containerBefore{
+        width:115px;
+        float:left;
+        padding-bottom: 500em;
+        margin-bottom: -500em;
+        margin-top: 0px;
+        margin-left: 0px;
+      }
+
 
       /**********************************               BOUTONS BUBBLE            *************************************/
 
-      .bubbleLogin, .bubble1, .bubble2, .bubbleBig {
+      .bubbleLogin, .bubble1, .bubble2, .bubbleBig, .bubbleBigEmptyPage {
         position : relative;
         background-color: #ccc;
         border: 3px solid #fff;
         width: 50px;
         height: 50px;
-        right:125px;
         display: -webkit-box;
         display: -ms-flexbox;
         display: flex;
@@ -124,12 +132,12 @@
       }
 
       .bubble1{
-        top: 0;
+        top: -95px;
         left:860px;
       }
 
       .bubble2{
-        top: 10px;
+        top: -85px;
         left:860px;
       }
 
@@ -142,8 +150,16 @@
       }
 
       .bubbleBig {
-        left:0;
-        top: 0;
+        top: -5px;
+        left: -120px;
+        margin: 0px;
+        width: 90px;
+        height: 90px;
+        text-align: center;
+        background-color: var(--elith-primary-color);
+      }
+
+      .bubbleBigEmptyPage {
         width: 90px;
         height: 90px;
         text-align: center;
@@ -256,7 +272,7 @@
       .alerte{
         /*display: flex;*/
         padding: 15px;
-        margin: 24px;
+        margin: 5px 24px 24px 24px;
         color: var(--elith-primary-color-dark);
         background-color: var(--elith-white);
         border-left: 10px solid var(--elith-primary-color-dark);
@@ -352,14 +368,19 @@
           display: flex !important;
         }
         .clientBoutons {
-          height: 60px;
+          height: 70px;
         }
         .bubble1 {
-          left: 0px;
+          left: 110px;
+          top: -90px;
         }
         .bubble2 {
-          top: -50px;
-          left: 60px;
+          top: -140px;
+          left: 170px;
+        }
+        .bubbleBig {
+          top: -40px;
+          left: 0px;
         }
         .containerOptions {
           display: none !important;

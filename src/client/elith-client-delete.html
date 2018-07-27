@@ -13,7 +13,7 @@
 
 
 
-<dom-module id="elith-client-add">
+<dom-module id="elith-client-delete">
     <template>
         <style include="elith-styles">
             :host {
@@ -36,30 +36,24 @@
                     <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
                         NOUVEAU CLIENT
                     </paper-button>
-                    <elith-iron-ajax id="1" element="[[client]]" module="client" methode="post" response="{{client}}" hidden$="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
-                    <paper-icon-button class="bubble1" icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
-                    <paper-icon-button class="bubble2" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                 </div>
 
-                <div class="clientNameHeader">
-                    <h1>Création du dossier</h1>
+                <div class="divContainer">
+                    <div class="alerte">
+                        <iron-icon icon="elith-icons:report"></iron-icon>
+                        Le client a été supprimé !
+                    </div>
                 </div>
-
-                <iron-form id="ajoutClient">
-                    <form is="iron-form" id="addClient" method="post">
-                        <elith-client-form client="{{client}}" edition="{{modeEdition}}" invalide="{{isInvalide}}"></elith-client-form>
-                    </form>
-                </iron-form>
             </div>
-            <div class="containerOptions">&nbsp;</div>
+
 
 
     </template>
 
     <script>
-      class ElithClientadd extends Polymer.Element {
+      class ElithClientdelete extends Polymer.Element {
         static get is () {
-          return 'elith-client-add'
+          return 'elith-client-delete'
         }
 
         static get properties () {
@@ -91,6 +85,11 @@
           }
         }
 
+        addClient(){
+            let path = '/client/add';
+            this.set('route.path', path);
+        }
+
         _clientChanged(){
           if(this.client !== null && typeof(this.client.items) !== 'undefined'){
             this.added = true ;
@@ -110,6 +109,6 @@
 
       }
 
-      window.customElements.define(ElithClientadd.is, ElithClientadd)
+      window.customElements.define(ElithClientdelete.is, ElithClientdelete)
     </script>
 </dom-module>
