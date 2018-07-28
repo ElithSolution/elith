@@ -237,7 +237,7 @@
                 role="main">
           <elith-login name="login"></elith-login>
           <elith-accueil name="accueil"></elith-accueil>
-          <elith-client name="client" route="[[subRoute]]"></elith-client>
+          <elith-client name="client" route="[[subRoute]]" update="{{update}}"></elith-client>
           <elith-produit name="produit" route="[[subRoute]]"></elith-produit>
           <elith-horaire name="horaire"></elith-horaire>
           <elith-view404 name="view404"></elith-view404>
@@ -276,9 +276,7 @@
             type : Boolean,
             value : false,
           },
-          update : Boolean, //todo : propager l'update
-
-
+          update : Boolean,
 
           wideLayout: {
             type: Boolean,
@@ -288,11 +286,13 @@
           items: {
             type: Array,
             value: function() {
-              return ['accueil', 'client', 'produit', 'horaire', 'finances'];
+              return ['accueil', 'client', 'produit', 'dépenses', 'horaire', 'finances'];
             }
           }
         }
       }
+
+
 
       onLayoutChange(wide) {
         var drawer = this.$.drawer;

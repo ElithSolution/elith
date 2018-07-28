@@ -144,8 +144,6 @@
         addClient(){
             let path = '/client/add';
             this.set('route.path', path);
-            this.routeData.param = 'add';
-            this._routeDataChanged();
         }
 
 
@@ -155,8 +153,8 @@
         }
 
         _onTabSelected(e) {
-          var selectedIndex = (e.srcElement||e.target).selected;
-          var item = this.items[selectedIndex];
+          let selectedIndex = (e.srcElement||e.target).selected;
+          let item = this.items[selectedIndex];
           this.section = item.id;
           this.isTraitement = (this.section === 'TRAITEMENTS');
           this.masquerEdit = (this.isTraitement || this.modeEdition);

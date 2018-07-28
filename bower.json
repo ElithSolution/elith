@@ -39,5 +39,9 @@
   "devDependencies": {
     "web-component-tester": "Polymer/web-component-tester#^6.0.0"
   },
-  "private": true
+  "private": true,
+  "resolutions": {
+    "vaadin-control-state-mixin": "^2.0.0",
+    "vaadin-overlay": "^3.0.0"
+  }
 }

@@ -29,35 +29,32 @@
 
     <div class="containerGlobal">
 
-    <dom-if if="[[isEmptyRoute]]">
-      <template>
-        <paper-button class="bubbleBigEmptyPage" raised class="primary" on-tap="addClient">
-          NOUVEAU CLIENT
-        </paper-button>
-      </template>
-    </dom-if>
+      <dom-if if="[[isEmptyRoute]]">
+        <template>
+          <paper-button class="bubbleBigEmptyPage" raised class="primary" on-tap="addClient">
+            NOUVEAU CLIENT
+          </paper-button>
+        </template>
+      </dom-if>
 
-    <dom-if if="[[affichagePermis(isIdPage,update)]]">
-      <template>
-          <elith-client-id idclient="{{idClient}}"></elith-client-id>
-      </template>
-    </dom-if>
-    <dom-if if="[[isAddPage]]">
-      <template>
-        <elith-client-add added="{{added}}" client="{{client}}"></elith-client-add>
-      </template>
-    </dom-if>
+      <dom-if if="[[affichagePermis(isIdPage,update)]]">
+        <template>
+            <elith-client-id idclient="{{idClient}}"></elith-client-id>
+        </template>
+      </dom-if>
+      <dom-if if="[[isAddPage]]">
+        <template>
+          <elith-client-add added="{{added}}" client="{{client}}"></elith-client-add>
+        </template>
+      </dom-if>
 
-    <dom-if if="[[isDeleted]]">
-      <template>
-        <elith-client-delete idclient="{{idClient}}"></elith-client-delete>
-      </template>
-    </dom-if>
+      <dom-if if="[[isDeleted]]">
+        <template>
+          <elith-client-delete></elith-client-delete>
+        </template>
+      </dom-if>
 
-</div>
-
-
-
+  </div>
   </template>
 
   <script>
@@ -95,7 +92,7 @@
         let path = '/client/add';
         this.set('route.path', path);
         this.routeData.param = 'add';
-        this._routeDataChanged();
+        this._routeDataChanged(); // il faut forcer cet appel car il n'est pas systématiquement appelé malgré la modif au routeData
       }
 
       _addedChanged(){
@@ -111,19 +108,27 @@
         this.update = false;
         this.isDeleted=false;
         this.isEmptyRoute=false;
+
+        // AJOUT D'UN NOUVEAU CLIENT
         if (this.routeData.param === 'add') {
           this.isAddPage = true;
           this.client = {};
-        } else if (this.routeData.param === '' || this.routeData.param === undefined ) {
+
+          // ROUTE VIDE OU CLIENT AFFICHÉ
+        } else if (this.routeData.param === '' || typeof(this.routeData.param) === 'undefined') {
           this.update = true ;
           if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
             this.isIdPage = true ;
           } else {
             this.isEmptyRoute = true;
           }
+
+          // CLIENT SUPPRIMÉ
         } else if (this.routeData.param === 'deleted') {
           this.update = true ;
           this.isDeleted = true;
+
+          // CLIENT EXISTANT
         } else if (Number(this.routeData.param)) {
           this.isIdPage = true;
           this.idClient = this.routeData.param;

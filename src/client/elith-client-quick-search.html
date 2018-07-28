@@ -28,7 +28,7 @@
     }
     </style>
 
-    <elith-client-searchbynom noresult="true"></elith-client-searchbynom>
+    <elith-client-searchbynom noresult="true" update="{{update}}"></elith-client-searchbynom>
 
 
 
@@ -43,6 +43,10 @@
 
       static get properties () {
         return {
+          update:{
+            type : Boolean,
+            notify: true,
+          },
         }
       }
 
