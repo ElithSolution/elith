@@ -103,6 +103,7 @@
       }
 
       _routeDataChanged(){
+       
         this.isIdPage = false;
         this.isAddPage = false;
         this.update = false;
@@ -117,11 +118,7 @@
           // ROUTE VIDE OU CLIENT AFFICHÉ
         } else if (this.routeData.param === '' || typeof(this.routeData.param) === 'undefined') {
           this.update = true ;
-          if (typeof(this.idClient) !== 'undefined' && this.idClient != ''){
-            this.isIdPage = true ;
-          } else {
-            this.isEmptyRoute = true;
-          }
+          this.isEmptyRoute = true;
 
           // CLIENT SUPPRIMÉ
         } else if (this.routeData.param === 'deleted') {
