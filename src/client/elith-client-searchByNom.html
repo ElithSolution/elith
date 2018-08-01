@@ -40,7 +40,9 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-location route="{{route}}"></app-location>
 
+
     <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
+
 
           <vaadin-combo-box-light  id="clientSearch"
                                    items="{{clients}}"
@@ -113,7 +115,6 @@
           noresult: Boolean,
         }
       }
-
 
 
       _resultatChanged () {

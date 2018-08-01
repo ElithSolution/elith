@@ -96,7 +96,7 @@
                                     <!-- boutons du bas -->
                                     <elith-iron-ajax hidden$="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
                                     <elith-iron-ajax hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
-                                    <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+                                    <paper-icon-button hidden$="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                                 </div>
                             </div>
                         </template>
@@ -290,7 +290,8 @@
                                     km : 0,
                                     login : 0,
                                     modePaiement: 'espèces',
-                                    nomTherapeute : '',
+                                    tarif: 'Plein tarif',
+                                    nomTherapeute : this.storedUser.firstname,
                                     prix : 0,
                                     raison : '',
                                     tps : 0,
@@ -305,7 +306,6 @@
 
          // todo : le mode de paiement vient d'une table
         _isModePaiement(modePaiement){
-          let n = 0 ;
           switch (modePaiement){
             case 'espèces': return 0;
             case 'chèque' : return 1;
@@ -316,7 +316,6 @@
         }
 
         _isTarif(tarif){
-          let n = 0 ;
           switch (tarif){
             case 'Plein tarif': return 0;
             case 'Tarif réduit' : return 1;

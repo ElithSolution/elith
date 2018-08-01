@@ -164,8 +164,10 @@
             this.$.ajax.body = this.element ;
           // validation du token
           }else{
+
             if (this.storedUser !== null && typeof(this.storedUser) !== 'undefined'){
               this.$.ajax.headers['Authorization'] = 'Bearer ' + this.storedUser.accessToken;
+
               if(idElement !== null && typeof(idElement) !== 'undefined'){
                 url = url.concat(`/${idElement}`);
               }else{
@@ -234,6 +236,7 @@
 
         }
 
+
         /**************************************************************************************************************/
         handleResponse(event) {
           try{
@@ -246,7 +249,9 @@
                   name:        this.element.login,
                   accessToken: this.response.accessToken,
                   loggedin:    true,
+                  firstname : this.response.prenomToken,  // prénom de la personne logguée
                 };
+
                 this.element = {};
               }
              // pour les autres modules
