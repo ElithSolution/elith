@@ -24,7 +24,7 @@
 
 <link rel="import" href="elith-login.html">
 <link rel="import" href="elith-logout.html">
-<link rel="import" href="client/elith-client-searchByNom.html">
+<link rel="import" href="client/elith-client-searchByNomOrTel.html">
 <link rel="lazy-import" href="elith-accueil.html">
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
@@ -116,7 +116,7 @@
 
       .search {
         width:100%;
-        height:45px;
+        height:60px;
         text-align: left;
         border-radius: 5px 5px 5px 5px;
         margin-right: 80px;
@@ -226,18 +226,15 @@
             <div class="login"></div>
 
 
-            <paper-radio-group selected="nom">
+            <paper-radio-group id="radioSearch" selected="nom">
               <paper-radio-button name="nom">Nom</paper-radio-button>
               <paper-radio-button name="telephone">Téléphone</paper-radio-button>
             </paper-radio-group>
 
 
             <div class="search">
-              <!-- recherche par nom -->
-              <elith-client-searchbynom noresult="true" update="{{update}}"></elith-client-searchbynom>
-
-              <!-- recherche par téléphone -->
-
+              <!-- recherche par nom ou téléphone-->
+              <elith-client-searchbynom noresult="true" update="{{update}}" telephone="{{telephone}}"></elith-client-searchbynom>
 
             </div>
             <!--section compte utilisateur-->
@@ -322,11 +319,24 @@
             value: function() {
               return ['accueil', 'client', 'produit', 'dépenses', 'horaire', 'finances'];
             }
+          },
+          telephone : {
+            type: Boolean,
+            value: false,
           }
         }
       }
 
 
+
+
+      ready() {
+        super.ready();
+        let radio = this.$.radioSearch;
+        radio.addEventListener('paper-radio-group-changed', () => {
+          (radio.selected === 'telephone' ? this.telephone = true : this.telephone = false) ;
+        });
+      }
 
       onLayoutChange(wide) {
         var drawer = this.$.drawer;

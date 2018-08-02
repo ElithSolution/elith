@@ -40,16 +40,18 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-location route="{{route}}"></app-location>
 
-
     <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
 
 
-          <vaadin-combo-box-light  id="clientSearch"
+
+          <vaadin-combo-box-light  id="clientSearchNom"
                                    items="{{clients}}"
                                    item-value-path="client.id"
                                    item-label-path="client.nomComplet"
-                                   style="display: block; width: 100%;">
+                                   style="display: block; width: 100%;" hidden$="{{telephone}}">
+
              <paper-input label="Nom de la personne" value=[[search]]>
+
               <template>
                   <style is="custom-style">
                       paper-item:hover {
@@ -68,6 +70,43 @@
               <paper-icon-button slot="prefix" icon="elith-icons:search" disabled></paper-icon-button>
             </paper-input>
           </vaadin-combo-box-light>
+
+      <!-- recherche par téléphone -->
+      <vaadin-combo-box-light  id="clientSearchTel"
+                               items="{{clients}}"
+                               item-value-path="client.id"
+                               item-label-path="client.telephoneChiffre"
+                               style="display: block; width: 100%;" hidden$="{{!telephone}}">
+          <paper-input label="Numéro de téléphone" value=[[search]]>
+              <template>
+                  <style is="custom-style">
+                      paper-item:hover {
+                          font-weight: bold;
+                      }
+                      paper-item-body div.second {
+                          color : var(--elith-primary-color-dark);
+                          font-size: 0.9em;
+
+                      }
+                      paper-item-body div.second:hover {
+                          color : var(--elith-white);
+                          font-weight: normal;
+                      }
+
+
+                  </style>
+
+                  <paper-item>
+                      <paper-item-body two-line>
+                          <div>[[item.client.prenom]] [[item.client.nom]]</div>
+                          <div class="second">[[item.client.telephone]]</div>
+                      </paper-item-body>
+                  </paper-item>
+              </template>
+              <paper-icon-button slot="suffix" class="clear-button" icon="close"></paper-icon-button>
+              <paper-icon-button slot="prefix" icon="elith-icons:search" disabled></paper-icon-button>
+          </paper-input>
+      </vaadin-combo-box-light>
 
     <div class="divBouton" hidden$="{{noresult}}">
       [[nbRes]] résultats.
@@ -113,6 +152,10 @@
             type: Object,
           },
           noresult: Boolean,
+          telephone: {
+            type : Boolean,
+            observer: '_telephoneChanged',
+          },
         }
       }
 
@@ -158,18 +201,33 @@
 
       ready(){
         super.ready();
-        let combobox = this.$.clientSearch;
-        combobox.addEventListener('value-changed', () => {
-          this.idclient = combobox.value;
+        let comboboxTel = this.$.clientSearchTel ;
+        let comboboxNom = this.$.clientSearchNom ;
+
+
+        comboboxTel.addEventListener('value-changed', () => {
+          this.idclient = comboboxTel.value;
+          let path = ['/client', this.idclient].join('/') ;
+          this.set('route.path', path);
+        });
+
+        comboboxNom.addEventListener('value-changed', () => {
+          this.idclient = comboboxNom.value;
           let path = ['/client', this.idclient].join('/') ;
           this.set('route.path', path);
         });
 
       }
 
+       _telephoneChanged(){
+         this.$.clientSearchNom.value = ''; // pour vider le champ de recherche
+         this.$.clientSearchTel.value = ''; // pour vider le champ de recherche
+       }
+
       _updateChanged() {
         if(this.update){
-          this.$.clientSearch.value = ''; // pour vider le champ de recherche
+          this.$.clientSearchNom.value = ''; // pour vider le champ de recherche
+          this.$.clientSearchTel.value = ''; // pour vider le champ de recherche
           this.initcall = 'true'; // pour forcer un rafraichissement de la liste des clients
         }
       }

@@ -6,7 +6,13 @@
             }
             :host([focused]:not([disabled])) {
                 background: var(--elith-primary-color) !important;
+                box-shadow: none !important;
             }
+            :host([tabindex])::before{
+                color : black !important;
+            }
+
+
         </style>
     </template>
 </dom-module>
