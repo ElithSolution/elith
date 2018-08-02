@@ -7,13 +7,15 @@
 <link rel="import" href="../bower_components/app-layout/app-toolbar/app-toolbar.html">
 <link rel="import" href="../bower_components/app-route/app-location.html">
 <link rel="import" href="../bower_components/app-route/app-route.html">
+<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
 <link rel="import" href="../bower_components/iron-pages/iron-pages.html">
 <link rel="import" href="../bower_components/iron-localstorage/iron-localstorage.html">
 <link rel="import" href="../bower_components/iron-selector/iron-selector.html">
 <link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../bower_components/paper-menu-button/paper-menu-button.html">
-<link rel="import" href="../bower_components/brum-global-variable/brum-global-variable.html">
+<link rel="import" href="../bower_components/paper-radio-button/paper-radio-button.html">
+<link rel="import" href="../bower_components/paper-radio-group/paper-radio-group.html">
 <link rel="import" href="../bower_components/paper-tabs/paper-tabs.html">
 <link rel="import" href="elith-icons.html">
 
@@ -22,7 +24,7 @@
 
 <link rel="import" href="elith-login.html">
 <link rel="import" href="elith-logout.html">
-<link rel="import" href="client/elith-client-quick-search.html">
+<link rel="import" href="client/elith-client-searchByNom.html">
 <link rel="lazy-import" href="elith-accueil.html">
 <link rel="lazy-import" href="elith-client.html">
 <link rel="lazy-import" href="elith-produit.html">
@@ -163,6 +165,22 @@
         text-transform: uppercase;
       }
 
+      paper-radio-group {
+        width: 570px;
+        font-size: 0.75rem;
+        margin: 0 ;
+      }
+      paper-radio-button {
+        --paper-radio-button-checked-color: var(--elith-primary-color);
+        --paper-radio-button-checked-ink-color: var(--elith-primary-color);
+        --paper-radio-button-unchecked-color: var(--elith-white);
+        --paper-radio-button-unchecked-ink-color: var(--elith-white);
+        --paper-radio-button-label-color: var(--elith-white);
+
+
+
+
+      }
 
 
 
@@ -206,8 +224,21 @@
             <paper-icon-button class="menu-button" icon="menu" drawer-toggle hidden$="{{wideLayout}}"></paper-icon-button>
 
             <div class="login"></div>
+
+
+            <paper-radio-group selected="nom">
+              <paper-radio-button name="nom">Nom</paper-radio-button>
+              <paper-radio-button name="telephone">Téléphone</paper-radio-button>
+            </paper-radio-group>
+
+
             <div class="search">
-              <elith-client-quick-search update="{{update}}"></elith-client-quick-search>
+              <!-- recherche par nom -->
+              <elith-client-searchbynom noresult="true" update="{{update}}"></elith-client-searchbynom>
+
+              <!-- recherche par téléphone -->
+
+
             </div>
             <!--section compte utilisateur-->
             <div class="bubbleLogin" hidden$="[[!storedUser.loggedin]]">
