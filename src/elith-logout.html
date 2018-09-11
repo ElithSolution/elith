@@ -24,8 +24,7 @@
     </style>
 
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-    <elith-data key="clientsListed" data="{{clients}}"></elith-data>
-
+ 
     <template is="dom-if" if="{{!link}}">
       <paper-icon-button icon="elith-icons:user" raised on-tap="logout"> </paper-icon-button>
     </template>
@@ -59,7 +58,8 @@
       logout () {
         // remove user data
         this.storedUser = null;
-        this.clients = null;
+
+
       }
     }
 

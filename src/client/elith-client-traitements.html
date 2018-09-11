@@ -258,6 +258,7 @@
           var item = e.model.item;
           this.editing = item;
           this.$.grid.querySelector('#raison-' + item.id).focus();
+          window.dispatchEvent(new Event('resize'));
         }
 
         _cancel(e) {
