@@ -201,6 +201,8 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
 
 
+
+
     <app-drawer-layout force-narrow>
       <app-drawer id="drawer" slot="drawer">
         <app-toolbar></app-toolbar>
@@ -216,8 +218,6 @@
 
       <app-header-layout>
         <app-header class="main-header" slot="header" hidden$="[[!storedUser.loggedin]]">
-
-
 
           <div class="containerGlobalHeader">
           <app-toolbar>

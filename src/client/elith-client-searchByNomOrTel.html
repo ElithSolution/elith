@@ -7,6 +7,7 @@
 <link rel="import" href="../styles/elith-styles.html">
 <link rel="import" href="../elith-utils.html">
 <link rel="import" href="../elith-iron-ajax.html">
+<link rel="import" href="../elith-data.html">
 
 <dom-module id="elith-client-searchbynom">
   <template>
@@ -40,11 +41,21 @@
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
     <app-location route="{{route}}"></app-location>
 
+    <brum-global-variable key="ListePaiements" value="{{listepaiements}}"></brum-global-variable>
+    <brum-global-variable key="ListeTarifs" value="{{listetarifs}}"></brum-global-variable>
+
+
     <elith-iron-ajax hidden disabled module="clients" methode="get" initcall="{{initcall}}" element="{{search}}" response="{{resultat}}" ></elith-iron-ajax>
 
 
+      <!--  TEST DE L'APPEL DU SERVICE POUR LE PAIEMENT OU LE TARIF -->
+      <elith-iron-ajax hidden disabled module="paiement" methode="get" initcall="{{initcall}}" response="{{listepaiements}}" ></elith-iron-ajax>
+      <elith-iron-ajax hidden disabled module="tarif" methode="get" initcall="{{initcall}}" response="{{listetarifs}}" ></elith-iron-ajax>
 
-          <vaadin-combo-box-light  id="clientSearchNom"
+
+
+
+      <vaadin-combo-box-light  id="clientSearchNom"
                                    items="{{clients}}"
                                    item-value-path="client.id"
                                    item-label-path="client.nomComplet"
@@ -156,8 +167,17 @@
             type : Boolean,
             observer: '_telephoneChanged',
           },
+          listepaiements: {
+            type: Object,
+            notify: true,
+          },
+          listetarifs: {
+            type: Object,
+            notify: true,
+          },
         }
       }
+
 
 
       _resultatChanged () {
