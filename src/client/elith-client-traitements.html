@@ -39,6 +39,7 @@
 
             .test {
                 display : flex ;
+                justify-content: flex-end;
 
             }
 
@@ -69,28 +70,17 @@
                                 <paper-textarea label="Conseils" id="conseils-[[item.id]]" value="{{item.conseils}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <paper-textarea label="Commentaires" id="commentaires-[[item.id]]" value="{{item.commentaires}}" disabled="[[!_isEditing(editing, item)]]"></paper-textarea>
                                 <div class="test">
-                                    <paper-input label="Prix" type="number" max="9999" id="prix-[[item.id]]"  width="20%" value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate>
+                                    <paper-input label="Prix" type="number" min="0" max="9999" id="prix-[[item.id]]"  width="20%" value="{{item.prix}}" disabled$="[[!_isEditing(editing, item)]]" required auto-validate>
                                         <div slot="prefix">$</div>
                                     </paper-input>
 
                                     <paper-dropdown-menu id="modePaiement-[[item.id]]" label="Mode de paiement" value="{{item.modePaiement}}" disabled$="[[!_isEditing(editing, item)]]">
-
-
                                         <paper-tabs slot="dropdown-content"
                                                     selected="[[_isModePaiement(item.modePaiement)]]">
-
                                             <template is="dom-repeat" items="{{itemsPaiement}}">
                                                 <paper-tab name$="{{item.0}}">{{item.0}}</paper-tab>
                                             </template>
-
-                                           <!-- <paper-tab>espèces</paper-tab>
-                                            <paper-tab>chèque</paper-tab>
-                                            <paper-tab>bon cadeau</paper-tab>
-                                            <paper-tab>forfait</paper-tab>-->
                                         </paper-tabs>
-
-
-
                                     </paper-dropdown-menu>
                                     <paper-dropdown-menu id="tarif-[[item.id]]" label="Tarif appliqué" value="{{item.tarif}}" disabled$="[[!_isEditing(editing, item)]]">
                                         <paper-tabs slot="dropdown-content"
@@ -120,7 +110,7 @@
                         <vaadin-grid-column width="15%" resizable>
                             <template class="header">Date visite</template>
                             <template>
-                                <paper-input id="date-[[item.id]]"  value="{{item.dateVisiteString}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate
+                                <paper-input id="date-[[item.id]]"  value="{{item.dateVisiteString}}" disabled$="[[!_isEditing(editing, item)]]" required auto-validate
                                              pattern="^(0?[1-9]|[12][0-9]|3[01])[\-](0?[1-9]|1[012])[\-](19|20)\d{2}$" error-message="Utiliser le format jj-mm-aaaa">
                                 </paper-input>
                              </template>
@@ -134,7 +124,7 @@
                         <vaadin-grid-column width="55%" resizable>
                             <template class="header">Raison</template>
                             <template>
-                                <paper-input id="raison-{{item.id}}"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]"required auto-validate></paper-input>
+                                <paper-input id="raison-{{item.id}}"  value="{{item.raison}}" disabled$="[[!_isEditing(editing, item)]]" required auto-validate></paper-input>
                             </template>
                         </vaadin-grid-column>
 
@@ -215,6 +205,7 @@
           this.editing = null;
 
         }
+
 
         _listePaiementsChanged() {
           if (this.listepaiements !== null && typeof(this.listepaiements) !== 'undefined') {
