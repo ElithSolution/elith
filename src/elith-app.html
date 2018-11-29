@@ -370,6 +370,9 @@
 
         // If no page was found in the route data, page will be an empty string.
         if (this.storedUser === null) {
+          // Vide le champ de recherche
+          Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchNom.value = null;
+          Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchTel.value = null;
           this.page = 'accueil'
           this.set('route.path', '/accueil')
         } else {
