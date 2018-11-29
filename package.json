@@ -17,6 +17,6 @@
   },
   "dependencies": {
     "bower-update": "^0.2.0",
-    "hoek": "^5.0.3"
+    "hoek": "^5.0.4"
   }
 }
