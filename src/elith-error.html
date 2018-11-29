@@ -9,10 +9,13 @@
         <style include="elith-styles"></style>
         <dom-if if="{{!success}}">
             <template>
-                <div class="alerte">
-                    <iron-icon icon="elith-icons:warning"></iron-icon>
-                    [[message]]
+                <div class="divContainer">
+                    <div class="alerte">
+                        <iron-icon icon="elith-icons:warning"></iron-icon>
+                        [[message]]
+                    </div>
                 </div>
+
             </template>
         </dom-if>
     </template>

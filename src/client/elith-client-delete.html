@@ -30,11 +30,6 @@
             <div class="containerBefore">&nbsp;</div>
             <div class="container">
 
-                <div class="clientBoutons">
-                    <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
-                        NOUVEAU CLIENT
-                    </paper-button>
-                </div>
 
                 <div class="divContainer">
                     <div class="alerte">
@@ -65,10 +60,6 @@
           }
         }
 
-        addClient(){
-            let path = '/client/add';
-            this.set('route.path', path);
-        }
 
 
         _pathChanged(path){

@@ -21,7 +21,15 @@
 
     <dom-if if="{{hasError}}">
       <template>
+
+        <paper-button class="bubbleBigEmptyPage" raised class="primary" on-tap="addClient">
+          NOUVEAU CLIENT
+        </paper-button>
+
+
         <elith-error code="{{codeError}}"></elith-error>
+
+
       </template>
     </dom-if>
 
