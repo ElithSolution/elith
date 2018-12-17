@@ -370,9 +370,21 @@
 
         // If no page was found in the route data, page will be an empty string.
         if (this.storedUser === null) {
+
+
+          // Select le nom par défaut
+          let radio = this.$.radioSearch;
+          radio.selected = "nom";
+
+          Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchTel.hidden = true;
+          Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchNom.hidden = false;
+
           // Vide le champ de recherche
           Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchNom.value = null;
           Polymer.dom(this.root).querySelectorAll('elith-client-searchbynom')[0].$.clientSearchTel.value = null;
+          this.telephone = false;
+
+
           this.page = 'accueil'
           this.set('route.path', '/accueil')
         } else {
@@ -386,6 +398,7 @@
       }
 
       _pageChanged (page) {
+
         // Load page import on demand. Show 404 page if fails
         let resolvedPageUrl = this.resolveUrl('elith-' + page + '.html')
         Polymer.importHref(
