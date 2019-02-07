@@ -34,7 +34,7 @@
         <paper-icon-button id="[[id]]"
                            focus-target="[[focus]]"
                            hidden="[[isHidden(hidden, link)]]"
-                           disabled="[[hidden]]"
+                           disabled="[[disabled]]"
                            on-tap="_onAction"
                            icon="elith-icons:[[methode]]">
 
@@ -73,6 +73,7 @@
             },
             module: String,
             hidden: Object,
+            disabled: Object,
             id: {
               type : String,
               observer : '_classChanged',

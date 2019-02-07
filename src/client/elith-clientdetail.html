@@ -50,12 +50,13 @@
                             <paper-button class="bubbleBig" raised class="primary" on-tap="addClient" disabled="[[isAddPage]]">
                                 NOUVEAU CLIENT
                             </paper-button>
-                            <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}"></elith-iron-ajax>
-                            <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]"></paper-icon-button>
+                            <elith-iron-ajax id="1" hidden$="[[masquerPut]]" element="[[client]]" module="client" methode="put" response="{{resultat}}" disabled="[[invalide]]" ></elith-iron-ajax>
+                            <paper-icon-button class="bubble1" icon="elith-icons:edit" on-tap="activeModeEdition" hidden$="[[masquerEdit]]" ></paper-icon-button>
+
                             <elith-iron-ajax id="2" element="[[client]]" module="client" methode="delete" path="{{route.path}}" hidden$="[[isTraitement]]"></elith-iron-ajax>
                         </div>
                         <div class="clientNameHeader" >
-                            <h1> [[resultat.items.0.client.prenom]]  [[resultat.items.0.client.nom]] </h1>
+                            <h1> [[resultat.items.0.client.prenom]] [[resultat.items.0.client.nom]] </h1>
                         </div>
                         <div class="clientSousMenu">
                             <paper-tabs selected="{{selected}}" on-iron-select="_onTabSelected">

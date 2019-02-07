@@ -38,8 +38,8 @@
                     </paper-button>
                     <elith-iron-ajax id="1" element="[[client]]" module="client" methode="post" response="{{client}}" hidden$="[[isInvalide]]" path="{{route.path}}"></elith-iron-ajax>
                     <paper-icon-button class="bubble1" icon="elith-icons:put"  hidden$="[[!isInvalide]]" disabled="[[isInvalide]]"></paper-icon-button>
-                    <paper-icon-button class="bubble2" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
-                </div>
+                <paper-icon-button class="bubble2" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
+            </div>
 
                 <div class="clientNameHeader">
                     <h1>Création du dossier</h1>
@@ -82,6 +82,7 @@
             isInvalide: {
               type : Object,
               notify : true,
+              observer: '_invalideObserver',
             },
             added: {
               type : Object,
@@ -89,6 +90,10 @@
               value: false,
             },
           }
+        }
+
+        _invalideObserver(){
+          console.log(this.isInvalide);
         }
 
         _clientChanged(){
