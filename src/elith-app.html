@@ -199,8 +199,7 @@
 
     <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
     <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
-
-
+    <brum-global-variable key="newTraitementEditing" value="{{editing}}"></brum-global-variable>
 
 
     <app-drawer-layout force-narrow>
@@ -362,6 +361,8 @@
 
       _routePageChanged (page) {
 
+        this.editing = null;
+        console.log(this.editing);
 
         // MAUVAIS HACK !!! Fix bug d'affichage entre ajout et recherche
         if( page === "client" ) {

@@ -48,6 +48,7 @@
 
         <iron-localstorage name="user-storage" value="{{storedUser}}"></iron-localstorage>
         <brum-global-variable key="userData" value="{{storedUser}}"></brum-global-variable>
+        <brum-global-variable key="newTraitementEditing" value="{{editing}}"></brum-global-variable>
 
         <brum-global-variable key="ListePaiements" value="{{listepaiements}}"></brum-global-variable>
         <brum-global-variable key="ListeTarifs" value="{{listetarifs}}"></brum-global-variable>
@@ -255,6 +256,7 @@
 
           console.log('date : ' + date);
           if(date != null){
+
             date.addEventListener('change', () => {
               console.log('date invalide : ' + date.invalid);
               this.invalide = date.invalid ;
