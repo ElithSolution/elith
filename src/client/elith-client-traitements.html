@@ -241,8 +241,10 @@
               this.traitements[0].id = this.itemid;
               this.$.grid.querySelector('#raison-0').id = 'raison-' + this.itemid;
               this.$.grid.querySelector('#papercheck-0').id = 'papercheck-' + this.itemid;
+              
             }
 
+            console.log('item changed ' + this.itemid);
           }
         }
 
@@ -250,16 +252,21 @@
           this.invalide = false ;
           let date = this.$.grid.querySelector('#date-' + idItem);
           let raison = this.$.grid.querySelector('#raison-' + idItem);
-          date.addEventListener('change', () => {
-            console.log('date invalide : ' + date.invalid);
-            this.invalide = date.invalid ;
-            console.log('**** invalide **** : ' + this.invalide);
-          });
-          if(! this.invalide){
-            raison.addEventListener('change', () => {
-              this.invalide = raison.invalid ;
+
+          console.log('date : ' + date);
+          if(date != null){
+            date.addEventListener('change', () => {
+              console.log('date invalide : ' + date.invalid);
+              this.invalide = date.invalid ;
+              console.log('**** invalide **** : ' + this.invalide);
             });
+            if(! this.invalide){
+              raison.addEventListener('change', () => {
+                this.invalide = raison.invalid ;
+              });
+            }
           }
+
 
 
         }
@@ -270,7 +277,8 @@
             // copie des données avant modification
             this.itemAvantEdition = JSON.parse(JSON.stringify(this.editing));
 
-           this._validator(this.idItem);
+            if (this.idItem != null) this._validator(this.idItem);
+            console.log(' id item : ' + this.idItem);
 
           } else {
             if (this.idItem != null) {
