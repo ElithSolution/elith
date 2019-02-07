@@ -97,7 +97,7 @@
                                 <div class="boutonCouleur">
                                     <!-- boutons du bas -->
                                     <elith-iron-ajax hidden$="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
-                                    <elith-iron-ajax hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax disabled="[[invalide]]" hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden$="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                                 </div>
                             </div>
@@ -193,7 +193,8 @@
             },
             itemsTarifs: {
               type: Array,
-            }
+            },
+            invalide: Object,
           }
 
 
@@ -234,6 +235,7 @@
         }
 
         _itemChanged() {
+
           if (this.traitements !== null && typeof(this.traitements) !== 'undefined') {
             if (this.itemid !== 0) {
               this.traitements[0].id = this.itemid;
@@ -244,11 +246,31 @@
           }
         }
 
+        _validator(idItem){
+          this.invalide = false ;
+          let date = this.$.grid.querySelector('#date-' + idItem);
+          let raison = this.$.grid.querySelector('#raison-' + idItem);
+          date.addEventListener('change', () => {
+            console.log('date invalide : ' + date.invalid);
+            this.invalide = date.invalid ;
+            console.log('**** invalide **** : ' + this.invalide);
+          });
+          if(! this.invalide){
+            raison.addEventListener('change', () => {
+              this.invalide = raison.invalid ;
+            });
+          }
+
+
+        }
+
         _editingChanged() {
           if (this.editing != null) {
             this.idItem = this.editing.id;
             // copie des données avant modification
             this.itemAvantEdition = JSON.parse(JSON.stringify(this.editing));
+
+           this._validator(this.idItem);
 
           } else {
             if (this.idItem != null) {
