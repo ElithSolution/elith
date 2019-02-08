@@ -97,8 +97,9 @@
 
                                 <div class="boutonCouleur">
                                     <!-- boutons du bas -->
-                                    <elith-iron-ajax hidden$="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
-                                    <elith-iron-ajax disabled="[[invalide]]" hidden$="[[!_isEditingAndNew(editing,item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
+                                    <paper-icon-button hidden$="[[!_isEditing(editing, item)]]" on-tap="_save" icon="elith-icons:save"></paper-icon-button>
+                                    <elith-iron-ajax initcall="{{traitementNouveauOK}}" hidden itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax initcall="{{traitementMajOK}}" hidden disabled="[[invalide]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>
                                     <paper-icon-button hidden$="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
                                 </div>
                             </div>
@@ -136,9 +137,8 @@
                                     <!-- boutons du haut-->
                                     <paper-icon-button id="edit-button-[[item.id]]" hidden="[[editing]]" on-tap="_edit" focus-target$="[[!editing]]" icon="elith-icons:edit"></paper-icon-button>
                                     <elith-iron-ajax hidden="[[editing]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="delete"></elith-iron-ajax>
-
-                                    <!--<elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>-->
-                                    <!--<elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>-->
+                                   <!-- <elith-iron-ajax hidden="[[!_isNewItem(item, itemid)]]" itemid="{{itemid}}" elements="{{traitements}}" element="{{item}}" module="traitement" methode="post" focus="{{editing}}"></elith-iron-ajax>
+                                    <elith-iron-ajax hidden="[[!_isEditingAndNew(editing, item)]]" elements="{{traitements}}" element="[[item]]" module="traitement" methode="put" focus="{{editing}}"></elith-iron-ajax>-->
                                     <paper-icon-button hidden="[[!_isEditing(editing, item)]]" on-tap="_cancel" icon="elith-icons:cancel"></paper-icon-button>
 
                                 </div>
@@ -149,6 +149,10 @@
         <paper-button raised on-tap="addTraitement" disabled="[[editing]]" >
             Nouveau traitement
         </paper-button>
+
+        <paper-alert-dialog  modal id="traitementErreur" title="Avertissement" confirm-button="OK">
+            Le formulaire contient des erreurs.
+        </paper-alert-dialog>
     </template>
 
     <script>
@@ -179,6 +183,12 @@
               type: Object,
               observer: '_itemChanged',
               value: 0,
+            },
+            traitementNouveauOK:{
+                type: Object,
+            },
+            traitementMajOK:{
+                type: Object,
             },
             itemAvantEdition: Object,
             listepaiements: {
@@ -254,7 +264,7 @@
           let date = this.$.grid.querySelector('#date-' + idItem);
           let raison = this.$.grid.querySelector('#raison-' + idItem);
 
-          console.log('date : ' + date);
+       /*   console.log('date : ' + date);
           if(date != null){
 
             date.addEventListener('change', () => {
@@ -268,8 +278,7 @@
               });
             }
           }
-
-
+          */
 
         }
 
@@ -335,6 +344,28 @@
           this.editing = item;
           this.$.grid.querySelector('#raison-' + item.id).focus();
           window.dispatchEvent(new Event('resize'));
+        }
+
+        _save(e) {
+            var item = e.model.item;
+            let date = this.$.grid.querySelector('#date-' + item.id);
+            this.invalide = date.invalid;
+            if(this.invalide) {
+                console.log("erreur");
+                this.$.traitementErreur.open();
+            } else {
+                this.editing = item;
+                if(item.id == 0 ) {
+                    this.traitementNouveauOK = this.storedUser;
+                } else {
+                    this.traitementMajOK = this.storedUser;
+                }
+
+                this.editing = null;
+                this.$.grid.clearCache();
+                this.traitementNouveauOK = null;
+                this.traitementMajOK = null;
+            }
         }
 
         _cancel(e) {
