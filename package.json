@@ -2,9 +2,9 @@
   "name": "Elith",
   "license": "MIT",
   "devDependencies": {
-    "eslint": "4.18.2",
-    "eslint-config-google": "0.7.1",
-    "eslint-plugin-html": "4.0.2",
+    "eslint": "5.13.0",
+    "eslint-config-google": "0.12.0",
+    "eslint-plugin-html": "5.0.3",
     "nsp": "3.2.1"
   },
   "scripts": {
@@ -16,7 +16,7 @@
     "test:integration": "polymer build # test that psk builds without error with the CLI"
   },
   "dependencies": {
-    "bower-update": "^0.2.0",
-    "hoek": "^5.0.4"
+    "hoek": "^6.1.2",
+    "npm-check-updates": "^2.15.0"
   }
 }
