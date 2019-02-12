@@ -254,32 +254,7 @@
               this.$.grid.querySelector('#papercheck-0').id = 'papercheck-' + this.itemid;
               
             }
-
-            console.log('item changed ' + this.itemid);
           }
-        }
-
-        _validator(idItem){
-          this.invalide = false ;
-          let date = this.$.grid.querySelector('#date-' + idItem);
-          let raison = this.$.grid.querySelector('#raison-' + idItem);
-
-       /*   console.log('date : ' + date);
-          if(date != null){
-
-            date.addEventListener('change', () => {
-              console.log('date invalide : ' + date.invalid);
-              this.invalide = date.invalid ;
-              console.log('**** invalide **** : ' + this.invalide);
-            });
-            if(! this.invalide){
-              raison.addEventListener('change', () => {
-                this.invalide = raison.invalid ;
-              });
-            }
-          }
-          */
-
         }
 
         _editingChanged() {
@@ -287,9 +262,6 @@
             this.idItem = this.editing.id;
             // copie des données avant modification
             this.itemAvantEdition = JSON.parse(JSON.stringify(this.editing));
-
-            if (this.idItem != null) this._validator(this.idItem);
-            console.log(' id item : ' + this.idItem);
 
           } else {
             if (this.idItem != null) {
@@ -348,10 +320,13 @@
 
         _save(e) {
             var item = e.model.item;
+
             let date = this.$.grid.querySelector('#date-' + item.id);
-            this.invalide = date.invalid;
+            let raison = this.$.grid.querySelector('#raison-' + item.id);
+            let prix = this.$.grid.querySelector('#prix-' + item.id);
+
+            this.invalide = (date.invalid || raison.invalid || prix.invalid );
             if(this.invalide) {
-                console.log("erreur");
                 this.$.traitementErreur.open();
             } else {
                 this.editing = item;
